@@ -142,6 +142,7 @@ export type PublicCampaign = {
   id: number; slug: string; name: string; client_name: string; thumbnail_url: string
   brief_url: string; cpm_rate: number; max_payout: number; budget_total: number
   budget_used: number; status: string; accepted_platforms: string; total_submissions: number
+  description?: string
 }
 
 export type PublicSubmission = {

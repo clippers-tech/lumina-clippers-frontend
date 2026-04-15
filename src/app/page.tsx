@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { publicApi, type PublicCampaign } from "@/lib/api"
-import { formatNumber, formatCurrency } from "@/lib/utils"
+import { formatCurrency } from "@/lib/utils"
 import { LuminaLogo } from "@/components/LuminaLogo"
 
 /* ── Grid Background ─────────────────────────────────── */
@@ -17,12 +17,74 @@ function GridBackground() {
   )
 }
 
-/* ── Stat Pill ────────────────────────────────────────── */
-function StatPill({ label, value }: { label: string; value: string }) {
+/* ── Default Thumbnail (CSS-based branded card) ───────── */
+const THUMB_COLORS: Record<string, { bg: string; accent: string }> = {
+  "adobe-clipping-campaign": {
+    bg: "from-red-900/90 via-red-800/80 to-red-950/90",
+    accent: "text-red-300",
+  },
+  "algorant-twitter-only-campaign": {
+    bg: "from-slate-800/90 via-slate-700/80 to-slate-900/90",
+    accent: "text-teal-300",
+  },
+}
+
+const DEFAULT_THUMB = {
+  bg: "from-emerald-900/80 via-emerald-800/70 to-emerald-950/80",
+  accent: "text-emerald-300",
+}
+
+function CampaignThumbnail({ campaign }: { campaign: PublicCampaign }) {
+  if (campaign.thumbnail_url) {
+    return (
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={campaign.thumbnail_url}
+          alt={campaign.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a10] via-transparent to-transparent" />
+        <div className="absolute top-3 left-3">
+          <span className="inline-flex items-center px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/30 text-emerald-300 backdrop-blur-sm border border-emerald-400/20">
+            {campaign.status}
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  const colors = THUMB_COLORS[campaign.slug] || DEFAULT_THUMB
+  const initials = campaign.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 3)
+    .toUpperCase()
+
   return (
-    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.06] bg-white/[0.02]">
-      <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">{label}</span>
-      <span className="text-sm font-bold text-zinc-100">{value}</span>
+    <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${colors.bg} flex flex-col items-center justify-center p-6`}>
+      {/* Decorative pattern */}
+      <div className="absolute inset-0 opacity-[0.07]">
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_25%,rgba(255,255,255,0.05)_50%,transparent_50%,transparent_75%,rgba(255,255,255,0.05)_75%)] bg-[size:20px_20px]" />
+      </div>
+      <div className="absolute top-3 left-3 z-10">
+        <span className="inline-flex items-center px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/30 text-emerald-300 backdrop-blur-sm border border-emerald-400/20">
+          {campaign.status}
+        </span>
+      </div>
+      <div className={`text-4xl font-black tracking-wider ${colors.accent} opacity-40 mb-2`}>
+        {initials}
+      </div>
+      <div className="text-center">
+        <p className="text-white/90 font-extrabold text-sm uppercase tracking-wide leading-tight max-w-[200px]">
+          {campaign.name}
+        </p>
+        {campaign.budget_total > 0 && (
+          <p className="text-white/50 text-xs font-semibold mt-1.5">
+            {formatCurrency(campaign.budget_total)} Budget
+          </p>
+        )}
+      </div>
     </div>
   )
 }
@@ -32,67 +94,61 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
   const budgetPct = campaign.budget_total > 0 ? Math.min(100, (campaign.budget_used / campaign.budget_total) * 100) : 0
 
   return (
-    <div className="group rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] overflow-hidden transition-all hover:border-white/[0.08] hover:bg-white/[0.025]">
+    <div className="group rounded-xl border border-white/[0.06] bg-[#0a1a10]/60 backdrop-blur-[2px] overflow-hidden transition-all hover:border-green-400/20 hover:shadow-[0_0_30px_-10px_rgba(74,222,128,0.15)]">
       {/* Thumbnail */}
-      {campaign.thumbnail_url && (
-        <div className="relative h-40 overflow-hidden">
-          <img
-            src={campaign.thumbnail_url}
-            alt={campaign.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
-          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${campaign.status === "open" ? "bg-emerald-500/20 text-emerald-400" : "bg-zinc-500/20 text-zinc-400"}`}>
-              {campaign.status}
-            </span>
-          </div>
-        </div>
-      )}
+      <CampaignThumbnail campaign={campaign} />
 
-      <div className="p-4 space-y-3">
+      <div className="p-5 space-y-4">
+        {/* Name + Description */}
         <div>
-          <h3 className="font-bold text-sm text-zinc-100 group-hover:text-white transition-colors">{campaign.name}</h3>
-          <p className="text-xs text-zinc-500 mt-0.5">{campaign.client_name}</p>
+          <h3 className="font-extrabold text-base text-zinc-100 group-hover:text-white transition-colors">
+            {campaign.name} Campaign
+          </h3>
+          {campaign.description && (
+            <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{campaign.description}</p>
+          )}
         </div>
 
-        {/* Stats row */}
-        <div className="flex items-center gap-4 text-xs">
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">CPM</span>
-            <p className="text-zinc-200 font-semibold">{formatCurrency(campaign.cpm_rate)}</p>
-          </div>
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Max Payout</span>
-            <p className="text-zinc-200 font-semibold">{formatCurrency(campaign.max_payout)}</p>
-          </div>
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Clips</span>
-            <p className="text-zinc-200 font-semibold">{formatNumber(campaign.total_submissions)}</p>
-          </div>
+        {/* CPM + Max Payout pills */}
+        <div className="flex flex-wrap gap-2">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] text-xs">
+            <span className="text-zinc-500 font-medium mr-1.5">CPM</span>
+            <span className="text-zinc-200 font-bold">{formatCurrency(campaign.cpm_rate)} / 1k views</span>
+          </span>
+          {campaign.max_payout > 0 && (
+            <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] text-xs">
+              <span className="text-zinc-500 font-medium mr-1.5">Max payout</span>
+              <span className="text-zinc-200 font-bold">{formatCurrency(campaign.max_payout)}</span>
+            </span>
+          )}
         </div>
 
         {/* Budget bar */}
-        <div>
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Budget</span>
-            <span className="text-[10px] text-zinc-500">{Math.round(budgetPct)}%</span>
+        {campaign.budget_total > 0 && (
+          <div className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs text-zinc-500 font-medium">Campaign Budget</span>
+              <span className="text-xs text-zinc-200 font-bold">
+                {formatCurrency(campaign.budget_used)} / {formatCurrency(campaign.budget_total)}
+              </span>
+            </div>
+            <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+              <div
+                className="h-full rounded-full bg-green-400 transition-all duration-500"
+                style={{ width: `${budgetPct}%` }}
+              />
+            </div>
+            <p className="text-right text-[10px] text-zinc-500 mt-1">{budgetPct.toFixed(1)}% used</p>
           </div>
-          <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">
-            <div
-              className="h-full rounded-full bg-green-400 transition-all duration-500"
-              style={{ width: `${budgetPct}%` }}
-            />
-          </div>
-        </div>
+        )}
 
-        {/* Submit link */}
+        {/* Submit button */}
         {campaign.status === "open" && (
           <Link
             href={`/c/${campaign.slug}`}
-            className="block w-full text-center bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
+            className="block w-full text-center bg-green-400 text-black font-extrabold text-sm px-6 py-3 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
-            Submit Clip
+            Submit &amp; continue to payout
           </Link>
         )}
       </div>
@@ -102,18 +158,18 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
 
 /* ── Main Page ────────────────────────────────────────── */
 export default function HomePage() {
-  const [campaigns, setCampaigns] = useState<PublicCampaign[]>([])
+  const [allCampaigns, setAllCampaigns] = useState<PublicCampaign[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     publicApi.campaigns()
-      .then((data) => setCampaigns(data.filter((c) => c.status === "open")))
+      .then((data) => setAllCampaigns(data))
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 
-  const totalSubmissions = campaigns.reduce((sum, c) => sum + c.total_submissions, 0)
-  const totalBudget = campaigns.reduce((sum, c) => sum + c.budget_total, 0)
+  const openCampaigns = allCampaigns.filter((c) => c.status === "open")
+  const completedCampaigns = allCampaigns.filter((c) => c.status !== "open")
 
   return (
     <div className="relative min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
@@ -158,65 +214,44 @@ export default function HomePage() {
           <p className="text-zinc-500 mt-4 text-lg max-w-xl mx-auto">
             Browse active campaigns, submit your content, and track your earnings — all in one place.
           </p>
-
-          {/* Stats */}
-          <div className="flex items-center justify-center gap-3 mt-8 flex-wrap">
-            <StatPill label="Campaigns" value={String(campaigns.length)} />
-            <StatPill label="Submissions" value={formatNumber(totalSubmissions)} />
-            <StatPill label="Total Budget" value={formatCurrency(totalBudget)} />
-          </div>
         </section>
 
-        {/* Campaigns Grid */}
-        <section className="max-w-6xl mx-auto px-4 pb-20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-zinc-100">Active Campaigns</h2>
-            <Link
-              href="/completed"
-              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
-            >
-              View Completed &rarr;
-            </Link>
-          </div>
+        {/* Open Campaigns Grid */}
+        <section className="max-w-5xl mx-auto px-4 pb-8">
+          <h2 className="text-lg font-bold text-zinc-100 mb-6">Active Campaigns</h2>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-xl border border-white/[0.04] bg-white/[0.015] h-72 animate-pulse" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[1, 2].map((i) => (
+                <div key={i} className="rounded-xl border border-white/[0.04] bg-white/[0.015] h-96 animate-pulse" />
               ))}
             </div>
-          ) : campaigns.length === 0 ? (
+          ) : openCampaigns.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-zinc-500">No active campaigns right now.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {campaigns.map((campaign) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {openCampaigns.map((campaign) => (
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))}
             </div>
           )}
         </section>
 
-        {/* How It Works */}
-        <section className="max-w-6xl mx-auto px-4 pb-20">
-          <h2 className="text-lg font-bold text-zinc-100 mb-6 text-center">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { step: "01", title: "Pick a Campaign", desc: "Browse active campaigns and find one that fits your content style." },
-              { step: "02", title: "Submit Your Clip", desc: "Paste your post URL and we'll start tracking views automatically." },
-              { step: "03", title: "Get Paid", desc: "Earn based on verified views at the campaign's CPM rate." },
-            ].map((item) => (
-              <div key={item.step} className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-6 text-center">
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-400/10 text-green-400 font-extrabold text-sm mb-3">
-                  {item.step}
-                </div>
-                <h3 className="font-bold text-sm text-zinc-100 mb-1">{item.title}</h3>
-                <p className="text-xs text-zinc-500 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* See Completed Campaigns */}
+        {!loading && completedCampaigns.length > 0 && (
+          <section className="max-w-5xl mx-auto px-4 pb-20">
+            <div className="text-center pt-6">
+              <Link
+                href="/completed"
+                className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+              >
+                See completed campaigns ({completedCampaigns.length})
+              </Link>
+            </div>
+          </section>
+        )}
 
         {/* Footer */}
         <footer className="border-t border-white/[0.06] py-8">

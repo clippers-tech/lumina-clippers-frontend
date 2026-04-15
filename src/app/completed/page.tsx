@@ -3,50 +3,58 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { publicApi, type PublicCampaign } from "@/lib/api"
-import { formatNumber, formatCurrency, platformIcon } from "@/lib/utils"
+import { formatNumber, formatCurrency } from "@/lib/utils"
+import { LuminaLogo } from "@/components/LuminaLogo"
+
+/* ── Default Thumbnail ────────────────────────────────── */
+function CompletedThumbnail({ campaign }: { campaign: PublicCampaign }) {
+  if (campaign.thumbnail_url) {
+    return (
+      <div className="relative h-36 overflow-hidden">
+        <img src={campaign.thumbnail_url} alt={campaign.name} className="w-full h-full object-cover opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
+        <div className="absolute bottom-3 left-3">
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-zinc-500/20 text-zinc-400">
+            Completed
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  const initials = campaign.name.split(" ").map((w) => w[0]).join("").slice(0, 3).toUpperCase()
+
+  return (
+    <div className="relative h-36 overflow-hidden bg-gradient-to-br from-zinc-800/60 via-zinc-700/40 to-zinc-900/60 flex flex-col items-center justify-center p-4">
+      <div className="absolute inset-0 opacity-[0.04]">
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_25%,rgba(255,255,255,0.05)_50%,transparent_50%,transparent_75%,rgba(255,255,255,0.05)_75%)] bg-[size:16px_16px]" />
+      </div>
+      <div className="absolute bottom-3 left-3">
+        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-zinc-500/20 text-zinc-400">
+          Completed
+        </span>
+      </div>
+      <div className="text-3xl font-black tracking-wider text-zinc-500/40 mb-1">{initials}</div>
+      <p className="text-white/40 font-bold text-xs uppercase tracking-wide text-center max-w-[180px] leading-tight">
+        {campaign.name}
+      </p>
+    </div>
+  )
+}
 
 /* ── Completed Campaign Card ──────────────────────────── */
 function CompletedCampaignCard({ campaign }: { campaign: PublicCampaign }) {
-  const budgetPct = campaign.budget_total > 0 ? Math.min(100, (campaign.budget_used / campaign.budget_total) * 100) : 0
-  const platforms = campaign.accepted_platforms ? campaign.accepted_platforms.split(",").map((p) => p.trim()) : []
-
   return (
     <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] overflow-hidden">
-      {campaign.thumbnail_url && (
-        <div className="relative h-36 overflow-hidden">
-          <img
-            src={campaign.thumbnail_url}
-            alt={campaign.name}
-            className="w-full h-full object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
-          <div className="absolute bottom-3 left-3">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-red-500/20 text-red-400">
-              {campaign.status}
-            </span>
-          </div>
-        </div>
-      )}
+      <CompletedThumbnail campaign={campaign} />
 
       <div className="p-4 space-y-3">
         <div>
           <h3 className="font-bold text-sm text-zinc-100">{campaign.name}</h3>
-          <p className="text-xs text-zinc-500 mt-0.5">{campaign.client_name}</p>
+          {campaign.description && (
+            <p className="text-xs text-zinc-500 mt-0.5 line-clamp-2">{campaign.description}</p>
+          )}
         </div>
-
-        {/* Platforms */}
-        {platforms.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {platforms.map((p) => (
-              <span
-                key={p}
-                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-white/[0.04] text-zinc-400 border border-white/[0.04]"
-              >
-                {platformIcon(p.toLowerCase())} {p}
-              </span>
-            ))}
-          </div>
-        )}
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2 text-xs">
@@ -63,20 +71,6 @@ function CompletedCampaignCard({ campaign }: { campaign: PublicCampaign }) {
             <p className="text-zinc-300 font-semibold">{formatNumber(campaign.total_submissions)}</p>
           </div>
         </div>
-
-        {/* Budget bar */}
-        <div>
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Budget Used</span>
-            <span className="text-[10px] text-zinc-500">{Math.round(budgetPct)}%</span>
-          </div>
-          <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">
-            <div
-              className="h-full rounded-full bg-zinc-500 transition-all duration-500"
-              style={{ width: `${budgetPct}%` }}
-            />
-          </div>
-        </div>
       </div>
     </div>
   )
@@ -89,7 +83,7 @@ export default function CompletedCampaignsPage() {
 
   useEffect(() => {
     publicApi.campaigns()
-      .then((data) => setCampaigns(data.filter((c) => c.status === "closed" || c.status === "archived")))
+      .then((data) => setCampaigns(data.filter((c) => c.status === "completed" || c.status === "closed")))
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
@@ -106,7 +100,14 @@ export default function CompletedCampaignsPage() {
         {/* Nav */}
         <nav className="border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <Link href="/" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
+            <Link href="/" className="flex items-center gap-2.5">
+              <LuminaLogo size={32} />
+              <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
+            </Link>
+            <Link
+              href="/"
+              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
               &larr; Active Campaigns
             </Link>
           </div>
@@ -115,7 +116,9 @@ export default function CompletedCampaignsPage() {
         <div className="max-w-6xl mx-auto px-4 py-10">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-extrabold text-zinc-100">Completed Campaigns</h1>
-            <p className="text-sm text-zinc-500 mt-1">Past campaigns that are no longer active</p>
+            <p className="text-sm text-zinc-500 mt-1">
+              {campaigns.length > 0 ? `${campaigns.length} past campaigns` : "Past campaigns that are no longer active"}
+            </p>
           </div>
 
           {loading ? (
@@ -142,6 +145,17 @@ export default function CompletedCampaignsPage() {
             </div>
           )}
         </div>
+
+        {/* Footer */}
+        <footer className="border-t border-white/[0.06] py-8">
+          <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <LuminaLogo size={20} />
+              <span className="text-xs text-zinc-500">Lumina Clippers</span>
+            </div>
+            <p className="text-xs text-zinc-600">&copy; {new Date().getFullYear()} All rights reserved.</p>
+          </div>
+        </footer>
       </div>
     </div>
   )
