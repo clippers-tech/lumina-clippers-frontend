@@ -436,8 +436,7 @@ export const verification = {
     form.append("video", file)
     return new Promise<{ status: string; message: string }>((resolve, reject) => {
       const xhr = new XMLHttpRequest()
-      xhr.open("POST", `${API_URL}/api/submissions/${submissionId}/upload-verification`)
-      xhr.setRequestHeader("Authorization", `Bearer ${token}`)
+      xhr.open("POST", `${API_URL}/api/submissions/${submissionId}/upload-verification?token=${encodeURIComponent(token)}`)
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100))
       }
@@ -453,8 +452,8 @@ export const verification = {
       xhr.send(form)
     })
   },
-  status: (token: string, submissionId: number) =>
-    apiFetch<VerificationStatus>(`/api/submissions/${submissionId}/verification-status`, { token }),
+  status: (submissionToken: string, submissionId: number) =>
+    apiFetch<VerificationStatus>(`/api/submissions/${submissionId}/verification-status?token=${encodeURIComponent(submissionToken)}`, {}),
   video: (token: string, submissionId: number) =>
     apiFetch<{ url: string; status: string }>(`/api/submissions/${submissionId}/verification-video`, { token }),
   verify: (token: string, submissionId: number, data: { status: "verified" | "rejected"; note?: string }) =>
