@@ -54,7 +54,7 @@ function ThreadList({
                 </span>
                 <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
                   thread.status === "open"
-                    ? "bg-emerald-500/20 text-emerald-400"
+                    ? "bg-green-500/20 text-green-400"
                     : "bg-zinc-500/20 text-zinc-400"
                 }`}>
                   {thread.status}

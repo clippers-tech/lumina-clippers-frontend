@@ -300,7 +300,7 @@ export default function SettingsPage() {
           <div
             className={`text-sm rounded-lg px-4 py-2 mb-4 ${
               saveMsg.includes("success")
-                ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
+                ? "bg-green-500/10 border border-green-500/20 text-green-400"
                 : "bg-red-500/10 border border-red-500/20 text-red-400"
             }`}
           >

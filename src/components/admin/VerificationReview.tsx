@@ -136,16 +136,16 @@ export function VerificationReview({
       {(currentStatus === "verified" || currentStatus === "rejected") && vStatus?.note && (
         <div className={`rounded-lg border px-4 py-3 mb-4 ${
           currentStatus === "verified"
-            ? "border-emerald-500/20 bg-emerald-500/5"
+            ? "border-green-500/20 bg-green-500/5"
             : "border-red-500/20 bg-red-500/5"
         }`}>
           <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${
-            currentStatus === "verified" ? "text-emerald-400" : "text-red-400"
+            currentStatus === "verified" ? "text-green-400" : "text-red-400"
           }`}>
             Admin Note
           </p>
           <p className={`text-xs ${
-            currentStatus === "verified" ? "text-emerald-400/80" : "text-red-400/80"
+            currentStatus === "verified" ? "text-green-400/80" : "text-red-400/80"
           }`}>
             {vStatus.note}
           </p>

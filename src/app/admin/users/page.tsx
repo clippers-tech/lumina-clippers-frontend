@@ -255,7 +255,7 @@ export default function UsersPage() {
                       <td className="px-5 py-4 text-center">
                         <span
                           className={`inline-block w-2 h-2 rounded-full ${
-                            user.is_active ? "bg-emerald-400" : "bg-zinc-600"
+                            user.is_active ? "bg-green-400" : "bg-zinc-600"
                           }`}
                         />
                       </td>

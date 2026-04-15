@@ -105,9 +105,9 @@ export function VerificationUpload({ submissionId, token, initialStatus }: Verif
 
       {/* Upload complete message */}
       {uploadComplete && (
-        <div className="flex items-center gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 mb-4">
-          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-          <p className="text-sm text-emerald-400">Verification video uploaded — pending review</p>
+        <div className="flex items-center gap-3 rounded-lg border border-green-500/20 bg-green-500/5 px-4 py-3 mb-4">
+          <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />
+          <p className="text-sm text-green-400">Verification video uploaded — pending review</p>
         </div>
       )}
 

@@ -80,7 +80,7 @@ export default function CampaignsPage() {
 
   const statusDot = (status: string) => {
     const colors: Record<string, string> = {
-      open: "bg-emerald-400",
+      open: "bg-green-400",
       closed: "bg-amber-400",
       draft: "bg-gray-400",
       archived: "bg-gray-500",

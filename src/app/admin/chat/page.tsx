@@ -209,7 +209,7 @@ function statusIcon(status: string) {
     case "open":
       return <Clock className="w-3.5 h-3.5 text-yellow-400" />
     case "resolved":
-      return <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+      return <CheckCircle className="w-3.5 h-3.5 text-green-400" />
     case "archived":
       return <Archive className="w-3.5 h-3.5 text-zinc-500" />
     default:
@@ -627,7 +627,7 @@ function ChatContent() {
                     <span
                       className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${
                         selectedThread.submission.status === "paid"
-                          ? "bg-emerald-400/10 text-emerald-400"
+                          ? "bg-green-400/10 text-green-400"
                           : selectedThread.submission.status === "rejected"
                           ? "bg-red-400/10 text-red-400"
                           : "bg-yellow-400/10 text-yellow-400"
