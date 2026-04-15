@@ -50,12 +50,12 @@ export function BulkAddModal({ campaigns, selectedCampaignId, onSubmit, onClose 
         {result ? (
           <div>
             <p className="text-sm text-zinc-100 mb-2">
-              Added: <span className="text-lime-400">{result.added}</span> | Skipped: <span className="text-zinc-400">{result.skipped}</span>
+              Added: <span className="text-green-400">{result.added}</span> | Skipped: <span className="text-zinc-400">{result.skipped}</span>
             </p>
             {result.results.length > 0 && (
               <div className="space-y-1 max-h-40 overflow-y-auto">
                 {result.results.map((r, i) => (
-                  <p key={i} className={`text-xs font-mono ${r.status === "added" ? "text-lime-400" : "text-zinc-500"}`}>
+                  <p key={i} className={`text-xs font-mono ${r.status === "added" ? "text-green-400" : "text-zinc-500"}`}>
                     {r.status}: {r.post_url} {r.reason && `(${r.reason})`}
                   </p>
                 ))}
@@ -63,7 +63,7 @@ export function BulkAddModal({ campaigns, selectedCampaignId, onSubmit, onClose 
             )}
             <button
               onClick={onClose}
-              className="mt-4 bg-lime-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)]"
+              className="mt-4 bg-green-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)]"
             >
               Done
             </button>
@@ -73,7 +73,7 @@ export function BulkAddModal({ campaigns, selectedCampaignId, onSubmit, onClose 
             <select
               value={campaignId}
               onChange={(e) => setCampaignId(Number(e.target.value))}
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
             >
               {campaigns.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
@@ -84,7 +84,7 @@ export function BulkAddModal({ campaigns, selectedCampaignId, onSubmit, onClose 
               value={urls}
               onChange={(e) => setUrls(e.target.value)}
               placeholder="Paste post URLs, one per line..."
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 h-40 resize-none font-mono focus:outline-none focus:border-lime-400/30"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 h-40 resize-none font-mono focus:outline-none focus:border-green-400/30"
             />
 
             <div className="flex justify-end gap-2">
@@ -97,7 +97,7 @@ export function BulkAddModal({ campaigns, selectedCampaignId, onSubmit, onClose 
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="bg-lime-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50"
+                className="bg-green-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50"
               >
                 {loading ? "Adding..." : "Add Submissions"}
               </button>

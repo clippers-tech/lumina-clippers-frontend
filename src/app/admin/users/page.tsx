@@ -146,7 +146,7 @@ export default function UsersPage() {
 
   const roleBadge = (role: string) => {
     const styles: Record<string, string> = {
-      admin: "bg-lime-400/10 text-lime-400",
+      admin: "bg-green-400/10 text-green-400",
       viewer: "bg-blue-400/10 text-blue-400",
       manager: "bg-purple-400/10 text-purple-400",
     }
@@ -159,7 +159,7 @@ export default function UsersPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-2">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-lime-400 mb-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">
               Admin Panel
             </p>
             <h1 className="text-2xl font-bold text-zinc-100">User Management</h1>
@@ -169,7 +169,7 @@ export default function UsersPage() {
           </div>
           <button
             onClick={openAddModal}
-            className="flex items-center gap-1.5 bg-lime-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all"
+            className="flex items-center gap-1.5 bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             <Plus className="w-4 h-4" />
             Add User
@@ -326,7 +326,7 @@ export default function UsersPage() {
                     onChange={(e) =>
                       setForm((f) => ({ ...f, name: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                     placeholder="Full name"
                   />
                 </div>
@@ -340,7 +340,7 @@ export default function UsersPage() {
                     onChange={(e) =>
                       setForm((f) => ({ ...f, email: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                     placeholder="user@example.com"
                   />
                 </div>
@@ -354,7 +354,7 @@ export default function UsersPage() {
                     onChange={(e) =>
                       setForm((f) => ({ ...f, password: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                     placeholder={editingUser ? "Leave blank to keep current" : "Password"}
                   />
                 </div>
@@ -367,7 +367,7 @@ export default function UsersPage() {
                     onChange={(e) =>
                       setForm((f) => ({ ...f, role: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors appearance-none"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors appearance-none"
                   >
                     <option value="admin" className="bg-[#0a0a0a]">
                       Admin
@@ -402,14 +402,14 @@ export default function UsersPage() {
                             onClick={() => toggleCampaign(campaign.id)}
                             className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors border-b border-white/[0.04] last:border-b-0 ${
                               isSelected
-                                ? "bg-lime-400/5"
+                                ? "bg-green-400/5"
                                 : "hover:bg-white/[0.02]"
                             }`}
                           >
                             <span
                               className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${
                                 isSelected
-                                  ? "bg-lime-400 text-black"
+                                  ? "bg-green-400 text-black"
                                   : "border border-white/[0.15]"
                               }`}
                             >
@@ -429,7 +429,7 @@ export default function UsersPage() {
                     )}
                   </div>
                   {selectedCampaignIds.length > 0 && (
-                    <p className="text-[11px] text-lime-400/60 mt-1.5">
+                    <p className="text-[11px] text-green-400/60 mt-1.5">
                       {selectedCampaignIds.length} campaign
                       {selectedCampaignIds.length !== 1 ? "s" : ""} selected
                     </p>
@@ -447,7 +447,7 @@ export default function UsersPage() {
                 <button
                   onClick={handleSubmit}
                   disabled={formLoading || !form.name || !form.email || (!editingUser && !form.password)}
-                  className="bg-lime-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {formLoading
                     ? "Saving..."

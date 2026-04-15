@@ -31,7 +31,7 @@ export default function CreatorsPage() {
     <AdminGuard>
       <div>
         <div className="mb-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-lime-400 mb-1">Admin Panel</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">Admin Panel</p>
           <h1 className="text-2xl font-bold text-zinc-100">Creators</h1>
           <p className="text-sm text-zinc-500 mt-1">All clippers and content creators</p>
         </div>
@@ -45,14 +45,14 @@ export default function CreatorsPage() {
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1) }}
               placeholder="Search creators..."
-              className="w-full pl-9 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+              className="w-full pl-9 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
             />
           </div>
         </div>
 
         <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] overflow-hidden">
           {loading ? (
-            <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" /></div>
+            <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" /></div>
           ) : !data || data.items.length === 0 ? (
             <div className="text-center py-16 text-zinc-500">No creators found</div>
           ) : (
@@ -79,13 +79,13 @@ export default function CreatorsPage() {
                       <td className="px-5 py-4 text-center">
                         <div className="flex justify-center gap-1">
                           {c.platforms.map((p) => (
-                            <span key={p} className="bg-lime-400/10 text-lime-400 text-[10px] font-mono px-1.5 py-0.5 rounded">{p}</span>
+                            <span key={p} className="bg-green-400/10 text-green-400 text-[10px] font-mono px-1.5 py-0.5 rounded">{p}</span>
                           ))}
                         </div>
                       </td>
                       <td className="px-5 py-4 text-right text-sm font-mono text-zinc-100">{formatNumber(c.total_views)}</td>
                       <td className="px-5 py-4 text-right text-sm font-mono text-zinc-100">{formatNumber(c.total_comments)}</td>
-                      <td className="px-5 py-4 text-right text-sm font-mono text-lime-400">{formatCurrency(c.total_paid)}</td>
+                      <td className="px-5 py-4 text-right text-sm font-mono text-green-400">{formatCurrency(c.total_paid)}</td>
                     </tr>
                   ))}
                 </tbody>

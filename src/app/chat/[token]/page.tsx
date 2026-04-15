@@ -26,7 +26,7 @@ function ThreadList({
         <h2 className="text-sm font-bold text-zinc-200">Messages</h2>
         <button
           onClick={onNewThread}
-          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-lime-400/10 text-lime-400 text-[10px] font-bold uppercase tracking-wider hover:bg-lime-400/20 transition-colors"
+          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-green-400/10 text-green-400 text-[10px] font-bold uppercase tracking-wider hover:bg-green-400/20 transition-colors"
         >
           <Plus className="w-3 h-3" />
           New
@@ -45,7 +45,7 @@ function ThreadList({
               key={thread.id}
               onClick={() => onSelect(thread.id)}
               className={`w-full text-left p-3 border-b border-white/[0.03] hover:bg-white/[0.03] transition-colors ${
-                selectedId === thread.id ? "bg-white/[0.05] border-l-2 border-l-lime-400" : ""
+                selectedId === thread.id ? "bg-white/[0.05] border-l-2 border-l-green-400" : ""
               }`}
             >
               <div className="flex items-center gap-2 mb-1">
@@ -135,7 +135,7 @@ function ConversationView({
             href={thread.submission.post_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[10px] text-zinc-500 hover:text-lime-400 truncate block transition-colors"
+            className="text-[10px] text-zinc-500 hover:text-green-400 truncate block transition-colors"
           >
             {platformIcon(thread.submission.platform)} {thread.submission.post_url}
           </a>
@@ -154,7 +154,7 @@ function ConversationView({
               <div
                 className={`max-w-[75%] rounded-xl px-3 py-2 ${
                   isCreator
-                    ? "bg-lime-400/10 border border-lime-400/20 text-zinc-100"
+                    ? "bg-green-400/10 border border-green-400/20 text-zinc-100"
                     : "bg-white/[0.05] border border-white/[0.06] text-zinc-200"
                 }`}
               >
@@ -177,12 +177,12 @@ function ConversationView({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 placeholder:text-zinc-600 transition-colors"
+            className="flex-1 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors"
           />
           <button
             type="submit"
             disabled={sending || !message.trim()}
-            className="bg-lime-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-lg shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-40"
+            className="bg-green-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-lg shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-40"
           >
             <Send className="w-4 h-4" />
           </button>
@@ -262,7 +262,7 @@ function NewThreadModal({
               <select
                 value={selectedSubmission ?? ""}
                 onChange={(e) => setSelectedSubmission(Number(e.target.value) || null)}
-                className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
               >
                 <option value="">Select submission...</option>
                 {submissions.map((s) => (
@@ -282,7 +282,7 @@ function NewThreadModal({
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
             >
               <option value="general">General</option>
               <option value="payment">Payment</option>
@@ -302,7 +302,7 @@ function NewThreadModal({
               onChange={(e) => setMessage(e.target.value)}
               rows={3}
               placeholder="Describe your question or issue..."
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 placeholder:text-zinc-600 transition-colors resize-none"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors resize-none"
             />
           </div>
 
@@ -317,7 +317,7 @@ function NewThreadModal({
             <button
               type="submit"
               disabled={creating || !selectedSubmission || !message.trim()}
-              className="flex-1 bg-lime-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-40"
+              className="flex-1 bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-40"
             >
               {creating ? "Creating..." : "Create Thread"}
             </button>
@@ -386,13 +386,13 @@ export default function CreatorInboxPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-lime-500/30">
+    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />

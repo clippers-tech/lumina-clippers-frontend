@@ -90,13 +90,13 @@ export function VerificationReview({
 
   const currentStatus = vStatus?.status || "pending"
   const labelClass = "text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1 block"
-  const inputClass = "w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+  const inputClass = "w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
 
   return (
     <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-lime-400" />
+          <ShieldCheck className="w-4 h-4 text-green-400" />
           <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">Verification</h3>
         </div>
         <VerificationBadge status={currentStatus} />
@@ -169,7 +169,7 @@ export function VerificationReview({
             <button
               onClick={() => handleVerify("verified")}
               disabled={submitting}
-              className="flex-1 h-10 bg-lime-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5"
+              className="flex-1 h-10 bg-green-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5"
             >
               <ShieldCheck className="w-4 h-4" />
               {submitting ? "..." : "Verify"}
@@ -204,7 +204,7 @@ export function VerificationReview({
               <button
                 onClick={() => handleVerify("verified")}
                 disabled={submitting}
-                className="flex-1 h-10 bg-lime-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="flex-1 h-10 bg-green-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
                 <ShieldCheck className="w-4 h-4" />
                 {submitting ? "..." : "Verify Instead"}

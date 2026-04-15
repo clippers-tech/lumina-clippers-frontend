@@ -60,7 +60,7 @@ export function SubmissionsSection({
                 onClick={() => onPlatformChange(p)}
                 className={`px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all ${
                   selectedPlatform === p
-                    ? "bg-lime-400/20 text-lime-400"
+                    ? "bg-green-400/20 text-green-400"
                     : "text-zinc-500 hover:text-zinc-300"
                 }`}
               >
@@ -72,7 +72,7 @@ export function SubmissionsSection({
 
         {!isViewer && selectedIds.length > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-lime-400">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">
               {selectedIds.length} selected
             </span>
             <button

@@ -109,13 +109,13 @@ function NewThreadModal({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by URL, email, or campaign..."
-              className="w-full pl-9 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+              className="w-full pl-9 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
             />
           </div>
           <div className="mt-2 max-h-40 overflow-y-auto rounded-lg border border-white/[0.08] bg-white/[0.02]">
             {searchLoading ? (
               <div className="flex justify-center py-4">
-                <div className="w-4 h-4 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : submissions.length === 0 ? (
               <p className="text-sm text-zinc-500 p-3">No submissions found</p>
@@ -126,14 +126,14 @@ function NewThreadModal({
                   onClick={() => setSelectedSubmission(sub.id)}
                   className={`w-full text-left px-3 py-2.5 border-b border-white/[0.04] last:border-b-0 transition-colors ${
                     selectedSubmission === sub.id
-                      ? "bg-lime-400/5"
+                      ? "bg-green-400/5"
                       : "hover:bg-white/[0.02]"
                   }`}
                 >
                   <p className="text-sm text-zinc-100 truncate">{sub.post_url}</p>
                   <p className="text-[10px] text-zinc-500">
                     {sub.clipper_email} &middot; {sub.campaign_name} &middot;{" "}
-                    <span className="bg-lime-400/10 text-lime-400 px-1 rounded">
+                    <span className="bg-green-400/10 text-green-400 px-1 rounded">
                       {sub.platform}
                     </span>
                   </p>
@@ -151,7 +151,7 @@ function NewThreadModal({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors appearance-none"
+            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors appearance-none"
           >
             <option value="general" className="bg-[#0a0a0a]">
               General
@@ -178,7 +178,7 @@ function NewThreadModal({
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
             rows={4}
-            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors resize-none"
+            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors resize-none"
           />
         </div>
 
@@ -192,7 +192,7 @@ function NewThreadModal({
           <button
             onClick={handleCreate}
             disabled={creating || !selectedSubmission || !message.trim()}
-            className="bg-lime-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {creating ? "Creating..." : "Create Thread"}
           </button>
@@ -220,7 +220,7 @@ function statusIcon(status: string) {
 function categoryBadge(category: string) {
   const styles: Record<string, string> = {
     general: "bg-blue-400/10 text-blue-400",
-    payment: "bg-lime-400/10 text-lime-400",
+    payment: "bg-green-400/10 text-green-400",
     issue: "bg-red-400/10 text-red-400",
     revision: "bg-orange-400/10 text-orange-400",
   }
@@ -347,7 +347,7 @@ function ChatContent() {
     <div>
       {/* Header */}
       <div className="mb-2">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-lime-400 mb-1">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">
           Admin Panel
         </p>
         <h1 className="text-2xl font-bold text-zinc-100">Chat</h1>
@@ -372,12 +372,12 @@ function ChatContent() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search threads..."
-                  className="w-full pl-8 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full pl-8 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
                 />
               </div>
               <button
                 onClick={() => setShowNewThread(true)}
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-lime-400 text-black hover:bg-lime-300 transition-all flex-shrink-0"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-400 text-black hover:bg-green-300 transition-all flex-shrink-0"
                 title="New thread"
               >
                 <Plus className="w-4 h-4" />
@@ -390,7 +390,7 @@ function ChatContent() {
                   onClick={() => setFilterStatus(s)}
                   className={`px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded transition-all ${
                     filterStatus === s
-                      ? "bg-lime-400/10 text-lime-400"
+                      ? "bg-green-400/10 text-green-400"
                       : "text-zinc-600 hover:text-zinc-400"
                   }`}
                 >
@@ -416,7 +416,7 @@ function ChatContent() {
                   onClick={() => handleSelectThread(thread.id)}
                   className={`w-full text-left px-3 py-3 border-b border-white/[0.04] transition-colors ${
                     selectedThread?.id === thread.id
-                      ? "bg-lime-400/5"
+                      ? "bg-green-400/5"
                       : "hover:bg-white/[0.02]"
                   }`}
                 >
@@ -447,7 +447,7 @@ function ChatContent() {
                       {thread.last_message && (
                         <p className="text-[11px] text-zinc-500 truncate mt-1">
                           {thread.last_message.sender_type === "admin" && (
-                            <span className="text-lime-400/60">You: </span>
+                            <span className="text-green-400/60">You: </span>
                           )}
                           {thread.last_message.body}
                         </p>
@@ -473,7 +473,7 @@ function ChatContent() {
             </div>
           ) : threadLoading ? (
             <div className="flex-1 flex items-center justify-center">
-              <div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
             <>
@@ -513,7 +513,7 @@ function ChatContent() {
                   <select
                     value={selectedThread.status}
                     onChange={(e) => handleUpdateStatus(e.target.value)}
-                    className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-lime-400/30 transition-colors appearance-none"
+                    className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors appearance-none"
                   >
                     <option value="open" className="bg-[#0a0a0a]">Open</option>
                     <option value="resolved" className="bg-[#0a0a0a]">Resolved</option>
@@ -534,14 +534,14 @@ function ChatContent() {
                       <div
                         className={`max-w-[75%] rounded-xl px-3.5 py-2.5 ${
                           isAdmin
-                            ? "bg-lime-400/10 border border-lime-400/10"
+                            ? "bg-green-400/10 border border-green-400/10"
                             : "bg-white/[0.04] border border-white/[0.06]"
                         }`}
                       >
                         <div className="flex items-center gap-2 mb-1">
                           <span
                             className={`text-[10px] font-bold uppercase tracking-wider ${
-                              isAdmin ? "text-lime-400/70" : "text-zinc-500"
+                              isAdmin ? "text-green-400/70" : "text-zinc-500"
                             }`}
                           >
                             {isAdmin ? "Admin" : msg.sender_email}
@@ -573,12 +573,12 @@ function ChatContent() {
                       }
                     }}
                     placeholder="Type a message..."
-                    className="flex-1 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                    className="flex-1 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={sending || !newMessage.trim()}
-                    className="w-10 h-10 flex items-center justify-center rounded-lg bg-lime-400 text-black hover:bg-lime-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                    className="w-10 h-10 flex items-center justify-center rounded-lg bg-green-400 text-black hover:bg-green-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -621,7 +621,7 @@ function ChatContent() {
                 </h3>
                 <div className="rounded-lg border border-white/[0.04] bg-white/[0.015] p-3 space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="bg-lime-400/10 text-lime-400 text-[10px] font-mono px-1.5 py-0.5 rounded">
+                    <span className="bg-green-400/10 text-green-400 text-[10px] font-mono px-1.5 py-0.5 rounded">
                       {selectedThread.submission.platform}
                     </span>
                     <span
@@ -641,7 +641,7 @@ function ChatContent() {
                       href={selectedThread.submission.post_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[11px] text-lime-400 hover:underline truncate block"
+                      className="text-[11px] text-green-400 hover:underline truncate block"
                     >
                       {selectedThread.submission.post_url}
                     </a>
@@ -679,7 +679,7 @@ function ChatContent() {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] text-zinc-500">Total Paid</span>
-                      <span className="text-sm font-mono text-lime-400">
+                      <span className="text-sm font-mono text-green-400">
                         ${selectedThread.creator_stats.total_paid?.toFixed(2)}
                       </span>
                     </div>

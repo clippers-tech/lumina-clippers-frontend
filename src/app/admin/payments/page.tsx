@@ -118,7 +118,7 @@ export default function PaymentsPage() {
       <div>
         {/* Header */}
         <div className="mb-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-lime-400 mb-1">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">
             Admin Panel
           </p>
           <h1 className="text-2xl font-bold text-zinc-100">Payment Logs</h1>
@@ -138,7 +138,7 @@ export default function PaymentsPage() {
               value={searchEmail}
               onChange={(e) => setSearchEmail(e.target.value)}
               placeholder="Search by creator email..."
-              className="w-full pl-9 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+              className="w-full pl-9 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
             />
           </div>
 
@@ -153,7 +153,7 @@ export default function PaymentsPage() {
                 }}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                   filterMode === mode
-                    ? "bg-lime-400/10 text-lime-400"
+                    ? "bg-green-400/10 text-green-400"
                     : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.04]"
                 }`}
               >
@@ -165,7 +165,7 @@ export default function PaymentsPage() {
           {/* Add button */}
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1.5 bg-lime-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all"
+            className="flex items-center gap-1.5 bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             <Plus className="w-4 h-4" />
             Add Payment
@@ -230,7 +230,7 @@ export default function PaymentsPage() {
                         <p className="text-sm text-zinc-300">{p.campaign_name}</p>
                       </td>
                       <td className="px-5 py-4 text-right">
-                        <span className="text-sm font-mono text-lime-400 font-semibold">
+                        <span className="text-sm font-mono text-green-400 font-semibold">
                           {formatCurrency(p.amount)}
                         </span>
                       </td>
@@ -298,7 +298,7 @@ export default function PaymentsPage() {
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, submission_id: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                     placeholder="e.g. 42"
                   />
                 </div>
@@ -313,7 +313,7 @@ export default function PaymentsPage() {
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, amount: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                     placeholder="e.g. 150.00"
                   />
                 </div>
@@ -326,7 +326,7 @@ export default function PaymentsPage() {
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, method: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                     placeholder="e.g. PayPal, Wire"
                   />
                 </div>
@@ -339,7 +339,7 @@ export default function PaymentsPage() {
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, reference: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                     placeholder="e.g. TXN-12345"
                   />
                 </div>
@@ -352,7 +352,7 @@ export default function PaymentsPage() {
                     onChange={(e) =>
                       setAddForm((f) => ({ ...f, notes: e.target.value }))
                     }
-                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors resize-none"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors resize-none"
                     rows={3}
                     placeholder="Optional notes..."
                   />
@@ -381,7 +381,7 @@ export default function PaymentsPage() {
                   disabled={
                     addLoading || !addForm.submission_id || !addForm.amount
                   }
-                  className="bg-lime-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {addLoading ? "Saving..." : "Add Payment"}
                 </button>

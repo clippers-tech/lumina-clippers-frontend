@@ -11,7 +11,7 @@ function GridBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-lime-400/[0.03] rounded-full blur-[120px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-green-400/[0.03] rounded-full blur-[120px]" />
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/[0.02] rounded-full blur-[100px]" />
     </div>
   )
@@ -80,7 +80,7 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
           </div>
           <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">
             <div
-              className="h-full rounded-full bg-lime-400 transition-all duration-500"
+              className="h-full rounded-full bg-green-400 transition-all duration-500"
               style={{ width: `${budgetPct}%` }}
             />
           </div>
@@ -90,7 +90,7 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
         {campaign.status === "open" && (
           <Link
             href={`/c/${campaign.slug}`}
-            className="block w-full text-center bg-lime-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all"
+            className="block w-full text-center bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             Submit Clip
           </Link>
@@ -116,7 +116,7 @@ export default function HomePage() {
   const totalBudget = campaigns.reduce((sum, c) => sum + c.budget_total, 0)
 
   return (
-    <div className="relative min-h-screen bg-[#050505] text-zinc-100 selection:bg-lime-500/30">
+    <div className="relative min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
       <GridBackground />
 
       <div className="relative z-10">
@@ -146,14 +146,14 @@ export default function HomePage() {
 
         {/* Hero */}
         <section className="max-w-6xl mx-auto px-4 pt-20 pb-16 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-lime-400/20 bg-lime-400/[0.05] mb-6">
-            <div className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-lime-400">Internal Platform</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-400/20 bg-green-400/[0.05] mb-6">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">Internal Platform</span>
           </div>
 
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
             <span className="text-white">Submit Your </span>
-            <span className="text-lime-400">Clips</span>
+            <span className="text-green-400">Clips</span>
           </h1>
           <p className="text-zinc-500 mt-4 text-lg max-w-xl mx-auto">
             Browse active campaigns, submit your content, and track your earnings — all in one place.
@@ -208,7 +208,7 @@ export default function HomePage() {
               { step: "03", title: "Get Paid", desc: "Earn based on verified views at the campaign's CPM rate." },
             ].map((item) => (
               <div key={item.step} className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-6 text-center">
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-lime-400/10 text-lime-400 font-extrabold text-sm mb-3">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-400/10 text-green-400 font-extrabold text-sm mb-3">
                   {item.step}
                 </div>
                 <h3 className="font-bold text-sm text-zinc-100 mb-1">{item.title}</h3>

@@ -43,12 +43,12 @@ export function SendUploadLinksModal({ submissions, onSend, onClose, sending }: 
               onClick={() => toggle(sub.id)}
               className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-all text-left ${
                 selectedIds.includes(sub.id)
-                  ? "border-lime-400/20 bg-lime-400/5"
+                  ? "border-green-400/20 bg-green-400/5"
                   : "border-white/[0.04] hover:bg-white/[0.02]"
               }`}
             >
               <div className={`w-4 h-4 rounded border flex items-center justify-center ${
-                selectedIds.includes(sub.id) ? "bg-lime-400 border-lime-400" : "border-white/[0.15]"
+                selectedIds.includes(sub.id) ? "bg-green-400 border-green-400" : "border-white/[0.15]"
               }`}>
                 {selectedIds.includes(sub.id) && <Check className="w-3 h-3 text-black" />}
               </div>
@@ -70,7 +70,7 @@ export function SendUploadLinksModal({ submissions, onSend, onClose, sending }: 
           <button
             onClick={() => onSend(selectedIds)}
             disabled={sending || selectedIds.length === 0}
-            className="bg-lime-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50"
+            className="bg-green-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50"
           >
             {sending ? "Sending..." : `Send to ${selectedIds.length}`}
           </button>

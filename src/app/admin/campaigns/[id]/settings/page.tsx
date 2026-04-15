@@ -93,11 +93,11 @@ export default function CampaignSettingsPage() {
   }
 
   if (loading) {
-    return <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" /></div>
+    return <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" /></div>
   }
 
   const labelClass = "text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1 block"
-  const inputClass = "w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 placeholder:text-zinc-600"
+  const inputClass = "w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600"
   const helpClass = "text-[10px] text-zinc-600 mt-1"
 
   return (
@@ -107,7 +107,7 @@ export default function CampaignSettingsPage() {
       <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-6 mb-6">
         <form onSubmit={handleSave} className="space-y-5">
           {error && <p className="text-sm text-red-400">{error}</p>}
-          {success && <p className="text-sm text-lime-400">{success}</p>}
+          {success && <p className="text-sm text-green-400">{success}</p>}
 
           <div className="grid grid-cols-2 gap-4">
             <div><label className={labelClass}>Campaign Name</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className={inputClass} /></div>
@@ -146,7 +146,7 @@ export default function CampaignSettingsPage() {
                   const combinedPct = (parseFloat(form.us_viewers_pct) || 0) + (parseFloat(form.uk_viewers_pct) || 0)
                   setForm(prev => ({ ...prev, include_uk_views: false, us_viewers_pct: String(Math.round(combinedPct)), uk_viewers_pct: "" }))
                 }
-              }} className={`relative w-11 h-6 rounded-full transition-colors ${form.include_uk_views ? "bg-lime-400" : "bg-white/10"}`}>
+              }} className={`relative w-11 h-6 rounded-full transition-colors ${form.include_uk_views ? "bg-green-400" : "bg-white/10"}`}>
                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${form.include_uk_views ? "translate-x-5" : "translate-x-0"}`} />
               </button>
             </div>
@@ -168,7 +168,7 @@ export default function CampaignSettingsPage() {
             <option value="draft">Draft</option><option value="open">Open</option><option value="closed">Closed</option><option value="archived">Archived</option>
           </select></div>
 
-          <button type="submit" disabled={saving} className="w-full h-10 bg-lime-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50">
+          <button type="submit" disabled={saving} className="w-full h-10 bg-green-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50">
             {saving ? "Saving..." : "Save Changes"}
           </button>
         </form>

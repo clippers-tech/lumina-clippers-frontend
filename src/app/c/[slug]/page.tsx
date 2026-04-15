@@ -52,7 +52,7 @@ export default function CampaignSubmitPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -64,7 +64,7 @@ export default function CampaignSubmitPage() {
           <p className="text-zinc-400 mb-4">{error || "Campaign not found"}</p>
           <Link
             href="/"
-            className="bg-lime-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all"
+            className="bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             Back to Campaigns
           </Link>
@@ -77,11 +77,11 @@ export default function CampaignSubmitPage() {
   const platforms = campaign.accepted_platforms ? campaign.accepted_platforms.split(",").map((p) => p.trim()) : []
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-lime-500/30">
+    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lime-400/[0.02] rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-400/[0.02] rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10">
@@ -116,7 +116,7 @@ export default function CampaignSubmitPage() {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">CPM Rate</span>
-                      <p className="text-sm font-bold text-lime-400">{formatCurrency(campaign.cpm_rate)}</p>
+                      <p className="text-sm font-bold text-green-400">{formatCurrency(campaign.cpm_rate)}</p>
                     </div>
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Max Payout</span>
@@ -137,7 +137,7 @@ export default function CampaignSubmitPage() {
                     </div>
                     <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-lime-400 transition-all duration-500"
+                        className="h-full rounded-full bg-green-400 transition-all duration-500"
                         style={{ width: `${budgetPct}%` }}
                       />
                     </div>
@@ -196,7 +196,7 @@ export default function CampaignSubmitPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="your@email.com"
-                        className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 placeholder:text-zinc-600 transition-colors"
+                        className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors"
                       />
                     </div>
 
@@ -209,7 +209,7 @@ export default function CampaignSubmitPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Your name or handle"
-                        className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 placeholder:text-zinc-600 transition-colors"
+                        className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors"
                       />
                     </div>
 
@@ -223,7 +223,7 @@ export default function CampaignSubmitPage() {
                         value={postUrl}
                         onChange={(e) => setPostUrl(e.target.value)}
                         placeholder="https://tiktok.com/@user/video/..."
-                        className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 placeholder:text-zinc-600 transition-colors"
+                        className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors"
                       />
                     </div>
 
@@ -236,7 +236,7 @@ export default function CampaignSubmitPage() {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full bg-lime-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-40"
+                      className="w-full bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-40"
                     >
                       {submitting ? "Submitting..." : "Submit Clip"}
                     </button>

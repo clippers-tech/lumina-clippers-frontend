@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return (
       <AtmosphericBackground>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
         </div>
       </AtmosphericBackground>
     )
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <span className="text-sm text-zinc-500">
                       {user.name}
                       {user.role === "viewer" && (
-                        <span className="ml-2 text-[10px] uppercase tracking-wider text-lime-400/60 bg-lime-400/10 px-1.5 py-0.5 rounded">
+                        <span className="ml-2 text-[10px] uppercase tracking-wider text-green-400/60 bg-green-400/10 px-1.5 py-0.5 rounded">
                           Viewer
                         </span>
                       )}

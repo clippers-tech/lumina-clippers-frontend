@@ -45,7 +45,7 @@ export function SubmissionGrid({
                 }
                 className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
                   allSelected
-                    ? "bg-lime-400 border-lime-400"
+                    ? "bg-green-400 border-green-400"
                     : "border-white/[0.15] hover:border-white/[0.3]"
                 }`}
               >
@@ -68,7 +68,7 @@ export function SubmissionGrid({
               <tr
                 key={sub.id}
                 className={`border-b border-white/[0.03] transition-colors ${
-                  isSelected ? "bg-lime-400/5" : hoveredId === sub.id ? "bg-white/[0.02]" : ""
+                  isSelected ? "bg-green-400/5" : hoveredId === sub.id ? "bg-white/[0.02]" : ""
                 }`}
                 onMouseEnter={() => setHoveredId(sub.id)}
                 onMouseLeave={() => setHoveredId(null)}
@@ -78,7 +78,7 @@ export function SubmissionGrid({
                     onClick={() => onToggleSelect(sub.id)}
                     className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
                       isSelected
-                        ? "bg-lime-400 border-lime-400"
+                        ? "bg-green-400 border-green-400"
                         : "border-white/[0.15] hover:border-white/[0.3]"
                     }`}
                   >
@@ -95,7 +95,7 @@ export function SubmissionGrid({
                   <div className="flex items-center gap-2">
                     <Link
                       href={`/admin/campaigns/${campaignId}/submissions/${sub.id}`}
-                      className="text-sm text-lime-400 hover:underline truncate max-w-[200px]"
+                      className="text-sm text-green-400 hover:underline truncate max-w-[200px]"
                     >
                       #{sub.id}
                     </Link>
@@ -116,7 +116,7 @@ export function SubmissionGrid({
                   <span className="text-sm font-mono text-zinc-100">{formatNumber(sub.views)}</span>
                 </td>
                 <td className="px-3 py-3 text-right">
-                  <span className="text-sm font-mono text-lime-400">{formatCurrency(sub.est_earnings)}</span>
+                  <span className="text-sm font-mono text-green-400">{formatCurrency(sub.est_earnings)}</span>
                 </td>
                 <td className="px-3 py-3 text-center">
                   <StatusBadge status={sub.status} />

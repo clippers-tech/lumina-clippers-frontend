@@ -33,7 +33,7 @@ export function UpdateStatusModal({ selectedCount, onConfirm, onClose }: UpdateS
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
           >
             {statuses.map((s) => (
               <option key={s} value={s}>{s.replace(/_/g, " ")}</option>
@@ -44,7 +44,7 @@ export function UpdateStatusModal({ selectedCount, onConfirm, onClose }: UpdateS
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Optional notes..."
-            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 h-20 resize-none focus:outline-none focus:border-lime-400/30"
+            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 h-20 resize-none focus:outline-none focus:border-green-400/30"
           />
         </div>
 
@@ -57,7 +57,7 @@ export function UpdateStatusModal({ selectedCount, onConfirm, onClose }: UpdateS
           </button>
           <button
             onClick={() => onConfirm(status, notes)}
-            className="bg-lime-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all"
+            className="bg-green-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             Confirm
           </button>

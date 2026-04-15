@@ -95,11 +95,11 @@ export default function CompletedCampaignsPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-lime-500/30">
+    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lime-400/[0.02] rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-400/[0.02] rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10">
@@ -129,7 +129,7 @@ export default function CompletedCampaignsPage() {
               <p className="text-zinc-500 text-sm">No completed campaigns yet.</p>
               <Link
                 href="/"
-                className="inline-block mt-3 text-xs text-lime-400 hover:text-lime-300 transition-colors"
+                className="inline-block mt-3 text-xs text-green-400 hover:text-green-300 transition-colors"
               >
                 View active campaigns &rarr;
               </Link>

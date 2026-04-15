@@ -93,13 +93,13 @@ export default function CampaignsPage() {
       <div>
         <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-2">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-lime-400 mb-1">Admin Panel</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">Admin Panel</p>
             <h1 className="text-2xl font-bold text-zinc-100">Campaign Management</h1>
             <p className="text-sm text-zinc-500 mt-1">Create and manage campaigns</p>
           </div>
           <Link
             href="/admin/campaigns/new"
-            className="flex items-center gap-1.5 bg-lime-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all"
+            className="flex items-center gap-1.5 bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             <Plus className="w-4 h-4" />
             New Campaign
@@ -117,7 +117,7 @@ export default function CampaignsPage() {
 
           {loading ? (
             <div className="flex justify-center py-16">
-              <div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : campaigns.length === 0 ? (
             <div className="text-center py-16 text-zinc-500">
@@ -143,7 +143,7 @@ export default function CampaignsPage() {
                         <div className="flex items-start gap-2.5">
                           <span className={`w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0 ${statusDot(c.status)}`} />
                           <div className="min-w-0">
-                            <Link href={`/admin/campaigns/${c.id}`} className="text-sm font-semibold text-zinc-100 hover:text-lime-400 transition-colors">
+                            <Link href={`/admin/campaigns/${c.id}`} className="text-sm font-semibold text-zinc-100 hover:text-green-400 transition-colors">
                               {c.name}
                             </Link>
                             {c.client_email && <p className="text-[11px] text-zinc-600 mt-0.5">by {c.client_email}</p>}
@@ -153,14 +153,14 @@ export default function CampaignsPage() {
                               {c.budget_total > 0 && ` · Budget: ${formatCurrency(c.budget_total)}`}
                             </p>
                             <div className="flex gap-2 mt-1">
-                              {c.thumbnail_url && <a href={c.thumbnail_url} target="_blank" rel="noopener noreferrer" className="text-[11px] text-lime-400 hover:underline">Thumbnail ↗</a>}
-                              {c.brief_url && <a href={c.brief_url} target="_blank" rel="noopener noreferrer" className="text-[11px] text-lime-400 hover:underline">Requirements ↗</a>}
+                              {c.thumbnail_url && <a href={c.thumbnail_url} target="_blank" rel="noopener noreferrer" className="text-[11px] text-green-400 hover:underline">Thumbnail ↗</a>}
+                              {c.brief_url && <a href={c.brief_url} target="_blank" rel="noopener noreferrer" className="text-[11px] text-green-400 hover:underline">Requirements ↗</a>}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-5 py-4">
-                        <span className="inline-block bg-lime-400/10 text-lime-400 text-xs font-mono px-2.5 py-1 rounded">{c.slug}</span>
+                        <span className="inline-block bg-green-400/10 text-green-400 text-xs font-mono px-2.5 py-1 rounded">{c.slug}</span>
                       </td>
                       <td className="px-5 py-4 text-center">
                         <span className="text-sm font-medium text-zinc-100">{c.submissionCount ?? 0}</span>

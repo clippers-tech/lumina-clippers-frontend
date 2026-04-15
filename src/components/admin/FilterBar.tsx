@@ -37,7 +37,7 @@ export function FilterBar({
         <select
           value={selectedCampaignId || ""}
           onChange={(e) => onCampaignChange(e.target.value ? Number(e.target.value) : null)}
-          className="bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 min-w-[200px]"
+          className="bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 min-w-[200px]"
         >
           <option value="">Select Campaign</option>
           {campaigns.map((c) => (
@@ -51,7 +51,7 @@ export function FilterBar({
         <select
           value={selectedStatus}
           onChange={(e) => onStatusChange(e.target.value)}
-          className="bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+          className="bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
         >
           <option value="">All Statuses</option>
           {statuses.filter(Boolean).map((s) => (

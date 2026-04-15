@@ -35,7 +35,7 @@ export function StatCards({
           <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">
             {s.label}
           </p>
-          <p className={`text-lg font-bold ${s.accent ? "text-lime-400" : "text-zinc-100"}`}>
+          <p className={`text-lg font-bold ${s.accent ? "text-green-400" : "text-zinc-100"}`}>
             {s.value}
           </p>
         </div>

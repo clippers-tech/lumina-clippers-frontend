@@ -7,7 +7,7 @@ export function DashboardHeader() {
 
   return (
     <div className="mb-6">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-lime-400 mb-1">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">
         Operations Terminal
       </p>
       <h1 className="text-2xl font-bold text-zinc-100">

@@ -127,12 +127,12 @@ export default function SubmissionDetailPage() {
   }
 
   if (loading || !sub) {
-    return <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" /></div>
+    return <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" /></div>
   }
 
   const embedUrl = getEmbedUrl(sub.platform, sub.post_url)
   const isVertical = sub.platform !== "youtube" || sub.post_url.includes("shorts")
-  const inputClass = "w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+  const inputClass = "w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
   const labelClass = "text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1 block"
 
   return (
@@ -171,7 +171,7 @@ export default function SubmissionDetailPage() {
         <div className="flex items-center justify-between">
           <div>
             <p className={labelClass}>Post URL</p>
-            <a href={sub.post_url} target="_blank" rel="noopener noreferrer" className="text-sm text-lime-400 hover:underline flex items-center gap-1.5">
+            <a href={sub.post_url} target="_blank" rel="noopener noreferrer" className="text-sm text-green-400 hover:underline flex items-center gap-1.5">
               {sub.post_url} <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
@@ -201,7 +201,7 @@ export default function SubmissionDetailPage() {
         ].map((s) => (
           <div key={s.label} className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4">
             <p className={labelClass}>{s.label}</p>
-            <p className={`text-2xl font-bold ${s.accent ? "text-lime-400" : "text-zinc-100"}`}>{s.value}</p>
+            <p className={`text-2xl font-bold ${s.accent ? "text-green-400" : "text-zinc-100"}`}>{s.value}</p>
           </div>
         ))}
       </div>
@@ -238,7 +238,7 @@ export default function SubmissionDetailPage() {
             <textarea value={editNotes} onChange={(e) => setEditNotes(e.target.value)} rows={3} placeholder="Admin notes..." className={`${inputClass} resize-none`} />
           </div>
           <div className="flex gap-3">
-            <button onClick={handleSave} disabled={saving} className="flex-1 h-10 bg-lime-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50">
+            <button onClick={handleSave} disabled={saving} className="flex-1 h-10 bg-green-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50">
               {saving ? "Saving..." : "Save Changes"}
             </button>
             <button onClick={handleScrape} disabled={scraping} className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-4 py-2 rounded-lg transition-all">
@@ -251,7 +251,7 @@ export default function SubmissionDetailPage() {
 
       {/* Actions */}
       <div className="flex gap-3">
-        <button onClick={() => setPayoutOpen(true)} disabled={sub.status === "paid"} className="flex-1 h-10 bg-lime-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50">
+        <button onClick={() => setPayoutOpen(true)} disabled={sub.status === "paid"} className="flex-1 h-10 bg-green-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50">
           {sub.status === "paid" ? "Already Paid" : "Log Payout"}
         </button>
         <button onClick={handleReject} disabled={sub.status === "rejected"} className="bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold px-4 py-2 rounded-lg hover:bg-red-500/30 transition-all disabled:opacity-50">

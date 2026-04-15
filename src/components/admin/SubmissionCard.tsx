@@ -36,7 +36,7 @@ export function SubmissionCard({ submission: sub, campaignId }: SubmissionCardPr
           </div>
           <div>
             <p className="text-[10px] text-zinc-600 uppercase tracking-wider">Earnings</p>
-            <p className="text-sm font-mono text-lime-400">{formatCurrency(sub.est_earnings)}</p>
+            <p className="text-sm font-mono text-green-400">{formatCurrency(sub.est_earnings)}</p>
           </div>
         </div>
       </div>

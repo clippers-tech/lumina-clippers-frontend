@@ -24,7 +24,7 @@ export default function ViewerPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -49,11 +49,11 @@ export default function ViewerPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-lime-500/30">
+    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-lime-400/[0.02] rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-green-400/[0.02] rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10">
@@ -114,7 +114,7 @@ export default function ViewerPage() {
             </div>
             <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4">
               <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Est. Revenue</span>
-              <p className="text-xl font-extrabold text-lime-400 mt-1">{formatCurrency(campaign.est_revenue)}</p>
+              <p className="text-xl font-extrabold text-green-400 mt-1">{formatCurrency(campaign.est_revenue)}</p>
             </div>
           </div>
 
@@ -125,7 +125,7 @@ export default function ViewerPage() {
               <select
                 value={platformFilter}
                 onChange={(e) => setPlatformFilter(e.target.value)}
-                className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-lime-400/30 transition-colors"
+                className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
               >
                 <option value="all">All Platforms</option>
                 {allSubmissionPlatforms.map((p) => (
@@ -158,7 +158,7 @@ export default function ViewerPage() {
                       href={sub.post_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-zinc-400 hover:text-lime-400 transition-colors truncate block"
+                      className="text-xs text-zinc-400 hover:text-green-400 transition-colors truncate block"
                     >
                       {sub.post_url}
                     </a>
@@ -174,7 +174,7 @@ export default function ViewerPage() {
                       </div>
                       <div>
                         <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Earnings</span>
-                        <p className="text-lime-400 font-semibold">{formatCurrency(sub.est_earnings)}</p>
+                        <p className="text-green-400 font-semibold">{formatCurrency(sub.est_earnings)}</p>
                       </div>
                     </div>
 

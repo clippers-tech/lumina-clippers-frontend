@@ -19,12 +19,12 @@ export function BudgetBar({ budgetUsed, budgetTotal, estRevenue }: BudgetBarProp
         </p>
         <p className="text-xs text-zinc-400">
           {formatCurrency(budgetUsed)} / {formatCurrency(budgetTotal)}
-          <span className="ml-3 text-lime-400">Est. Revenue: {formatCurrency(estRevenue)}</span>
+          <span className="ml-3 text-green-400">Est. Revenue: {formatCurrency(estRevenue)}</span>
         </p>
       </div>
       <div className="h-2 bg-white/[0.05] rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-lime-400 to-emerald-500 rounded-full transition-all duration-500"
+          className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>

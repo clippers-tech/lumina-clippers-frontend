@@ -27,7 +27,7 @@ export function useToast() {
 
 const VARIANT_STYLES: Record<ToastVariant, string> = {
   default: "border-white/[0.08] bg-[#1a1a1a] text-white",
-  success: "border-lime-400/20 bg-lime-400/10 text-lime-400",
+  success: "border-green-400/20 bg-green-400/10 text-green-400",
   error: "border-red-500/20 bg-red-500/10 text-red-400",
   warning: "border-yellow-500/20 bg-yellow-500/10 text-yellow-400",
 }

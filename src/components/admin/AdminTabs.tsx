@@ -39,7 +39,7 @@ export function AdminTabs() {
           >
             {tab.label}
             {isActive && (
-              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-lime-400 rounded-t-full" />
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-green-400 rounded-t-full" />
             )}
           </Link>
         )

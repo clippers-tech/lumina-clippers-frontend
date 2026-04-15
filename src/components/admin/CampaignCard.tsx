@@ -21,7 +21,7 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
           {campaign.budget_total > 0 && (
             <span>Budget: {formatCurrency(campaign.budget_total)}</span>
           )}
-          <span className="bg-lime-400/10 text-lime-400 px-1.5 py-0.5 rounded font-mono text-[10px]">
+          <span className="bg-green-400/10 text-green-400 px-1.5 py-0.5 rounded font-mono text-[10px]">
             {campaign.slug}
           </span>
         </div>

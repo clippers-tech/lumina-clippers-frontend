@@ -33,7 +33,7 @@ export function PayoutModal({ suggestedAmount, onConfirm, onClose }: PayoutModal
               step="0.01"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
             />
           </div>
           <div>
@@ -41,7 +41,7 @@ export function PayoutModal({ suggestedAmount, onConfirm, onClose }: PayoutModal
             <select
               value={method}
               onChange={(e) => setMethod(e.target.value)}
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
             >
               <option value="paypal">PayPal</option>
               <option value="bank">Bank Transfer</option>
@@ -56,7 +56,7 @@ export function PayoutModal({ suggestedAmount, onConfirm, onClose }: PayoutModal
               value={reference}
               onChange={(e) => setReference(e.target.value)}
               placeholder="Transaction ID, invoice #, etc."
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30"
             />
           </div>
         </div>
@@ -70,7 +70,7 @@ export function PayoutModal({ suggestedAmount, onConfirm, onClose }: PayoutModal
           </button>
           <button
             onClick={() => onConfirm({ amount: parseFloat(amount), method, reference })}
-            className="bg-lime-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all"
+            className="bg-green-400 text-black font-extrabold text-xs px-6 py-2 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             Log Payout
           </button>

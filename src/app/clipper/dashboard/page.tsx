@@ -51,7 +51,7 @@ function SubmissionRow({ submission }: { submission: ClipperDashboard["submissio
           href={submission.post_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[11px] text-zinc-500 hover:text-lime-400 transition-colors truncate block"
+          className="text-[11px] text-zinc-500 hover:text-green-400 transition-colors truncate block"
         >
           {submission.post_url}
         </a>
@@ -59,7 +59,7 @@ function SubmissionRow({ submission }: { submission: ClipperDashboard["submissio
 
       <div className="text-right shrink-0 space-y-0.5">
         <p className="text-xs font-bold text-zinc-200">{formatNumber(submission.views)} views</p>
-        <p className="text-xs text-lime-400 font-semibold">{formatCurrency(submission.est_earnings)}</p>
+        <p className="text-xs text-green-400 font-semibold">{formatCurrency(submission.est_earnings)}</p>
       </div>
 
       <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0 ${statusColor(submission.status)}`}>
@@ -138,7 +138,7 @@ function BulkUploadSection({
         className="w-full flex items-center justify-between p-4 hover:bg-white/[0.02] transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Upload className="w-4 h-4 text-lime-400" />
+          <Upload className="w-4 h-4 text-green-400" />
           <span className="text-sm font-bold text-zinc-200">Bulk Upload</span>
         </div>
         <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${expanded ? "rotate-180" : ""}`} />
@@ -153,7 +153,7 @@ function BulkUploadSection({
             <select
               value={selectedCampaign ?? ""}
               onChange={(e) => setSelectedCampaign(Number(e.target.value) || null)}
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
             >
               <option value="">Select campaign...</option>
               {campaigns.map((c) => (
@@ -169,7 +169,7 @@ function BulkUploadSection({
               <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
                 Post URLs (one per line)
               </label>
-              <label className="cursor-pointer text-[10px] text-lime-400 hover:text-lime-300 transition-colors font-semibold">
+              <label className="cursor-pointer text-[10px] text-green-400 hover:text-green-300 transition-colors font-semibold">
                 Import CSV
                 <input type="file" accept=".csv" onChange={handleCsvUpload} className="hidden" />
               </label>
@@ -179,14 +179,14 @@ function BulkUploadSection({
               onChange={(e) => setUrls(e.target.value)}
               rows={5}
               placeholder={"https://tiktok.com/@user/video/123\nhttps://tiktok.com/@user/video/456"}
-              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 placeholder:text-zinc-600 transition-colors resize-none"
+              className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors resize-none"
             />
           </div>
 
           <button
             onClick={handleBulkSubmit}
             disabled={uploading || !selectedCampaign || !urls.trim()}
-            className="w-full bg-lime-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-40"
+            className="w-full bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-40"
           >
             {uploading ? "Uploading..." : "Submit URLs"}
           </button>
@@ -194,7 +194,7 @@ function BulkUploadSection({
           {result && (
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.03] p-3 space-y-1.5">
               <p className="text-xs text-zinc-300">
-                Added: <span className="text-lime-400 font-bold">{result.added}</span> | Skipped:{" "}
+                Added: <span className="text-green-400 font-bold">{result.added}</span> | Skipped:{" "}
                 <span className="text-zinc-400 font-bold">{result.skipped}</span>
               </p>
               {result.results
@@ -268,7 +268,7 @@ export default function ClipperDashboardPage() {
   if (loading || !dashboard) {
     return (
       <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -283,11 +283,11 @@ export default function ClipperDashboardPage() {
   const allPlatforms = Array.from(new Set(dashboard.submissions.map((s) => s.platform)))
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-lime-500/30">
+    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-lime-400/[0.02] rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-green-400/[0.02] rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10">
@@ -298,7 +298,7 @@ export default function ClipperDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-xl font-extrabold text-zinc-100">
-                Welcome back, <span className="text-lime-400">{dashboard.name || dashboard.email}</span>
+                Welcome back, <span className="text-green-400">{dashboard.name || dashboard.email}</span>
               </h1>
               <p className="text-xs text-zinc-500 mt-0.5">{dashboard.email}</p>
             </div>
@@ -354,7 +354,7 @@ export default function ClipperDashboardPage() {
                     <div className="flex items-center gap-4 text-xs text-zinc-400">
                       <span>{c.submission_count} clips</span>
                       <span>{formatNumber(c.views)} views</span>
-                      <span className="text-lime-400">{formatCurrency(c.earnings)}</span>
+                      <span className="text-green-400">{formatCurrency(c.earnings)}</span>
                     </div>
                   </Link>
                 ))}
@@ -377,7 +377,7 @@ export default function ClipperDashboardPage() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
                 >
                   <option value="all">All Status</option>
                   {allStatuses.map((s) => (
@@ -389,7 +389,7 @@ export default function ClipperDashboardPage() {
                 <select
                   value={platformFilter}
                   onChange={(e) => setPlatformFilter(e.target.value)}
-                  className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
                 >
                   <option value="all">All Platforms</option>
                   {allPlatforms.map((p) => (
@@ -406,7 +406,7 @@ export default function ClipperDashboardPage() {
                 <p className="text-zinc-500 text-sm">No submissions found.</p>
                 <Link
                   href="/"
-                  className="inline-block mt-3 text-xs text-lime-400 hover:text-lime-300 transition-colors"
+                  className="inline-block mt-3 text-xs text-green-400 hover:text-green-300 transition-colors"
                 >
                   Browse campaigns &rarr;
                 </Link>

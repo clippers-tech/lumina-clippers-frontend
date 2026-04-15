@@ -62,7 +62,7 @@ export default function NewCampaignPage() {
   }
 
   const labelClass = "text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1 block"
-  const inputClass = "w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 placeholder:text-zinc-600"
+  const inputClass = "w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600"
   const helpClass = "text-[10px] text-zinc-600 mt-1"
 
   return (
@@ -152,7 +152,7 @@ export default function NewCampaignPage() {
                   const combinedPct = (parseFloat(prev.us_viewers_pct) || 0) + (parseFloat(prev.uk_viewers_pct) || 0)
                   return { ...prev, include_uk_views: false, us_viewers_pct: String(Math.round(combinedPct)), uk_viewers_pct: "0" }
                 })
-              }} className={`relative w-11 h-6 rounded-full transition-colors ${form.include_uk_views ? "bg-lime-400" : "bg-white/10"}`}>
+              }} className={`relative w-11 h-6 rounded-full transition-colors ${form.include_uk_views ? "bg-green-400" : "bg-white/10"}`}>
                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${form.include_uk_views ? "translate-x-5" : "translate-x-0"}`} />
               </button>
             </div>
@@ -210,7 +210,7 @@ export default function NewCampaignPage() {
 
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={() => router.back()} className="flex-1 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-4 py-2.5 rounded-lg transition-all">Cancel</button>
-            <button type="submit" disabled={loading} className="flex-1 h-10 bg-lime-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50">
+            <button type="submit" disabled={loading} className="flex-1 h-10 bg-green-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50">
               {loading ? "Creating..." : "Create Campaign"}
             </button>
           </div>

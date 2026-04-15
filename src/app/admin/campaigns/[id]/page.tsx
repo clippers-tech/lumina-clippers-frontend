@@ -81,7 +81,7 @@ export default function CampaignDetailPage() {
   }
 
   if (loading || !campaign || !stats) {
-    return <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin" /></div>
+    return <div className="flex justify-center py-16"><div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" /></div>
   }
 
   const baseUrl = typeof window !== "undefined" ? window.location.origin : ""
@@ -119,15 +119,15 @@ export default function CampaignDetailPage() {
               <h2 className="text-lg font-bold text-zinc-100">Import CSV</h2>
               <button onClick={() => setImportOpen(false)} className="text-zinc-500 hover:text-zinc-300"><X className="w-5 h-5" /></button>
             </div>
-            <p className="text-sm text-zinc-400 mb-4">Upload a CSV with columns: <code className="text-lime-400">clipper_email</code>, <code className="text-lime-400">post_url</code>, <code className="text-lime-400">clipper_name</code> (optional)</p>
-            <button onClick={downloadTemplate} className="text-xs text-lime-400 hover:underline mb-4 block">Download Template</button>
+            <p className="text-sm text-zinc-400 mb-4">Upload a CSV with columns: <code className="text-green-400">clipper_email</code>, <code className="text-green-400">post_url</code>, <code className="text-green-400">clipper_name</code> (optional)</p>
+            <button onClick={downloadTemplate} className="text-xs text-green-400 hover:underline mb-4 block">Download Template</button>
             <input ref={fileInputRef} type="file" accept=".csv" className="hidden" onChange={(e) => setImportFile(e.target.files?.[0] || null)} />
-            <div onClick={() => fileInputRef.current?.click()} className="border border-dashed border-white/[0.12] rounded-lg p-6 text-center cursor-pointer hover:border-lime-400/30 transition-colors mb-4">
+            <div onClick={() => fileInputRef.current?.click()} className="border border-dashed border-white/[0.12] rounded-lg p-6 text-center cursor-pointer hover:border-green-400/30 transition-colors mb-4">
               {importFile ? <p className="text-sm text-zinc-100">{importFile.name}</p> : <p className="text-sm text-zinc-500">Click to select CSV file</p>}
             </div>
             {importResult && (
               <div className="mb-4 p-3 rounded-lg bg-white/[0.03] text-sm">
-                <p className="text-zinc-100">Imported: <span className="text-lime-400">{importResult.imported}</span> | Skipped: <span className="text-zinc-500">{importResult.skipped}</span></p>
+                <p className="text-zinc-100">Imported: <span className="text-green-400">{importResult.imported}</span> | Skipped: <span className="text-zinc-500">{importResult.skipped}</span></p>
                 {importResult.errors.length > 0 && (
                   <div className="mt-2 max-h-32 overflow-y-auto">
                     {importResult.errors.map((e, i) => <p key={i} className="text-xs text-red-400">Row {e.row}: {e.reason}</p>)}
@@ -136,7 +136,7 @@ export default function CampaignDetailPage() {
               </div>
             )}
             <div className="flex gap-3">
-              <button onClick={handleImport} disabled={!importFile || importing} className="flex-1 h-10 bg-lime-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50">
+              <button onClick={handleImport} disabled={!importFile || importing} className="flex-1 h-10 bg-green-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50">
                 {importing ? "Importing..." : "Import"}
               </button>
               <button onClick={() => setImportOpen(false)} className="border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-4 py-2 rounded-lg transition-all">Cancel</button>
@@ -149,11 +149,11 @@ export default function CampaignDetailPage() {
       <div className="flex flex-wrap gap-3 mb-6">
         <div className="flex items-center gap-2 rounded-lg border border-white/[0.04] bg-white/[0.015] px-3 py-2 text-sm">
           <span className="text-zinc-500">Submission link:</span>
-          <code className="text-lime-400 text-xs font-mono">{submissionUrl}</code>
+          <code className="text-green-400 text-xs font-mono">{submissionUrl}</code>
           <button onClick={() => copyToClipboard(submissionUrl, "submission")} className="text-zinc-500 hover:text-zinc-300">
             <Copy className="w-3.5 h-3.5" />
           </button>
-          {copied === "submission" && <span className="text-[10px] text-lime-400">Copied</span>}
+          {copied === "submission" && <span className="text-[10px] text-green-400">Copied</span>}
         </div>
         {campaign.brief_url && (
           <a href={campaign.brief_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 rounded-lg border border-white/[0.04] bg-white/[0.015] px-3 py-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors">
@@ -173,7 +173,7 @@ export default function CampaignDetailPage() {
         ].map((s) => (
           <div key={s.label} className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4">
             <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">{s.label}</p>
-            <p className={`text-lg font-bold ${s.accent ? "text-lime-400" : "text-zinc-100"}`}>{s.value}</p>
+            <p className={`text-lg font-bold ${s.accent ? "text-green-400" : "text-zinc-100"}`}>{s.value}</p>
           </div>
         ))}
       </div>
@@ -183,7 +183,7 @@ export default function CampaignDetailPage() {
         <div className="flex gap-2 items-center">
           <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold">Status:</span>
           {["", "awaiting_stats", "stats_verified", "paid", "rejected"].map((s) => (
-            <button key={s} onClick={() => setStatusFilter(s)} className={`text-xs px-2.5 py-1 rounded transition-colors ${statusFilter === s ? "bg-lime-400/20 text-lime-400" : "text-zinc-500 hover:text-zinc-300"}`}>
+            <button key={s} onClick={() => setStatusFilter(s)} className={`text-xs px-2.5 py-1 rounded transition-colors ${statusFilter === s ? "bg-green-400/20 text-green-400" : "text-zinc-500 hover:text-zinc-300"}`}>
               {s ? s.replace(/_/g, " ") : "All"}
             </button>
           ))}
@@ -191,7 +191,7 @@ export default function CampaignDetailPage() {
         <div className="flex gap-2 items-center">
           <span className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold">Platform:</span>
           {["", "tiktok", "instagram", "youtube", "twitter"].map((p) => (
-            <button key={p} onClick={() => setPlatformFilter(p)} className={`text-xs px-2.5 py-1 rounded transition-colors ${platformFilter === p ? "bg-lime-400/20 text-lime-400" : "text-zinc-500 hover:text-zinc-300"}`}>
+            <button key={p} onClick={() => setPlatformFilter(p)} className={`text-xs px-2.5 py-1 rounded transition-colors ${platformFilter === p ? "bg-green-400/20 text-green-400" : "text-zinc-500 hover:text-zinc-300"}`}>
               {p || "All"}
             </button>
           ))}

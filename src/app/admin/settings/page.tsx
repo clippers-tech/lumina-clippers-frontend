@@ -35,7 +35,7 @@ function SecretField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 pr-10 focus:outline-none focus:border-lime-400/30 transition-colors font-mono"
+        className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 pr-10 focus:outline-none focus:border-green-400/30 transition-colors font-mono"
       />
       <button
         type="button"
@@ -156,7 +156,7 @@ function ApifyUsageSection() {
               <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">
                 Total Cost
               </p>
-              <p className="text-lg font-bold text-lime-400 font-mono">
+              <p className="text-lg font-bold text-green-400 font-mono">
                 {formatCurrency(data.summary.total_cost)}
               </p>
             </div>
@@ -202,7 +202,7 @@ function ApifyUsageSection() {
                       })}
                     </td>
                     <td className="px-3 py-3">
-                      <span className="bg-lime-400/10 text-lime-400 text-[10px] font-mono px-1.5 py-0.5 rounded">
+                      <span className="bg-green-400/10 text-green-400 text-[10px] font-mono px-1.5 py-0.5 rounded">
                         {row.platform}
                       </span>
                     </td>
@@ -210,7 +210,7 @@ function ApifyUsageSection() {
                     <td className="px-3 py-3 text-right text-sm font-mono text-zinc-100">
                       {row.url_count}
                     </td>
-                    <td className="px-3 py-3 text-right text-sm font-mono text-lime-400">
+                    <td className="px-3 py-3 text-right text-sm font-mono text-green-400">
                       {formatCurrency(row.est_cost)}
                     </td>
                     <td className="px-3 py-3 text-sm text-zinc-500 font-mono truncate max-w-[120px]">
@@ -278,7 +278,7 @@ export default function SettingsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-2">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-lime-400 mb-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">
               Admin Panel
             </p>
             <h1 className="text-2xl font-bold text-zinc-100">Settings</h1>
@@ -289,7 +289,7 @@ export default function SettingsPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-1.5 bg-lime-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             {saving ? "Saving..." : "Save All"}
@@ -322,7 +322,7 @@ export default function SettingsPage() {
                 <input
                   value={settings.app_name || ""}
                   onChange={(e) => updateField("app_name", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="Lumina Clippers"
                 />
               </FieldRow>
@@ -333,7 +333,7 @@ export default function SettingsPage() {
                 <input
                   value={settings.base_url || ""}
                   onChange={(e) => updateField("base_url", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="https://app.luminaclippers.com"
                 />
               </FieldRow>
@@ -346,7 +346,7 @@ export default function SettingsPage() {
                   step="0.01"
                   value={settings.default_cpm_rate || ""}
                   onChange={(e) => updateField("default_cpm_rate", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="10.00"
                 />
               </FieldRow>
@@ -359,7 +359,7 @@ export default function SettingsPage() {
                   step="0.01"
                   value={settings.default_max_payout || ""}
                   onChange={(e) => updateField("default_max_payout", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="500.00"
                 />
               </FieldRow>
@@ -375,7 +375,7 @@ export default function SettingsPage() {
                 <input
                   value={settings.smtp_host || ""}
                   onChange={(e) => updateField("smtp_host", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="smtp.gmail.com"
                 />
               </FieldRow>
@@ -384,7 +384,7 @@ export default function SettingsPage() {
                   type="number"
                   value={settings.smtp_port || ""}
                   onChange={(e) => updateField("smtp_port", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="587"
                 />
               </FieldRow>
@@ -392,7 +392,7 @@ export default function SettingsPage() {
                 <input
                   value={settings.smtp_username || ""}
                   onChange={(e) => updateField("smtp_username", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="user@gmail.com"
                 />
               </FieldRow>
@@ -407,7 +407,7 @@ export default function SettingsPage() {
                 <input
                   value={settings.from_email || ""}
                   onChange={(e) => updateField("from_email", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="noreply@luminaclippers.com"
                 />
               </FieldRow>
@@ -415,7 +415,7 @@ export default function SettingsPage() {
                 <input
                   value={settings.from_name || ""}
                   onChange={(e) => updateField("from_name", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="Lumina Clippers"
                 />
               </FieldRow>
@@ -438,7 +438,7 @@ export default function SettingsPage() {
                 <input
                   value={settings.telegram_chat_id || ""}
                   onChange={(e) => updateField("telegram_chat_id", e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="-1001234567890"
                 />
               </FieldRow>
@@ -455,7 +455,7 @@ export default function SettingsPage() {
                   }
                   className={`relative w-12 h-6 rounded-full transition-colors ${
                     settings.telegram_enabled === "true"
-                      ? "bg-lime-400"
+                      ? "bg-green-400"
                       : "bg-white/[0.1]"
                   }`}
                 >
@@ -496,7 +496,7 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     updateField("scrape_interval_minutes", e.target.value)
                   }
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   placeholder="60"
                 />
               </FieldRow>
@@ -513,7 +513,7 @@ export default function SettingsPage() {
                   }
                   className={`relative w-12 h-6 rounded-full transition-colors ${
                     settings.auto_scrape_enabled === "true"
-                      ? "bg-lime-400"
+                      ? "bg-green-400"
                       : "bg-white/[0.1]"
                   }`}
                 >
@@ -535,7 +535,7 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     updateField("apify_tiktok_actor_id", e.target.value)
                   }
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors font-mono"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors font-mono"
                   placeholder="actor_id"
                 />
               </FieldRow>
@@ -548,7 +548,7 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     updateField("apify_instagram_actor_id", e.target.value)
                   }
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors font-mono"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors font-mono"
                   placeholder="actor_id"
                 />
               </FieldRow>
@@ -561,7 +561,7 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     updateField("apify_youtube_actor_id", e.target.value)
                   }
-                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-lime-400/30 transition-colors font-mono"
+                  className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors font-mono"
                   placeholder="actor_id"
                 />
               </FieldRow>

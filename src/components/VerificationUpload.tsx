@@ -80,7 +80,7 @@ export function VerificationUpload({ submissionId, token, initialStatus }: Verif
     <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <FileVideo className="w-4 h-4 text-lime-400" />
+          <FileVideo className="w-4 h-4 text-green-400" />
           <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">Upload Proof Video</h3>
         </div>
         <VerificationBadge status={verificationStatus} />
@@ -121,7 +121,7 @@ export function VerificationUpload({ submissionId, token, initialStatus }: Verif
           {canUpload && (
             <button
               onClick={() => setShowUploadZone(true)}
-              className="text-[10px] text-lime-400 hover:text-lime-300 font-bold uppercase tracking-wider transition-colors"
+              className="text-[10px] text-green-400 hover:text-green-300 font-bold uppercase tracking-wider transition-colors"
             >
               Re-upload
             </button>
@@ -149,13 +149,13 @@ export function VerificationUpload({ submissionId, token, initialStatus }: Verif
           onClick={() => inputRef.current?.click()}
           className={`cursor-pointer rounded-xl border-2 border-dashed transition-all p-8 text-center ${
             dragOver
-              ? "border-lime-400/40 bg-lime-400/5"
-              : "border-white/[0.08] hover:border-lime-400/40 hover:bg-white/[0.02]"
+              ? "border-green-400/40 bg-green-400/5"
+              : "border-white/[0.08] hover:border-green-400/40 hover:bg-white/[0.02]"
           }`}
         >
-          <Upload className={`w-8 h-8 mx-auto mb-3 ${dragOver ? "text-lime-400" : "text-zinc-600"}`} />
+          <Upload className={`w-8 h-8 mx-auto mb-3 ${dragOver ? "text-green-400" : "text-zinc-600"}`} />
           <p className="text-sm text-zinc-300 mb-1">
-            Drag & drop your video here, or <span className="text-lime-400 font-semibold">click to browse</span>
+            Drag & drop your video here, or <span className="text-green-400 font-semibold">click to browse</span>
           </p>
           <p className="text-[10px] text-zinc-600">.mp4, .mov, .webm — max 100MB</p>
         </div>
@@ -166,7 +166,7 @@ export function VerificationUpload({ submissionId, token, initialStatus }: Verif
         <div className="space-y-3">
           <div className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.03] px-4 py-3">
             <div className="flex items-center gap-2 min-w-0">
-              <FileVideo className="w-4 h-4 text-lime-400 shrink-0" />
+              <FileVideo className="w-4 h-4 text-green-400 shrink-0" />
               <span className="text-xs text-zinc-200 truncate">{file.name}</span>
               <span className="text-[10px] text-zinc-500 shrink-0">({(file.size / 1024 / 1024).toFixed(1)}MB)</span>
             </div>
@@ -176,7 +176,7 @@ export function VerificationUpload({ submissionId, token, initialStatus }: Verif
           </div>
           <button
             onClick={handleUpload}
-            className="w-full h-10 bg-lime-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(163,230,53,0.4)] hover:bg-lime-300 transition-all"
+            className="w-full h-10 bg-green-400 text-black font-extrabold text-xs px-6 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             Upload Video
           </button>
@@ -188,11 +188,11 @@ export function VerificationUpload({ submissionId, token, initialStatus }: Verif
         <div className="space-y-3">
           <div className="flex items-center justify-between text-xs text-zinc-400">
             <span>Uploading...</span>
-            <span className="font-mono text-lime-400">{progress}%</span>
+            <span className="font-mono text-green-400">{progress}%</span>
           </div>
           <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
             <div
-              className="h-full rounded-full bg-lime-400 transition-all duration-300"
+              className="h-full rounded-full bg-green-400 transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
