@@ -100,6 +100,7 @@ export type Submission = {
   likes: number; comments: number; interactions: number; est_earnings: number
   status: string; scrape_status: string; scrape_error: string; scrape_last_run: string | null
   us_viewers_pct: number | null; uk_viewers_pct: number | null; notes: string; submission_token: string; created_at: string; updated_at: string
+  verification_status: string | null; verification_note: string | null
 }
 
 export const submissions = {
@@ -420,6 +421,44 @@ export type ApifyUsageResponse = {
   items: ApifyUsageLog[]
   total: number; page: number; per_page: number; pages: number
   summary: { total_urls: number; total_cost: number; total_runs: number }
+}
+
+// ── Verification ─────────────────────────────────────────
+export type VerificationStatus = {
+  status: string | null
+  note: string | null
+  has_video: boolean
+}
+
+export const verification = {
+  upload: async (token: string, submissionId: number, file: File, onProgress?: (pct: number) => void) => {
+    const form = new FormData()
+    form.append("video", file)
+    return new Promise<{ status: string; message: string }>((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      xhr.open("POST", `${API_URL}/api/submissions/${submissionId}/upload-verification`)
+      xhr.setRequestHeader("Authorization", `Bearer ${token}`)
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100))
+      }
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText))
+        } else {
+          try { reject(new Error(JSON.parse(xhr.responseText).detail || `Upload failed (${xhr.status})`)) }
+          catch { reject(new Error(`Upload failed (${xhr.status})`)) }
+        }
+      }
+      xhr.onerror = () => reject(new Error("Network error during upload"))
+      xhr.send(form)
+    })
+  },
+  status: (token: string, submissionId: number) =>
+    apiFetch<VerificationStatus>(`/api/submissions/${submissionId}/verification-status`, { token }),
+  video: (token: string, submissionId: number) =>
+    apiFetch<{ url: string; status: string }>(`/api/submissions/${submissionId}/verification-video`, { token }),
+  verify: (token: string, submissionId: number, data: { status: "verified" | "rejected"; note?: string }) =>
+    apiFetch<Submission>(`/api/submissions/${submissionId}/verify`, { token, method: "POST", body: JSON.stringify(data) }),
 }
 
 export const settingsApi = {

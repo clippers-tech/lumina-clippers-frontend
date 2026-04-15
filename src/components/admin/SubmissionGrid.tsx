@@ -5,6 +5,7 @@ import Link from "next/link"
 import { type Submission } from "@/lib/api"
 import { formatNumber, formatCurrency, platformIcon } from "@/lib/utils"
 import { StatusBadge } from "./StatusBadge"
+import { VerificationBadge } from "./VerificationBadge"
 import { ExternalLink, Check } from "lucide-react"
 
 interface SubmissionGridProps {
@@ -57,6 +58,7 @@ export function SubmissionGrid({
             <th className="text-right text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-3 py-3">Views</th>
             <th className="text-right text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-3 py-3">Earnings</th>
             <th className="text-center text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-3 py-3">Status</th>
+            <th className="text-center text-[10px] uppercase tracking-wider text-zinc-500 font-bold px-3 py-3">Verification</th>
           </tr>
         </thead>
         <tbody>
@@ -118,6 +120,9 @@ export function SubmissionGrid({
                 </td>
                 <td className="px-3 py-3 text-center">
                   <StatusBadge status={sub.status} />
+                </td>
+                <td className="px-3 py-3 text-center">
+                  <VerificationBadge status={sub.verification_status} />
                 </td>
               </tr>
             )

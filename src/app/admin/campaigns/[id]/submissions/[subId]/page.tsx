@@ -8,6 +8,7 @@ import { submissions as subsApi, type Submission } from "@/lib/api"
 import { PayoutModal } from "@/components/admin/PayoutModal"
 import { StatusBadge } from "@/components/admin/StatusBadge"
 import { formatNumber, formatCurrency, platformIcon } from "@/lib/utils"
+import { VerificationReview } from "@/components/admin/VerificationReview"
 import { ArrowLeft, RefreshCw, ExternalLink, AlertTriangle } from "lucide-react"
 import { useToast } from "@/components/ui/toast"
 
@@ -203,6 +204,16 @@ export default function SubmissionDetailPage() {
             <p className={`text-2xl font-bold ${s.accent ? "text-lime-400" : "text-zinc-100"}`}>{s.value}</p>
           </div>
         ))}
+      </div>
+
+      {/* Verification */}
+      <div className="mb-6">
+        <VerificationReview
+          submissionId={submissionId}
+          initialVerificationStatus={sub.verification_status}
+          initialVerificationNote={sub.verification_note}
+          onVerified={(status) => setSub((prev) => prev ? { ...prev, verification_status: status } : prev)}
+        />
       </div>
 
       {/* Admin controls */}

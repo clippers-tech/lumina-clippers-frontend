@@ -4,6 +4,7 @@ import Link from "next/link"
 import { type Submission } from "@/lib/api"
 import { formatNumber, formatCurrency, platformIcon } from "@/lib/utils"
 import { StatusBadge } from "./StatusBadge"
+import { VerificationBadge } from "./VerificationBadge"
 
 interface SubmissionCardProps {
   submission: Submission
@@ -19,7 +20,10 @@ export function SubmissionCard({ submission: sub, campaignId }: SubmissionCardPr
             <p className="text-sm font-medium text-zinc-100">{sub.clipper_name || sub.clipper_email}</p>
             <p className="text-[11px] text-zinc-500 font-mono">{platformIcon(sub.platform)} {sub.platform}</p>
           </div>
-          <StatusBadge status={sub.status} />
+          <div className="flex items-center gap-1.5">
+            <VerificationBadge status={sub.verification_status} />
+            <StatusBadge status={sub.status} />
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-2 mt-3">
           <div>

@@ -1,16 +1,33 @@
 "use client"
 
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { CheckCircle } from "lucide-react"
+import { publicApi, type PublicSubmission } from "@/lib/api"
+import { VerificationUpload } from "@/components/VerificationUpload"
 
 function SuccessContent() {
   const params = useParams()
   const slug = params.slug as string
   const searchParams = useSearchParams()
   const email = searchParams.get("email") || ""
+  const submissionToken = searchParams.get("token") || ""
+  const [submission, setSubmission] = useState<PublicSubmission | null>(null)
+
+  useEffect(() => {
+    if (!submissionToken) return
+    publicApi.clipperSubmissions(submissionToken)
+      .then((subs) => {
+        if (subs.length > 0) {
+          // Most recent submission is the one just created
+          const sorted = [...subs].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          setSubmission(sorted[0])
+        }
+      })
+      .catch(() => {})
+  }, [submissionToken])
 
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-lime-500/30 flex items-center justify-center">
@@ -20,7 +37,7 @@ function SuccessContent() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lime-400/[0.03] rounded-full blur-[120px]" />
       </div>
 
-      <div className="relative z-10 max-w-md mx-auto px-4 text-center">
+      <div className="relative z-10 max-w-md mx-auto px-4 text-center space-y-6">
         <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-8">
           {/* Success Icon */}
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-lime-400/10 mb-6">
@@ -54,6 +71,16 @@ function SuccessContent() {
             </Link>
           </div>
         </div>
+
+        {/* Verification Upload */}
+        {submission && submissionToken && (
+          <div className="text-left">
+            <VerificationUpload
+              submissionId={submission.id}
+              token={submissionToken}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

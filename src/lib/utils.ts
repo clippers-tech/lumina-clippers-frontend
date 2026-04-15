@@ -157,6 +157,28 @@ export function statusColor(status: string): string {
     success: "bg-emerald-500/20 text-emerald-400",
     failed: "bg-red-500/20 text-red-400",
     manual: "bg-orange-500/20 text-orange-400",
+    uploaded: "bg-amber-500/20 text-amber-400",
+    verified: "bg-emerald-500/20 text-emerald-400",
   }
   return colors[status] || "bg-gray-500/20 text-gray-400"
+}
+
+export function verificationStatusLabel(status: string | null | undefined): string {
+  const labels: Record<string, string> = {
+    pending: "No Video",
+    uploaded: "Pending Review",
+    verified: "Verified",
+    rejected: "Rejected",
+  }
+  return labels[status || "pending"] || "No Video"
+}
+
+export function verificationStatusColor(status: string | null | undefined): string {
+  const colors: Record<string, string> = {
+    pending: "border-zinc-500/30 text-zinc-500",
+    uploaded: "border-amber-400/30 text-amber-400",
+    verified: "border-emerald-400/30 text-emerald-400",
+    rejected: "border-red-400/30 text-red-400",
+  }
+  return colors[status || "pending"] || "border-zinc-500/30 text-zinc-500"
 }
