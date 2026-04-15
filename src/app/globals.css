@@ -5,7 +5,7 @@
 :root {
   --background: #050505;
   --foreground: #F4F4F5;
-  --primary: #A3E635;
+  --primary: #4ADE80;
   --secondary: #10B981;
   --radius: 0.625rem;
 }
@@ -46,8 +46,22 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgba(163, 230, 53, 0.3);
+  background: rgba(74, 222, 128, 0.3);
   color: white;
+}
+
+/* Dark-themed native selects & options */
+select {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #f4f4f5 !important;
+}
+select option {
+  background-color: #18181b !important;
+  color: #e4e4e7 !important;
+}
+select option:checked {
+  background-color: rgba(74, 222, 128, 0.15) !important;
+  color: #4ADE80 !important;
 }
 
 /* Toast animations */
