@@ -1,18 +1,66 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { publicApi, type PublicCampaign } from "@/lib/api"
 import { formatCurrency } from "@/lib/utils"
 import { LuminaLogo } from "@/components/LuminaLogo"
 
-/* ── Grid Background ─────────────────────────────────── */
-function GridBackground() {
+/* ── Aurora Background (matches Lumina Clippers brand) ─── */
+function AuroraBackground() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-green-400/[0.03] rounded-full blur-[120px]" />
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/[0.02] rounded-full blur-[100px]" />
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {/* Base dark green */}
+      <div className="absolute inset-0 bg-[#040d07]" />
+      {/* Top aurora glow */}
+      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.12)_0%,rgba(16,185,129,0.04)_40%,transparent_70%)]" />
+      {/* Secondary glow - right */}
+      <div className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(52,211,153,0.06)_0%,transparent_60%)]" />
+      {/* Secondary glow - left */}
+      <div className="absolute top-[5%] left-[-5%] w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.05)_0%,transparent_60%)]" />
+      {/* Mid-page glow for campaign area */}
+      <div className="absolute top-[50%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.04)_0%,transparent_60%)]" />
+      {/* Subtle grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:60px_60px]" />
+    </div>
+  )
+}
+
+/* ── Money Counter ────────────────────────────────────── */
+function MoneyCounter() {
+  const START = 105323
+  const RATE = 0.002 // 0.2%
+  const INTERVAL = 10000 // 10 seconds
+  const [amount, setAmount] = useState(START)
+  const amountRef = useRef(START)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      amountRef.current = amountRef.current * (1 + RATE)
+      setAmount(amountRef.current)
+    }, INTERVAL)
+    return () => clearInterval(timer)
+  }, [])
+
+  const formatted = amount.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+
+  return (
+    <div className="text-center">
+      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400/70 mb-3">
+        Total Paid Out
+      </p>
+      <div className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-white tabular-nums transition-all duration-700">
+        {formatted}
+      </div>
+      <div className="mt-4 flex items-center justify-center gap-2">
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="text-xs text-emerald-400/60 font-medium">Live counter</span>
+      </div>
     </div>
   )
 }
@@ -43,7 +91,7 @@ function CampaignThumbnail({ campaign }: { campaign: PublicCampaign }) {
           alt={campaign.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a10] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071a0e] via-transparent to-transparent" />
         <div className="absolute top-3 left-3">
           <span className="inline-flex items-center px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/30 text-emerald-300 backdrop-blur-sm border border-emerald-400/20">
             {campaign.status}
@@ -63,7 +111,6 @@ function CampaignThumbnail({ campaign }: { campaign: PublicCampaign }) {
 
   return (
     <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${colors.bg} flex flex-col items-center justify-center p-6`}>
-      {/* Decorative pattern */}
       <div className="absolute inset-0 opacity-[0.07]">
         <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_25%,rgba(255,255,255,0.05)_50%,transparent_50%,transparent_75%,rgba(255,255,255,0.05)_75%)] bg-[size:20px_20px]" />
       </div>
@@ -94,12 +141,10 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
   const budgetPct = campaign.budget_total > 0 ? Math.min(100, (campaign.budget_used / campaign.budget_total) * 100) : 0
 
   return (
-    <div className="group rounded-xl border border-white/[0.06] bg-[#0a1a10]/60 backdrop-blur-[2px] overflow-hidden transition-all hover:border-green-400/20 hover:shadow-[0_0_30px_-10px_rgba(74,222,128,0.15)]">
-      {/* Thumbnail */}
+    <div className="group rounded-xl border border-emerald-400/[0.08] bg-[#071a0e]/70 backdrop-blur-sm overflow-hidden transition-all hover:border-emerald-400/20 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.15)]">
       <CampaignThumbnail campaign={campaign} />
 
       <div className="p-5 space-y-4">
-        {/* Name + Description */}
         <div>
           <h3 className="font-extrabold text-base text-zinc-100 group-hover:text-white transition-colors">
             {campaign.name} Campaign
@@ -109,23 +154,21 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
           )}
         </div>
 
-        {/* CPM + Max Payout pills */}
         <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] text-xs">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-emerald-400/[0.08] bg-emerald-400/[0.03] text-xs">
             <span className="text-zinc-500 font-medium mr-1.5">CPM</span>
             <span className="text-zinc-200 font-bold">{formatCurrency(campaign.cpm_rate)} / 1k views</span>
           </span>
           {campaign.max_payout > 0 && (
-            <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-white/[0.06] bg-white/[0.03] text-xs">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-emerald-400/[0.08] bg-emerald-400/[0.03] text-xs">
               <span className="text-zinc-500 font-medium mr-1.5">Max payout</span>
               <span className="text-zinc-200 font-bold">{formatCurrency(campaign.max_payout)}</span>
             </span>
           )}
         </div>
 
-        {/* Budget bar */}
         {campaign.budget_total > 0 && (
-          <div className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-3">
+          <div className="rounded-lg border border-emerald-400/[0.06] bg-emerald-400/[0.02] p-3">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-zinc-500 font-medium">Campaign Budget</span>
               <span className="text-xs text-zinc-200 font-bold">
@@ -134,7 +177,7 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
             </div>
             <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
               <div
-                className="h-full rounded-full bg-green-400 transition-all duration-500"
+                className="h-full rounded-full bg-emerald-400 transition-all duration-500"
                 style={{ width: `${budgetPct}%` }}
               />
             </div>
@@ -142,11 +185,10 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
           </div>
         )}
 
-        {/* Submit button */}
         {campaign.status === "open" && (
           <Link
             href={`/c/${campaign.slug}`}
-            className="block w-full text-center bg-green-400 text-black font-extrabold text-sm px-6 py-3 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
+            className="block w-full text-center bg-emerald-400 text-black font-extrabold text-sm px-6 py-3 rounded-lg uppercase tracking-wide shadow-[0_0_30px_-5px_rgba(16,185,129,0.4)] hover:bg-emerald-300 transition-all"
           >
             Submit &amp; continue to payout
           </Link>
@@ -172,12 +214,12 @@ export default function HomePage() {
   const completedCampaigns = allCampaigns.filter((c) => c.status !== "open")
 
   return (
-    <div className="relative min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
-      <GridBackground />
+    <div className="relative min-h-screen text-zinc-100 selection:bg-emerald-500/30">
+      <AuroraBackground />
 
       <div className="relative z-10">
         {/* Nav */}
-        <nav className="border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-50">
+        <nav className="border-b border-emerald-400/[0.06] bg-[#040d07]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
               <LuminaLogo size={32} />
@@ -186,13 +228,13 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/viral"
-                className="border border-white/[0.06] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-white/[0.05] transition-all"
+                className="border border-emerald-400/[0.1] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-emerald-400/[0.05] transition-all"
               >
                 Creator Login
               </Link>
               <Link
                 href="/client"
-                className="border border-white/[0.06] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-white/[0.05] transition-all"
+                className="border border-emerald-400/[0.1] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-emerald-400/[0.05] transition-all"
               >
                 Client Login
               </Link>
@@ -200,20 +242,9 @@ export default function HomePage() {
           </div>
         </nav>
 
-        {/* Hero */}
-        <section className="max-w-6xl mx-auto px-4 pt-20 pb-16 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-400/20 bg-green-400/[0.05] mb-6">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">Internal Platform</span>
-          </div>
-
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-            <span className="text-white">Submit Your </span>
-            <span className="text-green-400">Clips</span>
-          </h1>
-          <p className="text-zinc-500 mt-4 text-lg max-w-xl mx-auto">
-            Browse active campaigns, submit your content, and track your earnings — all in one place.
-          </p>
+        {/* Hero — Money Counter */}
+        <section className="max-w-6xl mx-auto px-4 pt-24 pb-20">
+          <MoneyCounter />
         </section>
 
         {/* Open Campaigns Grid */}
@@ -223,7 +254,7 @@ export default function HomePage() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[1, 2].map((i) => (
-                <div key={i} className="rounded-xl border border-white/[0.04] bg-white/[0.015] h-96 animate-pulse" />
+                <div key={i} className="rounded-xl border border-emerald-400/[0.06] bg-[#071a0e]/50 h-96 animate-pulse" />
               ))}
             </div>
           ) : openCampaigns.length === 0 ? (
@@ -241,11 +272,11 @@ export default function HomePage() {
 
         {/* See Completed Campaigns */}
         {!loading && completedCampaigns.length > 0 && (
-          <section className="max-w-5xl mx-auto px-4 pb-20">
+          <section className="max-w-5xl mx-auto px-4 pb-16">
             <div className="text-center pt-6">
               <Link
                 href="/completed"
-                className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+                className="text-sm text-zinc-500 hover:text-emerald-400/80 transition-colors"
               >
                 See completed campaigns ({completedCampaigns.length})
               </Link>
@@ -253,8 +284,43 @@ export default function HomePage() {
           </section>
         )}
 
+        {/* How It Works */}
+        <section className="max-w-5xl mx-auto px-4 pb-20">
+          <h2 className="text-lg font-bold text-zinc-100 mb-6 text-center">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              {
+                step: "01",
+                title: "Read",
+                desc: "Read the reward requirements so you can make your clip.",
+              },
+              {
+                step: "02",
+                title: "Upload",
+                desc: "Upload your clip & upload video of analytics.",
+              },
+              {
+                step: "03",
+                title: "Get Paid",
+                desc: "Earn based on verified views at the campaign\u2019s CPM rate.",
+              },
+            ].map((item) => (
+              <div
+                key={item.step}
+                className="rounded-xl border border-emerald-400/[0.08] bg-[#071a0e]/50 backdrop-blur-sm p-6 text-center"
+              >
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-400/10 text-emerald-400 font-extrabold text-sm mb-3">
+                  {item.step}
+                </div>
+                <h3 className="font-bold text-sm text-zinc-100 mb-1">{item.title}</h3>
+                <p className="text-xs text-zinc-500 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Footer */}
-        <footer className="border-t border-white/[0.06] py-8">
+        <footer className="border-t border-emerald-400/[0.06] py-8">
           <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <LuminaLogo size={20} />
