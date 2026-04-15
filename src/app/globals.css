@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #050505;
+  --foreground: #F4F4F5;
+  --primary: #A3E635;
+  --secondary: #10B981;
+  --radius: 0.625rem;
+}
+
+body {
+  background-color: #050505;
+  color: #F4F4F5;
+}
+
+/* Glass utility */
+.glass-panel {
+  @apply bg-white/[0.015] border border-white/[0.04] backdrop-blur-sm;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hide scrollbar but allow scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Selection */
+::selection {
+  background: rgba(163, 230, 53, 0.3);
+  color: white;
+}
+
+/* Toast animations */
+@keyframes toast-slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes toast-slide-out {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+.toast-slide-in {
+  animation: toast-slide-in 0.2s ease-out;
+}
+.toast-slide-in[data-state="closed"] {
+  animation: toast-slide-out 0.15s ease-in forwards;
+}
