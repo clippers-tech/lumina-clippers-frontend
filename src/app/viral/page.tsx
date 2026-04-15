@@ -3,8 +3,8 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Zap } from "lucide-react"
 import { clipperAuth } from "@/lib/api"
+import { LuminaLogo } from "@/components/LuminaLogo"
 import { setClipperToken } from "@/lib/clipper-auth"
 import { useToast } from "@/components/ui/toast"
 
@@ -92,8 +92,8 @@ export default function ViralLoginPage() {
       <div className="relative z-10 w-full max-w-sm mx-auto px-4">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-lime-400/10 mb-4">
-            <Zap className="w-6 h-6 text-lime-400" />
+          <div className="inline-flex items-center justify-center mb-4">
+            <LuminaLogo size={48} />
           </div>
           <h1 className="text-xl font-extrabold text-zinc-100">Creator Login</h1>
           <p className="text-xs text-zinc-500 mt-1">Sign in to your clipper dashboard</p>

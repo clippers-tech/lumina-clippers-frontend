@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { auth } from "@/lib/api"
 import { setToken } from "@/lib/auth"
-import { Zap } from "lucide-react"
+import { LuminaLogo } from "@/components/LuminaLogo"
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -32,8 +32,8 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-sm rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-8">
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-lime-400/10 flex items-center justify-center mx-auto mb-4">
-            <Zap className="w-6 h-6 text-lime-400" />
+          <div className="flex items-center justify-center mx-auto mb-4">
+            <LuminaLogo size={48} />
           </div>
           <h1 className="text-xl font-bold text-zinc-100">Lumina Clippers</h1>
           <p className="text-sm text-zinc-500 mt-1">Campaign Management</p>

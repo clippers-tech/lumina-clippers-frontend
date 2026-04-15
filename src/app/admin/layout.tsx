@@ -5,9 +5,10 @@ import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 import { getToken, clearToken } from "@/lib/auth"
 import { auth } from "@/lib/api"
-import { LayoutDashboard, LogOut, Zap } from "lucide-react"
+import { LayoutDashboard, LogOut } from "lucide-react"
 import { UserProvider, type AppUser } from "@/lib/user-context"
 import { AtmosphericBackground } from "@/components/layout/AtmosphericBackground"
+import { LuminaLogo } from "@/components/LuminaLogo"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -60,7 +61,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <div className="flex items-center justify-between h-14">
                 <div className="flex items-center gap-6">
                   <Link href="/admin/dashboard" className="flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-lime-400" />
+                    <LuminaLogo size={28} />
                     <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
                   </Link>
                   <Link href="/admin/dashboard" className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 transition-colors">

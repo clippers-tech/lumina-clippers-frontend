@@ -4,18 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { publicApi, type PublicCampaign } from "@/lib/api"
 import { formatNumber, formatCurrency } from "@/lib/utils"
-
-/* ── Inline SVG Logo ─────────────────────────────────── */
-function LuminaLogo({ className = "w-8 h-8" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 40 40" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="40" height="40" rx="8" fill="#A3E635" fillOpacity="0.15" />
-      <path d="M12 28V12h3v13h9v3H12z" fill="#A3E635" />
-      <circle cx="28" cy="14" r="3" fill="#A3E635" />
-      <path d="M25 20v8h3v-8h-3z" fill="#A3E635" />
-    </svg>
-  )
-}
+import { LuminaLogo } from "@/components/LuminaLogo"
 
 /* ── Grid Background ─────────────────────────────────── */
 function GridBackground() {
@@ -135,7 +124,7 @@ export default function HomePage() {
         <nav className="border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
-              <LuminaLogo className="w-8 h-8" />
+              <LuminaLogo size={32} />
               <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
             </Link>
             <div className="flex items-center gap-3">
@@ -233,7 +222,7 @@ export default function HomePage() {
         <footer className="border-t border-white/[0.06] py-8">
           <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <LuminaLogo className="w-5 h-5" />
+              <LuminaLogo size={20} />
               <span className="text-xs text-zinc-500">Lumina Clippers</span>
             </div>
             <p className="text-xs text-zinc-600">&copy; {new Date().getFullYear()} All rights reserved.</p>

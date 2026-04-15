@@ -17,6 +17,15 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Lumina Clippers",
   description: "Campaign Management Platform",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  openGraph: {
+    title: "Lumina Clippers",
+    description: "Campaign Management Platform",
+    images: ["/og-logo.png"],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
