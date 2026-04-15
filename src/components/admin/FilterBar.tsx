@@ -50,7 +50,7 @@ function Dropdown({
       </button>
 
       {open && (
-        <div className="absolute z-50 mt-1 w-full max-h-72 overflow-y-auto rounded-lg border border-white/[0.08] bg-zinc-900/95 backdrop-blur-xl shadow-xl shadow-black/40">
+        <div className="absolute z-50 mt-1 w-full max-h-72 overflow-y-auto rounded-lg border border-white/[0.1] bg-[#1a1a1a] shadow-2xl shadow-black/60">
           {/* Placeholder / clear option */}
           <button
             type="button"
