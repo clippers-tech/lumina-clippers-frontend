@@ -13,13 +13,13 @@ function AuroraBackground() {
       {/* Base dark green */}
       <div className="absolute inset-0 bg-[#040d07]" />
       {/* Top aurora glow */}
-      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.12)_0%,rgba(16,185,129,0.04)_40%,transparent_70%)]" />
+      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.12)_0%,rgba(74,222,128,0.04)_40%,transparent_70%)]" />
       {/* Secondary glow - right */}
-      <div className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(52,211,153,0.06)_0%,transparent_60%)]" />
+      <div className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.06)_0%,transparent_60%)]" />
       {/* Secondary glow - left */}
-      <div className="absolute top-[5%] left-[-5%] w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.05)_0%,transparent_60%)]" />
+      <div className="absolute top-[5%] left-[-5%] w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.05)_0%,transparent_60%)]" />
       {/* Mid-page glow for campaign area */}
-      <div className="absolute top-[50%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.04)_0%,transparent_60%)]" />
+      <div className="absolute top-[50%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.04)_0%,transparent_60%)]" />
       {/* Subtle grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:60px_60px]" />
     </div>
@@ -51,15 +51,15 @@ function MoneyCounter() {
 
   return (
     <div className="text-center">
-      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400/70 mb-3">
+      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-green-400/70 mb-3">
         Total Paid Out
       </p>
       <div className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-white tabular-nums transition-all duration-700">
         {formatted}
       </div>
       <div className="mt-4 flex items-center justify-center gap-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="text-xs text-emerald-400/60 font-medium">Live counter</span>
+        <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+        <span className="text-xs text-green-400/60 font-medium">Live counter</span>
       </div>
     </div>
   )
@@ -78,8 +78,8 @@ const THUMB_COLORS: Record<string, { bg: string; accent: string }> = {
 }
 
 const DEFAULT_THUMB = {
-  bg: "from-emerald-900/80 via-emerald-800/70 to-emerald-950/80",
-  accent: "text-emerald-300",
+  bg: "from-green-900/80 via-green-800/70 to-green-950/80",
+  accent: "text-green-300",
 }
 
 function CampaignThumbnail({ campaign }: { campaign: PublicCampaign }) {
@@ -93,7 +93,7 @@ function CampaignThumbnail({ campaign }: { campaign: PublicCampaign }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#071a0e] via-transparent to-transparent" />
         <div className="absolute top-3 left-3">
-          <span className="inline-flex items-center px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/30 text-emerald-300 backdrop-blur-sm border border-emerald-400/20">
+          <span className="inline-flex items-center px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-green-500/30 text-green-300 backdrop-blur-sm border border-green-400/20">
             {campaign.status}
           </span>
         </div>
@@ -115,7 +115,7 @@ function CampaignThumbnail({ campaign }: { campaign: PublicCampaign }) {
         <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_25%,rgba(255,255,255,0.05)_50%,transparent_50%,transparent_75%,rgba(255,255,255,0.05)_75%)] bg-[size:20px_20px]" />
       </div>
       <div className="absolute top-3 left-3 z-10">
-        <span className="inline-flex items-center px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/30 text-emerald-300 backdrop-blur-sm border border-emerald-400/20">
+        <span className="inline-flex items-center px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-green-500/30 text-green-300 backdrop-blur-sm border border-green-400/20">
           {campaign.status}
         </span>
       </div>
@@ -141,7 +141,7 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
   const budgetPct = campaign.budget_total > 0 ? Math.min(100, (campaign.budget_used / campaign.budget_total) * 100) : 0
 
   return (
-    <div className="group rounded-xl border border-emerald-400/[0.08] bg-[#071a0e]/70 backdrop-blur-sm overflow-hidden transition-all hover:border-emerald-400/20 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.15)]">
+    <div className="group rounded-xl border border-green-400/[0.08] bg-[#071a0e]/70 backdrop-blur-sm overflow-hidden transition-all hover:border-green-400/20 hover:shadow-[0_0_40px_-10px_rgba(74,222,128,0.15)]">
       <CampaignThumbnail campaign={campaign} />
 
       <div className="p-5 space-y-4">
@@ -155,12 +155,12 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-emerald-400/[0.08] bg-emerald-400/[0.03] text-xs">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-green-400/[0.08] bg-green-400/[0.03] text-xs">
             <span className="text-zinc-500 font-medium mr-1.5">CPM</span>
             <span className="text-zinc-200 font-bold">{formatCurrency(campaign.cpm_rate)} / 1k views</span>
           </span>
           {campaign.max_payout > 0 && (
-            <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-emerald-400/[0.08] bg-emerald-400/[0.03] text-xs">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-lg border border-green-400/[0.08] bg-green-400/[0.03] text-xs">
               <span className="text-zinc-500 font-medium mr-1.5">Max payout</span>
               <span className="text-zinc-200 font-bold">{formatCurrency(campaign.max_payout)}</span>
             </span>
@@ -168,7 +168,7 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
         </div>
 
         {campaign.budget_total > 0 && (
-          <div className="rounded-lg border border-emerald-400/[0.06] bg-emerald-400/[0.02] p-3">
+          <div className="rounded-lg border border-green-400/[0.06] bg-green-400/[0.02] p-3">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-zinc-500 font-medium">Campaign Budget</span>
               <span className="text-xs text-zinc-200 font-bold">
@@ -177,7 +177,7 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
             </div>
             <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
               <div
-                className="h-full rounded-full bg-emerald-400 transition-all duration-500"
+                className="h-full rounded-full bg-green-400 transition-all duration-500"
                 style={{ width: `${budgetPct}%` }}
               />
             </div>
@@ -188,7 +188,7 @@ function CampaignCard({ campaign }: { campaign: PublicCampaign }) {
         {campaign.status === "open" && (
           <Link
             href={`/c/${campaign.slug}`}
-            className="block w-full text-center bg-emerald-400 text-black font-extrabold text-sm px-6 py-3 rounded-lg uppercase tracking-wide shadow-[0_0_30px_-5px_rgba(16,185,129,0.4)] hover:bg-emerald-300 transition-all"
+            className="block w-full text-center bg-green-400 text-black font-extrabold text-sm px-6 py-3 rounded-lg uppercase tracking-wide shadow-[0_0_30px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             Submit &amp; continue to payout
           </Link>
@@ -214,12 +214,12 @@ export default function HomePage() {
   const completedCampaigns = allCampaigns.filter((c) => c.status !== "open")
 
   return (
-    <div className="relative min-h-screen text-zinc-100 selection:bg-emerald-500/30">
+    <div className="relative min-h-screen text-zinc-100 selection:bg-green-500/30">
       <AuroraBackground />
 
       <div className="relative z-10">
         {/* Nav */}
-        <nav className="border-b border-emerald-400/[0.06] bg-[#040d07]/80 backdrop-blur-md sticky top-0 z-50">
+        <nav className="border-b border-green-400/[0.06] bg-[#040d07]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
               <LuminaLogo size={32} />
@@ -228,13 +228,13 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/viral"
-                className="border border-emerald-400/[0.1] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-emerald-400/[0.05] transition-all"
+                className="border border-green-400/[0.1] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-green-400/[0.05] transition-all"
               >
                 Creator Login
               </Link>
               <Link
                 href="/client"
-                className="border border-emerald-400/[0.1] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-emerald-400/[0.05] transition-all"
+                className="border border-green-400/[0.1] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-green-400/[0.05] transition-all"
               >
                 Client Login
               </Link>
@@ -254,7 +254,7 @@ export default function HomePage() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[1, 2].map((i) => (
-                <div key={i} className="rounded-xl border border-emerald-400/[0.06] bg-[#071a0e]/50 h-96 animate-pulse" />
+                <div key={i} className="rounded-xl border border-green-400/[0.06] bg-[#071a0e]/50 h-96 animate-pulse" />
               ))}
             </div>
           ) : openCampaigns.length === 0 ? (
@@ -276,7 +276,7 @@ export default function HomePage() {
             <div className="text-center pt-6">
               <Link
                 href="/completed"
-                className="text-sm text-zinc-500 hover:text-emerald-400/80 transition-colors"
+                className="text-sm text-zinc-500 hover:text-green-400/80 transition-colors"
               >
                 See completed campaigns ({completedCampaigns.length})
               </Link>
@@ -307,9 +307,9 @@ export default function HomePage() {
             ].map((item) => (
               <div
                 key={item.step}
-                className="rounded-xl border border-emerald-400/[0.08] bg-[#071a0e]/50 backdrop-blur-sm p-6 text-center"
+                className="rounded-xl border border-green-400/[0.08] bg-[#071a0e]/50 backdrop-blur-sm p-6 text-center"
               >
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-400/10 text-emerald-400 font-extrabold text-sm mb-3">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-400/10 text-green-400 font-extrabold text-sm mb-3">
                   {item.step}
                 </div>
                 <h3 className="font-bold text-sm text-zinc-100 mb-1">{item.title}</h3>
@@ -320,7 +320,7 @@ export default function HomePage() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-emerald-400/[0.06] py-8">
+        <footer className="border-t border-green-400/[0.06] py-8">
           <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <LuminaLogo size={20} />
