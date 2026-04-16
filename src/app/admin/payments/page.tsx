@@ -14,7 +14,7 @@ import { Pagination } from "@/components/admin/Pagination"
 import { LoadingState } from "@/components/admin/LoadingState"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { formatCurrency } from "@/lib/utils"
-import { Plus, Trash2, DollarSign, ChevronDown, Check, Clock, CheckCircle } from "lucide-react"
+import { Plus, Trash2, DollarSign, ChevronDown, Check, CheckCircle } from "lucide-react"
 
 type FilterMode = "paid" | "to_be_paid" | "rejected"
 
@@ -375,17 +375,12 @@ export default function PaymentsPage() {
                       )}
                       {isClaimView && (
                         <td className="px-5 py-4">
-                          {(p as PaymentLog & { status?: string }).status === "payment_claimed" ? (
-                            <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-400 bg-amber-400/10 px-2 py-1 rounded-md">
-                              <Clock className="w-3 h-3" />
-                              Claimed
-                            </span>
-                          ) : (p as PaymentLog & { status?: string }).status === "rejected" ? (
+                          {filterMode === "rejected" ? (
                             <span className="inline-flex items-center gap-1 text-xs font-bold text-red-400 bg-red-400/10 px-2 py-1 rounded-md">
                               Rejected
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 bg-blue-400/10 px-2 py-1 rounded-md">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-green-400 bg-green-400/10 px-2 py-1 rounded-md">
                               <CheckCircle className="w-3 h-3" />
                               Verified
                             </span>

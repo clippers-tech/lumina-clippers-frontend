@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Upload, ChevronDown, MessageSquare, DollarSign, ShieldCheck, AlertCircle, RotateCcw, CheckCircle2, Wallet, LayoutGrid, List } from "lucide-react"
+import { Upload, ChevronDown, MessageSquare, DollarSign, ShieldCheck, AlertCircle, RotateCcw, CheckCircle2, Wallet, LayoutGrid, List, Clock } from "lucide-react"
 import { clipperApi, clipperAuth, verification, type ClipperDashboard, type ClipperSubmission, type ClipperCampaignOption, type ClipperBulkSubmitResult } from "@/lib/api"
 import { getClipperToken, clearClipperToken } from "@/lib/clipper-auth"
 import { formatNumber, formatCurrency, platformIcon, statusColor } from "@/lib/utils"
@@ -736,6 +736,45 @@ export default function ClipperDashboardPage() {
             <StatCard label="Paid" value={formatCurrency(dashboard.stats.total_paid)} />
             <StatCard label="Pending" value={formatCurrency(dashboard.stats.pending_earnings)} sub="Awaiting payment" />
           </div>
+
+          {/* Payment Claims — submissions awaiting payout */}
+          {(() => {
+            const claimedSubs = dashboard.submissions.filter((s) => s.status === "payment_claimed")
+            if (claimedSubs.length === 0) return null
+            return (
+              <CollapsibleSection
+                title="Claiming Payments"
+                icon={<DollarSign className="w-4 h-4 text-yellow-400" />}
+                count={claimedSubs.length}
+                defaultOpen={true}
+              >
+                <div className="space-y-2 pt-3">
+                  {claimedSubs.map((sub) => (
+                    <div key={sub.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] p-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-sm">
+                          {platformIcon(sub.platform)}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-zinc-200 truncate">{sub.campaign_name}</p>
+                          <a href={sub.post_url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-zinc-500 hover:text-green-400 transition-colors truncate block">{sub.post_url}</a>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-xs font-bold text-zinc-300">{formatNumber(sub.views)} views</span>
+                        <span className="text-xs font-bold text-green-400">{formatCurrency(sub.est_earnings)}</span>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded">
+                          <Clock className="w-3 h-3" />
+                          Pending
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                  <p className="text-[10px] text-zinc-600 mt-1">These submissions are being processed. You will be paid shortly.</p>
+                </div>
+              </CollapsibleSection>
+            )
+          })()}
 
           {/* Claim Payouts — standout collapsible */}
           <div className="rounded-xl border border-green-400/20 bg-gradient-to-r from-green-400/[0.08] via-[#0d3420]/90 to-[#0d3420]/80 overflow-hidden shadow-[0_0_30px_-10px_rgba(74,222,128,0.15)]">
