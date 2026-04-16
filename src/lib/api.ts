@@ -354,6 +354,7 @@ export type ClipperSubmission = {
   id: number; post_url: string; platform: string; views: number; likes: number
   comments: number; est_earnings: number; status: string; campaign_name: string
   campaign_slug: string; thumbnail_url: string; created_at: string
+  verification_status: string; verification_note: string; submission_token: string
 }
 
 export type ClipperDashboard = {
@@ -384,6 +385,12 @@ export const clipperApi = {
       token: jwtToken,
       method: "POST",
       body: JSON.stringify({ campaign_id: campaignId, urls }),
+    }),
+  claimPayment: (jwtToken: string, submissionId: number) =>
+    apiFetch<{ detail: string; submission_id: number }>(`/api/clipper/claim-payment`, {
+      token: jwtToken,
+      method: "POST",
+      body: JSON.stringify({ submission_id: submissionId }),
     }),
 }
 

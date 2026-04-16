@@ -1,33 +1,15 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+import { useSearchParams, useParams } from "next/navigation"
 import Link from "next/link"
-import { useParams } from "next/navigation"
-import { CheckCircle } from "lucide-react"
-import { publicApi, type PublicSubmission } from "@/lib/api"
-import { VerificationUpload } from "@/components/VerificationUpload"
+import { CheckCircle, DollarSign } from "lucide-react"
 
 function SuccessContent() {
   const params = useParams()
   const slug = params.slug as string
   const searchParams = useSearchParams()
   const email = searchParams.get("email") || ""
-  const submissionToken = searchParams.get("token") || ""
-  const [submission, setSubmission] = useState<PublicSubmission | null>(null)
-
-  useEffect(() => {
-    if (!submissionToken) return
-    publicApi.clipperSubmissions(submissionToken)
-      .then((subs) => {
-        if (subs.length > 0) {
-          // Most recent submission is the one just created
-          const sorted = [...subs].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-          setSubmission(sorted[0])
-        }
-      })
-      .catch(() => {})
-  }, [submissionToken])
 
   return (
     <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30 flex items-center justify-center">
@@ -57,11 +39,13 @@ function SuccessContent() {
           )}
 
           <div className="space-y-3">
+            {/* Claim Payout — main CTA */}
             <Link
               href="/viral"
-              className="block w-full bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
+              className="flex items-center justify-center gap-2 w-full bg-green-400 text-black font-extrabold text-sm px-6 py-3.5 rounded-lg uppercase tracking-wide shadow-[0_0_30px_-5px_rgba(74,222,128,0.5)] hover:bg-green-300 transition-all"
             >
-              Go to Dashboard
+              <DollarSign className="w-5 h-5" />
+              Claim Payout
             </Link>
             <Link
               href={`/c/${slug}`}
@@ -72,15 +56,24 @@ function SuccessContent() {
           </div>
         </div>
 
-        {/* Verification Upload */}
-        {submission && submissionToken && (
-          <div className="text-left">
-            <VerificationUpload
-              submissionId={submission.id}
-              token={submissionToken}
-            />
-          </div>
-        )}
+        {/* Info card */}
+        <div className="rounded-xl border border-green-400/[0.08] bg-green-400/[0.03] p-5 text-left">
+          <h3 className="text-xs font-bold text-green-400 uppercase tracking-wider mb-2">How to get paid</h3>
+          <ol className="space-y-2 text-xs text-zinc-400">
+            <li className="flex gap-2">
+              <span className="text-green-400 font-bold shrink-0">1.</span>
+              Log in to your dashboard using the button above
+            </li>
+            <li className="flex gap-2">
+              <span className="text-green-400 font-bold shrink-0">2.</span>
+              Upload a proof video (screen recording of your analytics showing the view count)
+            </li>
+            <li className="flex gap-2">
+              <span className="text-green-400 font-bold shrink-0">3.</span>
+              Once verified, click &quot;Claim Payment&quot; and you&apos;ll be paid based on your verified views
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
   )

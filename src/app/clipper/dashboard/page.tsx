@@ -3,15 +3,14 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Upload, ChevronDown, MessageSquare } from "lucide-react"
-import { clipperApi, clipperAuth, type ClipperDashboard, type ClipperCampaignOption, type ClipperBulkSubmitResult } from "@/lib/api"
+import { Upload, ChevronDown, MessageSquare, DollarSign, ShieldCheck, AlertCircle, RotateCcw, CheckCircle2 } from "lucide-react"
+import { clipperApi, clipperAuth, verification, type ClipperDashboard, type ClipperSubmission, type ClipperCampaignOption, type ClipperBulkSubmitResult } from "@/lib/api"
 import { getClipperToken, clearClipperToken } from "@/lib/clipper-auth"
 import { formatNumber, formatCurrency, platformIcon, statusColor } from "@/lib/utils"
 import { ClipperNav } from "@/components/clipper/ClipperNav"
 import { useToast } from "@/components/ui/toast"
 
-/* ── Sub-components ───────────────────────────────────── */
-
+/* ── Stat Card ────────────────────────────────────────── */
 function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
     <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4">
@@ -22,53 +21,317 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
   )
 }
 
-function PlatformPill({ platform }: { platform: string }) {
+/* ── Payout Guide Banner ──────────────────────────────── */
+function PayoutGuideBanner() {
+  const [dismissed, setDismissed] = useState(false)
+  if (dismissed) return null
+
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/[0.05] text-zinc-300 border border-white/[0.06]">
-      {platformIcon(platform.toLowerCase())} {platform}
-    </span>
-  )
-}
-
-function SubmissionRow({ submission }: { submission: ClipperDashboard["submissions"][0] }) {
-  return (
-    <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 flex items-center gap-4">
-      {/* Thumbnail */}
-      {submission.thumbnail_url ? (
-        <img src={submission.thumbnail_url} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
-      ) : (
-        <div className="w-12 h-12 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-lg">
-          {platformIcon(submission.platform)}
+    <div className="rounded-xl border border-green-400/[0.12] bg-green-400/[0.04] p-5 relative">
+      <button
+        onClick={() => setDismissed(true)}
+        className="absolute top-3 right-3 text-zinc-500 hover:text-zinc-300 text-xs"
+      >
+        Dismiss
+      </button>
+      <div className="flex items-start gap-3">
+        <div className="shrink-0 w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center">
+          <DollarSign className="w-5 h-5 text-green-400" />
         </div>
-      )}
-
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
-          <span className="text-xs font-semibold text-zinc-200 truncate">{submission.campaign_name}</span>
-          <PlatformPill platform={submission.platform} />
+        <div>
+          <h3 className="text-sm font-bold text-zinc-100 mb-2">How to Claim Your Payment</h3>
+          <div className="space-y-2">
+            <div className="flex items-start gap-2.5">
+              <span className="shrink-0 w-5 h-5 rounded-full bg-green-400/10 text-green-400 text-[10px] font-bold flex items-center justify-center">1</span>
+              <p className="text-xs text-zinc-400">
+                <span className="text-zinc-200 font-semibold">Upload proof video</span> — Record your screen showing the analytics/geo breakdown for each clip you submitted.
+              </p>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <span className="shrink-0 w-5 h-5 rounded-full bg-green-400/10 text-green-400 text-[10px] font-bold flex items-center justify-center">2</span>
+              <p className="text-xs text-zinc-400">
+                <span className="text-zinc-200 font-semibold">Wait for verification</span> — Our team will review your proof and verify the view count.
+              </p>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <span className="shrink-0 w-5 h-5 rounded-full bg-green-400/10 text-green-400 text-[10px] font-bold flex items-center justify-center">3</span>
+              <p className="text-xs text-zinc-400">
+                <span className="text-zinc-200 font-semibold">Claim payment</span> — Once verified, hit the &quot;Claim Payment&quot; button. You&apos;ll only be paid for the views shown in your proof video.
+              </p>
+            </div>
+          </div>
+          <p className="text-[10px] text-zinc-500 mt-3 border-t border-white/[0.04] pt-2">
+            You can re-upload a new proof video anytime to update your verified view count.
+          </p>
         </div>
-        <a
-          href={submission.post_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[11px] text-zinc-500 hover:text-green-400 transition-colors truncate block"
-        >
-          {submission.post_url}
-        </a>
       </div>
-
-      <div className="text-right shrink-0 space-y-0.5">
-        <p className="text-xs font-bold text-zinc-200">{formatNumber(submission.views)} views</p>
-        <p className="text-xs text-green-400 font-semibold">{formatCurrency(submission.est_earnings)}</p>
-      </div>
-
-      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0 ${statusColor(submission.status)}`}>
-        {submission.status.replace(/_/g, " ")}
-      </span>
     </div>
   )
 }
 
+/* ── Proof Upload Inline ──────────────────────────────── */
+function ProofUploadInline({
+  submissionId,
+  submissionToken,
+  isReupload,
+  onComplete,
+}: {
+  submissionId: number
+  submissionToken: string
+  isReupload?: boolean
+  onComplete: () => void
+}) {
+  const { toast } = useToast()
+  const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [dragOver, setDragOver] = useState(false)
+
+  const handleFile = async (file: File) => {
+    if (!file.type.startsWith("video/")) {
+      toast({ description: "Please select a video file", variant: "error" })
+      return
+    }
+    if (file.size > 100 * 1024 * 1024) {
+      toast({ description: "File must be under 100MB", variant: "error" })
+      return
+    }
+    setUploading(true)
+    setProgress(0)
+    try {
+      await verification.upload(submissionToken, submissionId, file, setProgress)
+      toast({ description: isReupload ? "New proof video uploaded" : "Proof video uploaded successfully", variant: "success" })
+      onComplete()
+    } catch (err) {
+      toast({ description: err instanceof Error ? err.message : "Upload failed", variant: "error" })
+    } finally {
+      setUploading(false)
+      setProgress(0)
+    }
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setDragOver(false)
+    const file = e.dataTransfer.files[0]
+    if (file) handleFile(file)
+  }
+
+  return (
+    <div className="mt-3">
+      {uploading ? (
+        <div className="rounded-lg border border-green-400/[0.1] bg-green-400/[0.03] p-3">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">Uploading proof...</span>
+            <span className="text-[10px] text-zinc-400 font-mono">{progress}%</span>
+          </div>
+          <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+            <div className="h-full rounded-full bg-green-400 transition-all duration-300" style={{ width: `${progress}%` }} />
+          </div>
+        </div>
+      ) : (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={handleDrop}
+          className={`rounded-lg border-2 border-dashed p-4 text-center transition-colors cursor-pointer ${
+            dragOver ? "border-green-400/40 bg-green-400/[0.05]" : "border-white/[0.08] hover:border-green-400/20"
+          }`}
+          onClick={() => {
+            const input = document.createElement("input")
+            input.type = "file"
+            input.accept = "video/*"
+            input.onchange = (e) => {
+              const file = (e.target as HTMLInputElement).files?.[0]
+              if (file) handleFile(file)
+            }
+            input.click()
+          }}
+        >
+          <Upload className="w-5 h-5 text-zinc-500 mx-auto mb-1" />
+          <p className="text-xs text-zinc-400">
+            {isReupload ? "Drop new proof video or " : "Drop your proof video or "}
+            <span className="text-green-400 font-semibold">click to browse</span>
+          </p>
+          <p className="text-[10px] text-zinc-600 mt-0.5">.mp4, .mov, .webm — max 100MB</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ── Submission Card ──────────────────────────────────── */
+function SubmissionCard({
+  submission,
+  token,
+  onRefresh,
+}: {
+  submission: ClipperSubmission
+  token: string
+  onRefresh: () => void
+}) {
+  const { toast } = useToast()
+  const [showUpload, setShowUpload] = useState(false)
+  const [claiming, setClaiming] = useState(false)
+
+  const vs = submission.verification_status || "pending"
+  const isPaid = submission.status === "paid"
+  const isClaimed = submission.status === "payment_claimed"
+  const isVerified = vs === "verified"
+  const hasProof = vs === "uploaded" || vs === "verified" || vs === "rejected"
+
+  const handleClaimPayment = async () => {
+    setClaiming(true)
+    try {
+      await clipperApi.claimPayment(token, submission.id)
+      toast({ description: "Payment claimed. You'll be paid shortly.", variant: "success" })
+      onRefresh()
+    } catch (err) {
+      toast({ description: err instanceof Error ? err.message : "Claim failed", variant: "error" })
+    } finally {
+      setClaiming(false)
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4">
+      {/* Top row: platform + campaign + status */}
+      <div className="flex items-center gap-3 mb-3">
+        {submission.thumbnail_url ? (
+          <img src={submission.thumbnail_url} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" />
+        ) : (
+          <div className="w-10 h-10 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-lg">
+            {platformIcon(submission.platform)}
+          </div>
+        )}
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
+            <span className="text-xs font-semibold text-zinc-200 truncate">{submission.campaign_name}</span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/[0.05] text-zinc-300 border border-white/[0.06]">
+              {platformIcon(submission.platform.toLowerCase())} {submission.platform}
+            </span>
+          </div>
+          <a
+            href={submission.post_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] text-zinc-500 hover:text-green-400 transition-colors truncate block"
+          >
+            {submission.post_url}
+          </a>
+        </div>
+
+        <div className="text-right shrink-0 space-y-0.5">
+          <p className="text-xs font-bold text-zinc-200">{formatNumber(submission.views)} views</p>
+          <p className="text-xs text-green-400 font-semibold">{formatCurrency(submission.est_earnings)}</p>
+        </div>
+      </div>
+
+      {/* Verification + Payment Status Bar */}
+      <div className="flex items-center justify-between gap-2 pt-3 border-t border-white/[0.04]">
+        {/* Left: verification status */}
+        <div className="flex items-center gap-2">
+          {vs === "pending" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-400">
+              <AlertCircle className="w-3 h-3" /> No proof uploaded
+            </span>
+          )}
+          {vs === "uploaded" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-blue-400">
+              <ShieldCheck className="w-3 h-3" /> Proof under review
+            </span>
+          )}
+          {vs === "verified" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-green-400">
+              <CheckCircle2 className="w-3 h-3" /> Verified
+            </span>
+          )}
+          {vs === "rejected" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-red-400">
+              <AlertCircle className="w-3 h-3" /> Proof rejected
+              {submission.verification_note && (
+                <span className="text-zinc-500 normal-case tracking-normal"> — {submission.verification_note}</span>
+              )}
+            </span>
+          )}
+        </div>
+
+        {/* Right: action buttons */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Upload Proof - show for pending or rejected */}
+          {(vs === "pending" || vs === "rejected") && !isPaid && (
+            <button
+              onClick={() => setShowUpload(!showUpload)}
+              className="flex items-center gap-1.5 bg-amber-500 text-black font-bold text-[11px] px-3 py-1.5 rounded-lg uppercase tracking-wide hover:bg-amber-400 transition-all"
+            >
+              <Upload className="w-3.5 h-3.5" />
+              Upload Proof
+            </button>
+          )}
+
+          {/* Re-upload option for uploaded/verified */}
+          {(vs === "uploaded" || vs === "verified") && !isPaid && !isClaimed && (
+            <button
+              onClick={() => setShowUpload(!showUpload)}
+              className="flex items-center gap-1 text-[10px] text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              <RotateCcw className="w-3 h-3" />
+              Re-upload
+            </button>
+          )}
+
+          {/* Claim Payment - only when verified and not yet claimed/paid */}
+          {isVerified && !isPaid && !isClaimed && (
+            <button
+              onClick={handleClaimPayment}
+              disabled={claiming}
+              className="flex items-center gap-1.5 bg-green-400 text-black font-bold text-[11px] px-3 py-1.5 rounded-lg uppercase tracking-wide shadow-[0_0_20px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50"
+            >
+              <DollarSign className="w-3.5 h-3.5" />
+              {claiming ? "Claiming..." : "Claim Payment"}
+            </button>
+          )}
+
+          {/* Payment claimed badge */}
+          {isClaimed && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-yellow-400 bg-yellow-400/10 px-2.5 py-1 rounded-lg">
+              Payment Pending
+            </span>
+          )}
+
+          {/* Paid badge */}
+          {isPaid && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-400/10 px-2.5 py-1 rounded-lg">
+              <CheckCircle2 className="w-3 h-3" /> Paid
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Expandable upload area */}
+      {showUpload && (
+        <ProofUploadInline
+          submissionId={submission.id}
+          submissionToken={submission.submission_token}
+          isReupload={hasProof}
+          onComplete={() => {
+            setShowUpload(false)
+            onRefresh()
+          }}
+        />
+      )}
+
+      {/* Info note about views */}
+      {vs === "pending" && !isPaid && (
+        <p className="text-[10px] text-zinc-600 mt-2 italic">
+          You will only be paid for the views shown in your analytics proof video.
+        </p>
+      )}
+    </div>
+  )
+}
+
+/* ── Bulk Upload Section ──────────────────────────────── */
 function BulkUploadSection({
   token,
   campaigns,
@@ -90,22 +353,13 @@ function BulkUploadSection({
     setUploading(true)
     setResult(null)
     try {
-      const urlList = urls
-        .split("\n")
-        .map((u) => u.trim())
-        .filter(Boolean)
+      const urlList = urls.split("\n").map((u) => u.trim()).filter(Boolean)
       const res = await clipperApi.bulkSubmit(token, selectedCampaign, urlList)
       setResult(res)
       toast({ description: `Added ${res.added} submissions`, variant: "success" })
-      if (res.added > 0) {
-        onUploadComplete()
-        setUrls("")
-      }
+      if (res.added > 0) { onUploadComplete(); setUrls("") }
     } catch (err) {
-      toast({
-        description: err instanceof Error ? err.message : "Bulk submit failed",
-        variant: "error",
-      })
+      toast({ description: err instanceof Error ? err.message : "Bulk submit failed", variant: "error" })
     } finally {
       setUploading(false)
     }
@@ -118,13 +372,8 @@ function BulkUploadSection({
     reader.onload = (ev) => {
       const text = ev.target?.result as string
       if (!text) return
-      const lines = text.split("\n").slice(1) // skip header
-      const parsedUrls = lines
-        .map((line) => {
-          const cols = line.split(",")
-          return cols[0]?.trim()
-        })
-        .filter(Boolean)
+      const lines = text.split("\n").slice(1)
+      const parsedUrls = lines.map((line) => line.split(",")[0]?.trim()).filter(Boolean)
       setUrls(parsedUrls.join("\n"))
     }
     reader.readAsText(file)
@@ -147,28 +396,19 @@ function BulkUploadSection({
       {expanded && (
         <div className="px-4 pb-4 space-y-4 border-t border-white/[0.04]">
           <div className="pt-4">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-1.5">
-              Campaign
-            </label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-1.5">Campaign</label>
             <select
               value={selectedCampaign ?? ""}
               onChange={(e) => setSelectedCampaign(Number(e.target.value) || null)}
               className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
             >
               <option value="">Select campaign...</option>
-              {campaigns.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
+              {campaigns.map((c) => (<option key={c.id} value={c.id}>{c.name}</option>))}
             </select>
           </div>
-
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
-                Post URLs (one per line)
-              </label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Post URLs (one per line)</label>
               <label className="cursor-pointer text-[10px] text-green-400 hover:text-green-300 transition-colors font-semibold">
                 Import CSV
                 <input type="file" accept=".csv" onChange={handleCsvUpload} className="hidden" />
@@ -182,7 +422,6 @@ function BulkUploadSection({
               className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors resize-none"
             />
           </div>
-
           <button
             onClick={handleBulkSubmit}
             disabled={uploading || !selectedCampaign || !urls.trim()}
@@ -190,20 +429,14 @@ function BulkUploadSection({
           >
             {uploading ? "Uploading..." : "Submit URLs"}
           </button>
-
           {result && (
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.03] p-3 space-y-1.5">
               <p className="text-xs text-zinc-300">
-                Added: <span className="text-green-400 font-bold">{result.added}</span> | Skipped:{" "}
-                <span className="text-zinc-400 font-bold">{result.skipped}</span>
+                Added: <span className="text-green-400 font-bold">{result.added}</span> | Skipped: <span className="text-zinc-400 font-bold">{result.skipped}</span>
               </p>
-              {result.results
-                .filter((r) => r.status !== "added")
-                .map((r, i) => (
-                  <p key={i} className="text-[10px] text-zinc-500 truncate">
-                    {r.post_url}: {r.reason}
-                  </p>
-                ))}
+              {result.results.filter((r) => r.status !== "added").map((r, i) => (
+                <p key={i} className="text-[10px] text-zinc-500 truncate">{r.post_url}: {r.reason}</p>
+              ))}
             </div>
           )}
         </div>
@@ -221,17 +454,12 @@ export default function ClipperDashboardPage() {
   const [campaigns, setCampaigns] = useState<ClipperCampaignOption[]>([])
   const [loading, setLoading] = useState(true)
   const [chatToken, setChatToken] = useState<string | null>(null)
-
-  // Filters
   const [statusFilter, setStatusFilter] = useState("all")
   const [platformFilter, setPlatformFilter] = useState("all")
 
   const loadDashboard = useCallback(async () => {
     const token = getClipperToken()
-    if (!token) {
-      router.replace("/viral")
-      return
-    }
+    if (!token) { router.replace("/viral"); return }
     try {
       const [data, campaignOpts] = await Promise.all([
         clipperApi.dashboardAuth(token),
@@ -239,14 +467,10 @@ export default function ClipperDashboardPage() {
       ])
       setDashboard(data)
       setCampaigns(campaignOpts)
-
-      // Get chat token
       try {
         const ct = await clipperAuth.chatToken(token)
         setChatToken(ct.chat_token)
-      } catch {
-        // chat token optional
-      }
+      } catch { /* optional */ }
     } catch {
       clearClipperToken()
       toast({ description: "Session expired. Please login again.", variant: "error" })
@@ -256,14 +480,9 @@ export default function ClipperDashboardPage() {
     }
   }, [router, toast])
 
-  useEffect(() => {
-    loadDashboard()
-  }, [loadDashboard])
+  useEffect(() => { loadDashboard() }, [loadDashboard])
 
-  const handleLogout = () => {
-    clearClipperToken()
-    router.push("/viral")
-  }
+  const handleLogout = () => { clearClipperToken(); router.push("/viral") }
 
   if (loading || !dashboard) {
     return (
@@ -279,12 +498,15 @@ export default function ClipperDashboardPage() {
     return true
   })
 
+  const needsProofCount = dashboard.submissions.filter(
+    (s) => (s.verification_status === "pending" || s.verification_status === "rejected") && s.status !== "paid"
+  ).length
+
   const allStatuses = Array.from(new Set(dashboard.submissions.map((s) => s.status)))
   const allPlatforms = Array.from(new Set(dashboard.submissions.map((s) => s.platform)))
 
   return (
     <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30">
-      {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-green-400/[0.02] rounded-full blur-[120px]" />
@@ -308,8 +530,7 @@ export default function ClipperDashboardPage() {
                   href={`/chat/${chatToken}`}
                   className="inline-flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-white/[0.05] transition-all"
                 >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  Messages
+                  <MessageSquare className="w-3.5 h-3.5" /> Messages
                 </Link>
               )}
               <button
@@ -321,17 +542,26 @@ export default function ClipperDashboardPage() {
             </div>
           </div>
 
-          {/* Stats Cards */}
+          {/* Payout Guide Banner */}
+          <PayoutGuideBanner />
+
+          {/* Needs Proof Alert */}
+          {needsProofCount > 0 && (
+            <div className="flex items-center gap-3 rounded-lg border border-amber-400/20 bg-amber-400/[0.05] px-4 py-3">
+              <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
+              <p className="text-xs text-zinc-300">
+                You have <span className="text-amber-400 font-bold">{needsProofCount} submission{needsProofCount > 1 ? "s" : ""}</span> that need{needsProofCount === 1 ? "s" : ""} a proof video to claim payment.
+              </p>
+            </div>
+          )}
+
+          {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <StatCard label="Submissions" value={formatNumber(dashboard.stats.total_submissions)} />
             <StatCard label="Total Views" value={formatNumber(dashboard.stats.total_views)} />
             <StatCard label="Est. Earnings" value={formatCurrency(dashboard.stats.total_est_earnings)} />
             <StatCard label="Paid" value={formatCurrency(dashboard.stats.total_paid)} />
-            <StatCard
-              label="Pending"
-              value={formatCurrency(dashboard.stats.pending_earnings)}
-              sub="Awaiting payment"
-            />
+            <StatCard label="Pending" value={formatCurrency(dashboard.stats.pending_earnings)} sub="Awaiting payment" />
           </div>
 
           {/* Campaigns */}
@@ -363,11 +593,7 @@ export default function ClipperDashboardPage() {
           )}
 
           {/* Bulk Upload */}
-          <BulkUploadSection
-            token={getClipperToken()!}
-            campaigns={campaigns}
-            onUploadComplete={loadDashboard}
-          />
+          <BulkUploadSection token={getClipperToken()!} campaigns={campaigns} onUploadComplete={loadDashboard} />
 
           {/* Submissions */}
           <div>
@@ -380,11 +606,7 @@ export default function ClipperDashboardPage() {
                   className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
                 >
                   <option value="all">All Status</option>
-                  {allStatuses.map((s) => (
-                    <option key={s} value={s}>
-                      {s.replace(/_/g, " ")}
-                    </option>
-                  ))}
+                  {allStatuses.map((s) => (<option key={s} value={s}>{s.replace(/_/g, " ")}</option>))}
                 </select>
                 <select
                   value={platformFilter}
@@ -392,11 +614,7 @@ export default function ClipperDashboardPage() {
                   className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
                 >
                   <option value="all">All Platforms</option>
-                  {allPlatforms.map((p) => (
-                    <option key={p} value={p}>
-                      {p}
-                    </option>
-                  ))}
+                  {allPlatforms.map((p) => (<option key={p} value={p}>{p}</option>))}
                 </select>
               </div>
             </div>
@@ -404,17 +622,19 @@ export default function ClipperDashboardPage() {
             {filteredSubmissions.length === 0 ? (
               <div className="text-center py-12 rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px]">
                 <p className="text-zinc-500 text-sm">No submissions found.</p>
-                <Link
-                  href="/"
-                  className="inline-block mt-3 text-xs text-green-400 hover:text-green-300 transition-colors"
-                >
+                <Link href="/" className="inline-block mt-3 text-xs text-green-400 hover:text-green-300 transition-colors">
                   Browse campaigns &rarr;
                 </Link>
               </div>
             ) : (
               <div className="space-y-2">
                 {filteredSubmissions.map((sub) => (
-                  <SubmissionRow key={sub.id} submission={sub} />
+                  <SubmissionCard
+                    key={sub.id}
+                    submission={sub}
+                    token={getClipperToken()!}
+                    onRefresh={loadDashboard}
+                  />
                 ))}
               </div>
             )}
