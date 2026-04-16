@@ -11,63 +11,46 @@ import { ClipperNav } from "@/components/clipper/ClipperNav"
 import { useToast } from "@/components/ui/toast"
 
 /* ── Stat Card ────────────────────────────────────────── */
-function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
+function StatCard({ label, value, sub, accent }: { label: string; value: string; sub?: string; accent?: boolean }) {
   return (
-    <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4">
+    <div className={`rounded-xl border p-4 ${
+      accent
+        ? "border-green-400/20 bg-gradient-to-br from-green-400/[0.08] to-green-400/[0.02]"
+        : "border-white/[0.08] bg-[#0d3420]/80"
+    }`}>
       <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">{label}</span>
-      <p className="text-xl font-extrabold text-zinc-100 mt-1">{value}</p>
+      <p className={`text-xl font-extrabold mt-1 ${accent ? "text-green-400" : "text-zinc-100"}`}>{value}</p>
       {sub && <p className="text-[10px] text-zinc-500 mt-0.5">{sub}</p>}
     </div>
   )
 }
 
-/* ── Payout Guide Banner ──────────────────────────────── */
-function PayoutGuideBanner() {
-  const [dismissed, setDismissed] = useState(false)
-  if (dismissed) return null
-
+/* ── Collapsible Section ─────────────────────────────── */
+function CollapsibleSection({ title, icon, children, defaultOpen = false, count }: {
+  title: string; icon: React.ReactNode; children: React.ReactNode; defaultOpen?: boolean; count?: number
+}) {
+  const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="rounded-xl border border-green-400/[0.12] bg-green-400/[0.04] p-5 relative">
+    <div className="rounded-xl border border-white/[0.08] bg-[#0d3420]/80 overflow-hidden">
       <button
-        onClick={() => setDismissed(true)}
-        className="absolute top-3 right-3 text-zinc-500 hover:text-zinc-300 text-xs"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-white/[0.02] transition-colors"
       >
-        Dismiss
+        <div className="flex items-center gap-2.5">
+          {icon}
+          <span className="text-sm font-bold text-zinc-200">{title}</span>
+          {count !== undefined && (
+            <span className="text-[10px] font-bold text-zinc-500 bg-white/[0.06] px-1.5 py-0.5 rounded">{count}</span>
+          )}
+        </div>
+        <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
-      <div className="flex items-start gap-3">
-        <div className="shrink-0 w-10 h-10 rounded-lg bg-green-400/10 flex items-center justify-center">
-          <DollarSign className="w-5 h-5 text-green-400" />
-        </div>
-        <div>
-          <h3 className="text-sm font-bold text-zinc-100 mb-2">How to Claim Your Payment</h3>
-          <div className="space-y-2">
-            <div className="flex items-start gap-2.5">
-              <span className="shrink-0 w-5 h-5 rounded-full bg-green-400/10 text-green-400 text-[10px] font-bold flex items-center justify-center">1</span>
-              <p className="text-xs text-zinc-400">
-                <span className="text-zinc-200 font-semibold">Upload proof video</span> — Record your screen showing the analytics/geo breakdown for each clip you submitted.
-              </p>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <span className="shrink-0 w-5 h-5 rounded-full bg-green-400/10 text-green-400 text-[10px] font-bold flex items-center justify-center">2</span>
-              <p className="text-xs text-zinc-400">
-                <span className="text-zinc-200 font-semibold">Wait for verification</span> — Our team will review your proof and verify the view count.
-              </p>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <span className="shrink-0 w-5 h-5 rounded-full bg-green-400/10 text-green-400 text-[10px] font-bold flex items-center justify-center">3</span>
-              <p className="text-xs text-zinc-400">
-                <span className="text-zinc-200 font-semibold">Claim payment</span> — Once verified, hit the &quot;Claim Payment&quot; button. You&apos;ll only be paid for the views shown in your proof video.
-              </p>
-            </div>
-          </div>
-          <p className="text-[10px] text-zinc-500 mt-3 border-t border-white/[0.04] pt-2">
-            You can re-upload a new proof video anytime to update your verified view count.
-          </p>
-        </div>
-      </div>
+      {open && <div className="px-5 pb-4 border-t border-white/[0.06]">{children}</div>}
     </div>
   )
 }
+
+/* PayoutGuideBanner removed — replaced by CollapsibleSection inline */
 
 /* ── Proof Upload Inline ──────────────────────────────── */
 function ProofUploadInline({
@@ -193,7 +176,7 @@ function SubmissionCard({
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4">
+    <div className="rounded-xl border border-white/[0.08] bg-[#0d3420]/80 p-4">
       {/* Top row: platform + campaign + status */}
       <div className="flex items-center gap-3 mb-3">
         {submission.thumbnail_url ? (
@@ -228,7 +211,7 @@ function SubmissionCard({
       </div>
 
       {/* Verification + Payment Status Bar */}
-      <div className="flex items-center justify-between gap-2 pt-3 border-t border-white/[0.04]">
+      <div className="flex items-center justify-between gap-2 pt-3 border-t border-white/[0.06]">
         {/* Left: verification status */}
         <div className="flex items-center gap-2">
           {vs === "pending" && (
@@ -381,7 +364,7 @@ function BulkUploadSection({
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] overflow-hidden">
+    <div className="rounded-xl border border-white/[0.08] bg-[#0d3420]/80 overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between p-4 hover:bg-white/[0.02] transition-colors"
@@ -394,7 +377,7 @@ function BulkUploadSection({
       </button>
 
       {expanded && (
-        <div className="px-4 pb-4 space-y-4 border-t border-white/[0.04]">
+        <div className="px-4 pb-4 space-y-4 border-t border-white/[0.06]">
           <div className="pt-4">
             <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-1.5">Campaign</label>
             <select
@@ -507,15 +490,16 @@ export default function ClipperDashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30">
+      {/* Gradient background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-green-400/[0.02] rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-green-400/[0.06] via-green-400/[0.02] to-transparent rounded-full blur-[100px]" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-gradient-to-tl from-emerald-600/[0.04] to-transparent rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10">
         <ClipperNav />
 
-        <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+        <div className="max-w-5xl mx-auto px-4 py-8 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
@@ -528,28 +512,25 @@ export default function ClipperDashboardPage() {
               {chatToken && (
                 <Link
                   href={`/chat/${chatToken}`}
-                  className="inline-flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-white/[0.05] transition-all"
+                  className="inline-flex items-center gap-1.5 border border-white/[0.08] bg-[#0d3420]/60 text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-[#0d3420] transition-all"
                 >
                   <MessageSquare className="w-3.5 h-3.5" /> Messages
                 </Link>
               )}
               <button
                 onClick={handleLogout}
-                className="border border-white/[0.06] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-white/[0.05] transition-all"
+                className="border border-white/[0.08] bg-[#0d3420]/60 text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-[#0d3420] transition-all"
               >
                 Logout
               </button>
             </div>
           </div>
 
-          {/* Payout Guide Banner */}
-          <PayoutGuideBanner />
-
-          {/* Payment Method Warning */}
+          {/* Payment Method Warning — always on top if needed */}
           {!dashboard.has_payment_method && (
             <Link
               href="/clipper/settings"
-              className="group flex items-center gap-4 rounded-xl border border-red-400/20 bg-red-400/[0.06] px-5 py-4 hover:border-red-400/30 hover:bg-red-400/[0.08] transition-all"
+              className="group flex items-center gap-4 rounded-xl border border-red-400/20 bg-red-500/[0.08] px-5 py-4 hover:bg-red-500/[0.12] transition-all"
             >
               <div className="relative flex-shrink-0">
                 <div className="w-10 h-10 rounded-full bg-red-400/15 flex items-center justify-center">
@@ -559,9 +540,7 @@ export default function ClipperDashboardPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-red-400">Set up your payment method</p>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  You need to add a payment method before you can receive payouts. Tap here to configure.
-                </p>
+                <p className="text-xs text-zinc-400 mt-0.5">Add a payment method to receive payouts.</p>
               </div>
               <span className="text-xs font-bold text-red-400 group-hover:text-red-300 uppercase tracking-wide flex-shrink-0">
                 Set Up &rarr;
@@ -571,10 +550,10 @@ export default function ClipperDashboardPage() {
 
           {/* Needs Proof Alert */}
           {needsProofCount > 0 && (
-            <div className="flex items-center gap-3 rounded-lg border border-amber-400/20 bg-amber-400/[0.05] px-4 py-3">
+            <div className="flex items-center gap-3 rounded-lg border border-amber-400/20 bg-amber-500/[0.08] px-4 py-3">
               <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
               <p className="text-xs text-zinc-300">
-                You have <span className="text-amber-400 font-bold">{needsProofCount} submission{needsProofCount > 1 ? "s" : ""}</span> that need{needsProofCount === 1 ? "s" : ""} a proof video to claim payment.
+                <span className="text-amber-400 font-bold">{needsProofCount} submission{needsProofCount > 1 ? "s" : ""}</span> need{needsProofCount === 1 ? "s" : ""} a proof video to claim payment.
               </p>
             </div>
           )}
@@ -583,24 +562,49 @@ export default function ClipperDashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             <StatCard label="Submissions" value={formatNumber(dashboard.stats.total_submissions)} />
             <StatCard label="Total Views" value={formatNumber(dashboard.stats.total_views)} />
-            <StatCard label="Est. Earnings" value={formatCurrency(dashboard.stats.total_est_earnings)} />
+            <StatCard label="Est. Earnings" value={formatCurrency(dashboard.stats.total_est_earnings)} accent />
             <StatCard label="Paid" value={formatCurrency(dashboard.stats.total_paid)} />
             <StatCard label="Pending" value={formatCurrency(dashboard.stats.pending_earnings)} sub="Awaiting payment" />
           </div>
 
-          {/* Campaigns */}
+          {/* Payout Guide — collapsed by default */}
+          <CollapsibleSection
+            title="How to Claim Your Payment"
+            icon={<DollarSign className="w-4 h-4 text-green-400" />}
+          >
+            <div className="space-y-2.5 pt-3">
+              {[
+                { n: "1", title: "Upload proof video", desc: "Record your screen showing the analytics/geo breakdown for each clip you submitted." },
+                { n: "2", title: "Wait for verification", desc: "Our team will review your proof and verify the view count." },
+                { n: "3", title: "Claim payment", desc: "Once verified, hit the \"Claim Payment\" button. You'll only be paid for the views shown in your proof video." },
+              ].map((step) => (
+                <div key={step.n} className="flex items-start gap-2.5">
+                  <span className="shrink-0 w-5 h-5 rounded-full bg-green-400/10 text-green-400 text-[10px] font-bold flex items-center justify-center">{step.n}</span>
+                  <p className="text-xs text-zinc-400">
+                    <span className="text-zinc-200 font-semibold">{step.title}</span> — {step.desc}
+                  </p>
+                </div>
+              ))}
+              <p className="text-[10px] text-zinc-500 mt-2">You can re-upload a new proof video anytime to update your verified view count.</p>
+            </div>
+          </CollapsibleSection>
+
+          {/* Campaigns — collapsed by default */}
           {dashboard.campaigns.length > 0 && (
-            <div>
-              <h2 className="text-sm font-bold text-zinc-300 mb-3">Your Campaigns</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <CollapsibleSection
+              title="Your Campaigns"
+              icon={<ShieldCheck className="w-4 h-4 text-green-400" />}
+              count={dashboard.campaigns.length}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-3">
                 {dashboard.campaigns.map((c) => (
                   <Link
                     key={c.id}
                     href={`/c/${c.slug}`}
-                    className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 hover:border-white/[0.08] hover:bg-white/[0.025] transition-all group"
+                    className="rounded-lg border border-white/[0.06] bg-white/[0.03] p-3 hover:border-green-400/20 hover:bg-white/[0.05] transition-all group"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">{c.name}</h3>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <h3 className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors truncate">{c.name}</h3>
                       <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${statusColor(c.status)}`}>
                         {c.status}
                       </span>
@@ -613,7 +617,7 @@ export default function ClipperDashboardPage() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </CollapsibleSection>
           )}
 
           {/* Bulk Upload */}
@@ -627,24 +631,24 @@ export default function ClipperDashboardPage() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
+                  className="bg-[#0d3420]/80 border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
                 >
-                  <option value="all">All Status</option>
-                  {allStatuses.map((s) => (<option key={s} value={s}>{s.replace(/_/g, " ")}</option>))}
+                  <option value="all" className="bg-[#0d3420]">All Status</option>
+                  {allStatuses.map((s) => (<option key={s} value={s} className="bg-[#0d3420]">{s.replace(/_/g, " ")}</option>))}
                 </select>
                 <select
                   value={platformFilter}
                   onChange={(e) => setPlatformFilter(e.target.value)}
-                  className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
+                  className="bg-[#0d3420]/80 border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
                 >
-                  <option value="all">All Platforms</option>
-                  {allPlatforms.map((p) => (<option key={p} value={p}>{p}</option>))}
+                  <option value="all" className="bg-[#0d3420]">All Platforms</option>
+                  {allPlatforms.map((p) => (<option key={p} value={p} className="bg-[#0d3420]">{p}</option>))}
                 </select>
               </div>
             </div>
 
             {filteredSubmissions.length === 0 ? (
-              <div className="text-center py-12 rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px]">
+              <div className="text-center py-12 rounded-xl border border-white/[0.08] bg-[#0d3420]/80">
                 <p className="text-zinc-500 text-sm">No submissions found.</p>
                 <Link href="/" className="inline-block mt-3 text-xs text-green-400 hover:text-green-300 transition-colors">
                   Browse campaigns &rarr;

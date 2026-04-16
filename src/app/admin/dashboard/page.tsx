@@ -18,6 +18,7 @@ import { UpdateStatusModal } from "@/components/admin/UpdateStatusModal"
 import { SendUploadLinksModal } from "@/components/admin/SendUploadLinksModal"
 import { BulkAddModal } from "@/components/admin/BulkAddModal"
 import { useUser } from "@/lib/user-context"
+import { AdminTabs } from "@/components/admin/AdminTabs"
 
 export default function DashboardPage() {
   const { isViewer } = useUser()
@@ -159,6 +160,10 @@ export default function DashboardPage() {
   return (
     <div>
       <DashboardHeader />
+
+      <div className="mt-6 mb-6">
+        <AdminTabs />
+      </div>
 
       <FilterBar
         campaigns={allCampaigns}

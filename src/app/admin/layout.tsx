@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 import { getToken, clearToken } from "@/lib/auth"
 import { auth } from "@/lib/api"
-import { LayoutDashboard, LogOut, Megaphone, Users, CreditCard, MessageSquare, Settings } from "lucide-react"
+import { LogOut } from "lucide-react"
 import { UserProvider, type AppUser } from "@/lib/user-context"
 import { AtmosphericBackground } from "@/components/layout/AtmosphericBackground"
 import { LuminaLogo } from "@/components/LuminaLogo"
@@ -55,40 +55,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <UserProvider user={user}>
       <AtmosphericBackground>
         <div className="min-h-screen">
-          {/* Top navbar */}
+          {/* Top navbar — logo + user only */}
           <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md sticky top-0 z-40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-14">
-                <div className="flex items-center gap-6">
-                  <Link href="/admin/dashboard" className="flex items-center gap-2">
-                    <LuminaLogo size={28} />
-                    <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
-                  </Link>
-                  {[
-                    { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-                    { href: "/admin/campaigns", label: "Campaigns", icon: Megaphone },
-                    { href: "/admin/users", label: "Users", icon: Users },
-                    { href: "/admin/payments", label: "Payments", icon: CreditCard },
-                    { href: "/admin/chat", label: "Chat", icon: MessageSquare },
-                    { href: "/admin/settings", label: "Settings", icon: Settings },
-                  ].map((link) => {
-                    const isActive = pathname === link.href || pathname?.startsWith(link.href + "/")
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className={`flex items-center gap-1.5 text-sm transition-colors ${
-                          isActive
-                            ? "text-green-400 font-semibold"
-                            : "text-zinc-500 hover:text-zinc-300"
-                        }`}
-                      >
-                        <link.icon className="w-4 h-4" />
-                        <span className="hidden md:inline">{link.label}</span>
-                      </Link>
-                    )
-                  })}
-                </div>
+                <Link href="/admin/dashboard" className="flex items-center gap-2">
+                  <LuminaLogo size={28} />
+                  <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
+                </Link>
                 <div className="flex items-center gap-4">
                   {user && (
                     <span className="text-sm text-zinc-500">
