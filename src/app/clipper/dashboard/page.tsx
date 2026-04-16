@@ -504,7 +504,7 @@ export default function ClipperDashboardPage() {
     <AtmosphericBackground>
       <ClipperNav chatToken={chatToken} />
 
-      <main className="max-w-5xl mx-auto px-4 py-6 space-y-5">
+      <main className="max-w-5xl mx-auto px-4 py-6 pt-20 space-y-5">
         {/* Header — compact */}
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">Dashboard</p>

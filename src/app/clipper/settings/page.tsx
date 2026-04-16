@@ -110,7 +110,7 @@ export default function ClipperSettingsPage() {
     return (
       <div className="min-h-screen bg-[#0b2518]">
         <ClipperNav />
-        <div className="max-w-2xl mx-auto px-4 py-20 text-center">
+        <div className="max-w-2xl mx-auto px-4 pt-20 py-20 text-center">
           <div className="w-8 h-8 border-2 border-green-400/30 border-t-green-400 rounded-full animate-spin mx-auto" />
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function ClipperSettingsPage() {
   return (
     <div className="min-h-screen bg-[#0b2518]">
       <ClipperNav />
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto px-4 pt-20 py-8">
         {/* Back link */}
         <Link
           href="/clipper/dashboard"

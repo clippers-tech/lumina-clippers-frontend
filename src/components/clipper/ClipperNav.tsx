@@ -12,7 +12,7 @@ export function ClipperNav({ chatToken }: { chatToken?: string | null }) {
   const isSettings = pathname === "/clipper/settings"
 
   return (
-    <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md sticky top-0 z-40">
+    <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md fixed top-0 left-0 right-0 z-40">
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           <Link href="/clipper/dashboard" className="flex items-center gap-2">

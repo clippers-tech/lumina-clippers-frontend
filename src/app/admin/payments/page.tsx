@@ -15,7 +15,7 @@ import { Pagination } from "@/components/admin/Pagination"
 import { LoadingState } from "@/components/admin/LoadingState"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { formatCurrency } from "@/lib/utils"
-import { Plus, Trash2, DollarSign, ChevronDown, Check, CheckCircle, ExternalLink } from "lucide-react"
+import { Plus, Trash2, DollarSign, ChevronDown, Check, CheckCircle, ExternalLink, Copy } from "lucide-react"
 
 type FilterMode = "paid" | "to_be_paid" | "rejected"
 
@@ -123,6 +123,7 @@ export default function PaymentsPage() {
   })
   const [addLoading, setAddLoading] = useState(false)
   const [addError, setAddError] = useState("")
+  const [copiedAddr, setCopiedAddr] = useState("")
 
   // Load campaigns for dropdown
   useEffect(() => {
@@ -522,7 +523,7 @@ export default function PaymentsPage() {
                         {prefillCreatorInfo.method === "whop" ? "Whop" : prefillCreatorInfo.method === "paypal" ? "PayPal" : prefillCreatorInfo.method === "solana" ? "Solana" : prefillCreatorInfo.method}
                       </span>
                     </p>
-                    <p className="text-xs text-zinc-300">
+                    <p className="text-xs text-zinc-300 flex items-center gap-1.5">
                       <span className="text-zinc-500">Address:</span>{" "}
                       <span className="font-mono text-zinc-200">
                         {prefillCreatorInfo.method === "whop" ? prefillCreatorInfo.whop
@@ -530,6 +531,21 @@ export default function PaymentsPage() {
                           : prefillCreatorInfo.method === "solana" ? prefillCreatorInfo.solana
                           : "-"}
                       </span>
+                      {(() => {
+                        const addr = prefillCreatorInfo.method === "whop" ? prefillCreatorInfo.whop
+                          : prefillCreatorInfo.method === "paypal" ? prefillCreatorInfo.paypal
+                          : prefillCreatorInfo.method === "solana" ? prefillCreatorInfo.solana : ""
+                        if (!addr) return null
+                        return (
+                          <button
+                            onClick={() => { navigator.clipboard.writeText(addr); setCopiedAddr(addr) ; setTimeout(() => setCopiedAddr(""), 1500) }}
+                            className="text-zinc-500 hover:text-green-400 transition-colors shrink-0"
+                            title="Copy address"
+                          >
+                            {copiedAddr === addr ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+                          </button>
+                        )
+                      })()}
                     </p>
                   </div>
                 </div>

@@ -160,7 +160,7 @@ export default function SubmissionDetailPage() {
   return (
     <AtmosphericBackground>
       <ClipperNav />
-      <main className="max-w-4xl mx-auto px-4 py-6 space-y-5">
+      <main className="max-w-4xl mx-auto px-4 py-6 pt-20 space-y-5">
         {/* Back link */}
         <Link href="/clipper/dashboard" className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
