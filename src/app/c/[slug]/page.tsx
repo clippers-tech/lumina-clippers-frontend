@@ -51,7 +51,7 @@ export default function CampaignSubmitPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0b2518] flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -59,7 +59,7 @@ export default function CampaignSubmitPage() {
 
   if (error || !campaign) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0b2518] flex items-center justify-center">
         <div className="text-center">
           <p className="text-zinc-400 mb-4">{error || "Campaign not found"}</p>
           <Link
@@ -77,7 +77,7 @@ export default function CampaignSubmitPage() {
   const platforms = campaign.accepted_platforms ? campaign.accepted_platforms.split(",").map((p) => p.trim()) : []
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
+    <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
@@ -86,7 +86,7 @@ export default function CampaignSubmitPage() {
 
       <div className="relative z-10">
         {/* Nav */}
-        <nav className="border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-50">
+        <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors">
               &larr; All Campaigns

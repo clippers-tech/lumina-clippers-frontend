@@ -5,7 +5,7 @@ import { LuminaLogo } from "@/components/LuminaLogo"
 
 export function ClipperNav() {
   return (
-    <nav className="border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-40">
+    <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md sticky top-0 z-40">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <LuminaLogo size={24} />

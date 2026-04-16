@@ -267,7 +267,7 @@ export default function ClipperDashboardPage() {
 
   if (loading || !dashboard) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0b2518] flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -283,7 +283,7 @@ export default function ClipperDashboardPage() {
   const allPlatforms = Array.from(new Set(dashboard.submissions.map((s) => s.platform)))
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
+    <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />

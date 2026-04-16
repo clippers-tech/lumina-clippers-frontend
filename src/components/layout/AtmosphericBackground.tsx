@@ -2,7 +2,7 @@
 
 export function AtmosphericBackground({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen bg-[#050505] overflow-hidden text-zinc-100 selection:bg-green-500/30">
+    <div className="relative min-h-screen bg-[#0b2518] overflow-hidden text-zinc-100 selection:bg-green-500/30">
       {/* Layer 1: Ambient glows */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-green-500/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed -top-40 right-[-20%] w-[600px] h-[600px] bg-green-500/5 rounded-full blur-[100px] pointer-events-none" />

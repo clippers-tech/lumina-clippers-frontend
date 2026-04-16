@@ -56,7 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <AtmosphericBackground>
         <div className="min-h-screen">
           {/* Top navbar */}
-          <nav className="border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-40">
+          <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md sticky top-0 z-40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-14">
                 <div className="flex items-center gap-6">

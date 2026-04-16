@@ -24,7 +24,7 @@ export function SendUploadLinksModal({ submissions, onSend, onClose, sending }: 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="rounded-xl border border-white/[0.04] bg-[#0a0a0a] backdrop-blur-md w-full max-w-lg p-6 max-h-[80vh] overflow-y-auto">
+      <div className="rounded-xl border border-white/[0.04] bg-[#0d2e1c] backdrop-blur-md w-full max-w-lg p-6 max-h-[80vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-zinc-100">Send Upload Links</h3>
           <button onClick={onClose} className="text-zinc-500 hover:text-zinc-300">

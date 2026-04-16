@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { publicApi, type PublicCampaign } from "@/lib/api"
-import { formatNumber, formatCurrency } from "@/lib/utils"
+import { formatCurrency } from "@/lib/utils"
 import { LuminaLogo } from "@/components/LuminaLogo"
 
 /* ── Default Thumbnail ────────────────────────────────── */
@@ -12,7 +12,7 @@ function CompletedThumbnail({ campaign }: { campaign: PublicCampaign }) {
     return (
       <div className="relative h-36 overflow-hidden">
         <img src={campaign.thumbnail_url} alt={campaign.name} className="w-full h-full object-cover opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b2518] via-transparent to-transparent" />
         <div className="absolute bottom-3 left-3">
           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-zinc-500/20 text-zinc-400">
             Completed
@@ -25,7 +25,7 @@ function CompletedThumbnail({ campaign }: { campaign: PublicCampaign }) {
   const initials = campaign.name.split(" ").map((w) => w[0]).join("").slice(0, 3).toUpperCase()
 
   return (
-    <div className="relative h-36 overflow-hidden bg-gradient-to-br from-zinc-800/60 via-zinc-700/40 to-zinc-900/60 flex flex-col items-center justify-center p-4">
+    <div className="relative h-36 overflow-hidden bg-gradient-to-br from-green-900/40 via-green-800/30 to-green-950/40 flex flex-col items-center justify-center p-4">
       <div className="absolute inset-0 opacity-[0.04]">
         <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_25%,rgba(255,255,255,0.05)_50%,transparent_50%,transparent_75%,rgba(255,255,255,0.05)_75%)] bg-[size:16px_16px]" />
       </div>
@@ -57,18 +57,14 @@ function CompletedCampaignCard({ campaign }: { campaign: PublicCampaign }) {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="grid grid-cols-2 gap-2 text-xs">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">CPM</span>
             <p className="text-zinc-300 font-semibold">{formatCurrency(campaign.cpm_rate)}</p>
           </div>
           <div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Max Pay</span>
-            <p className="text-zinc-300 font-semibold">{formatCurrency(campaign.max_payout)}</p>
-          </div>
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Clips</span>
-            <p className="text-zinc-300 font-semibold">{formatNumber(campaign.total_submissions)}</p>
+            <p className="text-zinc-300 font-semibold">{formatCurrency(campaign.cpm_rate * 100)}</p>
           </div>
         </div>
       </div>
@@ -89,7 +85,7 @@ export default function CompletedCampaignsPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
+    <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
@@ -98,7 +94,7 @@ export default function CompletedCampaignsPage() {
 
       <div className="relative z-10">
         {/* Nav */}
-        <nav className="border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-50">
+        <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
               <LuminaLogo size={32} />

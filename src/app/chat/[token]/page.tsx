@@ -242,7 +242,7 @@ function NewThreadModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-md mx-4 rounded-xl border border-white/[0.04] bg-[#0a0a0a] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md mx-4 rounded-xl border border-white/[0.04] bg-[#0d2e1c] shadow-2xl overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b border-white/[0.04]">
           <h3 className="text-sm font-bold text-zinc-200">New Conversation</h3>
           <button onClick={onClose} className="p-1 rounded hover:bg-white/[0.05] transition-colors">
@@ -385,14 +385,14 @@ export default function CreatorInboxPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0b2518] flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
+    <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />

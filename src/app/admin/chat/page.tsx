@@ -87,7 +87,7 @@ function NewThreadModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-[#0a0a0a]/95 border border-white/[0.06] backdrop-blur-md rounded-xl w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#0d2e1c]/95 border border-white/[0.06] backdrop-blur-md rounded-xl w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-zinc-100">New Thread</h2>
           <button
@@ -153,16 +153,16 @@ function NewThreadModal({
             onChange={(e) => setCategory(e.target.value)}
             className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors appearance-none"
           >
-            <option value="general" className="bg-[#0a0a0a]">
+            <option value="general" className="bg-[#0d2e1c]">
               General
             </option>
-            <option value="payment" className="bg-[#0a0a0a]">
+            <option value="payment" className="bg-[#0d2e1c]">
               Payment
             </option>
-            <option value="issue" className="bg-[#0a0a0a]">
+            <option value="issue" className="bg-[#0d2e1c]">
               Issue
             </option>
-            <option value="revision" className="bg-[#0a0a0a]">
+            <option value="revision" className="bg-[#0d2e1c]">
               Revision
             </option>
           </select>
@@ -515,9 +515,9 @@ function ChatContent() {
                     onChange={(e) => handleUpdateStatus(e.target.value)}
                     className="bg-white/[0.05] border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors appearance-none"
                   >
-                    <option value="open" className="bg-[#0a0a0a]">Open</option>
-                    <option value="resolved" className="bg-[#0a0a0a]">Resolved</option>
-                    <option value="archived" className="bg-[#0a0a0a]">Archived</option>
+                    <option value="open" className="bg-[#0d2e1c]">Open</option>
+                    <option value="resolved" className="bg-[#0d2e1c]">Resolved</option>
+                    <option value="archived" className="bg-[#0d2e1c]">Archived</option>
                   </select>
                 </div>
               </div>

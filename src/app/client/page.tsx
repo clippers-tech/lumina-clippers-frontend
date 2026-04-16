@@ -35,7 +35,7 @@ export default function ClientLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30 flex items-center justify-center">
+    <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30 flex items-center justify-center">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />

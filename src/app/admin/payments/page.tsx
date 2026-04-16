@@ -278,7 +278,7 @@ export default function PaymentsPage() {
         {/* Add Payment Modal */}
         {showAddModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="bg-[#0a0a0a]/95 border border-white/[0.06] backdrop-blur-md rounded-xl w-full max-w-md mx-4 p-6">
+            <div className="bg-[#0d2e1c]/95 border border-white/[0.06] backdrop-blur-md rounded-xl w-full max-w-md mx-4 p-6">
               <h2 className="text-lg font-bold text-zinc-100 mb-4">Add Payment</h2>
 
               {addError && (

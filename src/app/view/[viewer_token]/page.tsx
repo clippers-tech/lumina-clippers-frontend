@@ -23,7 +23,7 @@ export default function ViewerPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0b2518] flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -31,7 +31,7 @@ export default function ViewerPage() {
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0b2518] flex items-center justify-center">
         <div className="text-center">
           <p className="text-zinc-400 mb-4">{error || "Not found"}</p>
         </div>
@@ -49,7 +49,7 @@ export default function ViewerPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 selection:bg-green-500/30">
+    <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:60px_60px]" />
@@ -58,7 +58,7 @@ export default function ViewerPage() {
 
       <div className="relative z-10">
         {/* Nav */}
-        <nav className="border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-50">
+        <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Campaign Results</span>
             <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${statusColor(campaign.status)}`}>

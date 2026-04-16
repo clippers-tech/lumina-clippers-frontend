@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #050505;
+  --background: #0b2518;
   --foreground: #F4F4F5;
   --primary: #4ADE80;
   --secondary: #10B981;
@@ -11,7 +11,7 @@
 }
 
 body {
-  background-color: #050505;
+  background-color: #0b2518;
   color: #F4F4F5;
 }
 
@@ -56,7 +56,7 @@ select {
   color: #f4f4f5 !important;
 }
 select option {
-  background-color: #18181b !important;
+  background-color: #0d2e1c !important;
   color: #e4e4e7 !important;
 }
 select option:checked {

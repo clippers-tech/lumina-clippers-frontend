@@ -185,7 +185,7 @@ export default function CreatorDetailPage() {
       {/* Payout Modal */}
       {payoutOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="rounded-xl border border-white/[0.04] bg-[#0a0a0a] backdrop-blur-md w-full max-w-md p-6">
+          <div className="rounded-xl border border-white/[0.04] bg-[#0d2e1c] backdrop-blur-md w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-zinc-100">Log Payment</h3>
               <button onClick={() => setPayoutOpen(false)} className="text-zinc-500 hover:text-zinc-300"><X className="w-5 h-5" /></button>

@@ -297,7 +297,7 @@ export default function UsersPage() {
         {/* Add/Edit User Modal */}
         {showModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="bg-[#0a0a0a]/95 border border-white/[0.06] backdrop-blur-md rounded-xl w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
+            <div className="bg-[#0d2e1c]/95 border border-white/[0.06] backdrop-blur-md rounded-xl w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-zinc-100">
                   {editingUser ? "Edit User" : "Add User"}
@@ -369,13 +369,13 @@ export default function UsersPage() {
                     }
                     className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors appearance-none"
                   >
-                    <option value="admin" className="bg-[#0a0a0a]">
+                    <option value="admin" className="bg-[#0d2e1c]">
                       Admin
                     </option>
-                    <option value="viewer" className="bg-[#0a0a0a]">
+                    <option value="viewer" className="bg-[#0d2e1c]">
                       Viewer
                     </option>
-                    <option value="manager" className="bg-[#0a0a0a]">
+                    <option value="manager" className="bg-[#0d2e1c]">
                       Manager
                     </option>
                   </select>

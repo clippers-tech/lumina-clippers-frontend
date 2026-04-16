@@ -50,13 +50,13 @@ function Dropdown({
       </button>
 
       {open && (
-        <div className="absolute z-50 mt-1 w-full max-h-72 overflow-y-auto rounded-lg border border-white/[0.1] bg-[#1a1a1a] shadow-2xl shadow-black/60">
+        <div className="absolute z-50 mt-1 w-full max-h-72 overflow-y-auto rounded-lg border border-green-400/[0.12] bg-[#0a2015] shadow-2xl shadow-black/60 ring-1 ring-black/20">
           {/* Placeholder / clear option */}
           <button
             type="button"
             onClick={() => { onChange(""); setOpen(false) }}
-            className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-              !value ? "text-green-400 bg-green-400/[0.08]" : "text-zinc-500 hover:bg-white/[0.05]"
+            className={`w-full text-left px-3 py-2.5 text-sm transition-colors ${
+              !value ? "text-green-400 bg-green-400/[0.08]" : "text-zinc-400 hover:bg-white/[0.06] hover:text-zinc-200"
             }`}
           >
             {placeholder}
@@ -67,10 +67,10 @@ function Dropdown({
               key={opt.value}
               type="button"
               onClick={() => { onChange(opt.value); setOpen(false) }}
-              className={`w-full flex items-center justify-between text-left px-3 py-2 text-sm transition-colors ${
+              className={`w-full flex items-center justify-between text-left px-3 py-2.5 text-sm transition-colors ${
                 opt.value === value
                   ? "text-green-400 bg-green-400/[0.08]"
-                  : "text-zinc-300 hover:bg-white/[0.05] hover:text-zinc-100"
+                  : "text-zinc-200 hover:bg-white/[0.06] hover:text-white"
               }`}
             >
               <span className="truncate">{opt.label}</span>
