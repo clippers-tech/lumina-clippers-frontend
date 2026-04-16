@@ -413,7 +413,12 @@ export const clipperApi = {
 // ── Clipper Auth ─────────────────────────────────────
 export const clipperAuth = {
   login: (email: string, password: string) =>
-    apiFetch<{ access_token: string; token_type: string }>("/api/clipper/auth/login", {
+    apiFetch<{ status: string; email?: string; access_token?: string; token_type?: string }>("/api/clipper/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    }),
+  setPassword: (email: string, password: string) =>
+    apiFetch<{ status: string; access_token: string; token_type: string }>("/api/clipper/auth/set-password", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
