@@ -163,20 +163,25 @@ export function SubmissionCard({
 
         {/* Thumbnail / Preview */}
         <div className="px-3 py-2">
-          {(submission.platform === "instagram" || submission.platform === "twitter") && embedUrl ? (
-            <div className="relative w-full rounded-lg overflow-hidden bg-black" style={{ height: submission.platform === "twitter" ? "280px" : "320px" }}>
+          {embedUrl ? (
+            <div className="relative w-full rounded-lg overflow-hidden bg-black" style={{
+              height: submission.platform === "twitter" ? "280px"
+                : submission.platform === "tiktok" ? "400px"
+                : submission.platform === "youtube" ? "220px"
+                : "320px"
+            }}>
               <iframe
                 src={embedUrl}
                 className="w-full h-full border-0"
-                allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                title={`${submission.platform === "twitter" ? "Tweet" : "Instagram reel"}`}
+                title={`${submission.platform} embed`}
                 loading="lazy"
               />
             </div>
           ) : thumbnail ? (
             <button
-              onClick={() => (embedUrl ? setShowEmbed(true) : window.open(submission.post_url, "_blank"))}
+              onClick={() => window.open(submission.post_url, "_blank")}
               className="relative w-full h-40 rounded-lg bg-white/[0.03] overflow-hidden cursor-pointer group/thumb"
             >
               <img
@@ -192,16 +197,10 @@ export function SubmissionCard({
             </button>
           ) : (
             <button
-              onClick={() => (embedUrl ? setShowEmbed(true) : window.open(submission.post_url, "_blank"))}
+              onClick={() => window.open(submission.post_url, "_blank")}
               className="w-full h-40 rounded-lg bg-white/[0.03] flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white/[0.05] transition-colors group/thumb"
             >
-              {embedUrl ? (
-                <div className="w-12 h-12 rounded-full bg-white/10 group-hover/thumb:bg-white/20 flex items-center justify-center transition-colors">
-                  <Play className="w-5 h-5 text-white/60 group-hover/thumb:text-white fill-white/60 group-hover/thumb:fill-white ml-0.5 transition-colors" />
-                </div>
-              ) : (
-                <span className="text-3xl opacity-30">{platformIcon}</span>
-              )}
+              <span className="text-3xl opacity-30">{platformIcon}</span>
               <span className="text-[10px] text-white/20 flex items-center gap-1">
                 <ExternalLink className="w-3 h-3" /> Open post
               </span>
