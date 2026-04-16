@@ -225,20 +225,12 @@ export default function HomePage() {
               <LuminaLogo size={32} />
               <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
             </Link>
-            <div className="flex items-center gap-3">
-              <Link
-                href="/viral"
-                className="border border-green-400/[0.1] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-green-400/[0.05] transition-all"
-              >
-                Creator Login
-              </Link>
-              <Link
-                href="/client"
-                className="border border-green-400/[0.1] bg-transparent text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-green-400/[0.05] transition-all"
-              >
-                Client Login
-              </Link>
-            </div>
+            <Link
+              href="/viral"
+              className="bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
+            >
+              Claim Payouts
+            </Link>
           </div>
         </nav>
 
