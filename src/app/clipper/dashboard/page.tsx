@@ -196,6 +196,7 @@ function ProofUploadInline({
    SUBMISSION ROW — compact, table-like
    ───────────────────────────────────────────────────────── */
 function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; token: string; onRefresh: () => void }) {
+  const router = useRouter()
   const { toast } = useToast()
   const [showUpload, setShowUpload] = useState(false)
   const [claiming, setClaiming] = useState(false)
@@ -206,7 +207,8 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
   const isVerified = vs === "verified"
   const hasProof = vs === "uploaded" || vs === "verified" || vs === "rejected"
 
-  const handleClaim = async () => {
+  const handleClaim = async (e: React.MouseEvent) => {
+    e.stopPropagation()
     setClaiming(true)
     try {
       await clipperApi.claimPayment(token, sub.id)
@@ -218,8 +220,11 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
   }
 
   return (
-    <div className="border-b border-white/[0.04] last:border-b-0">
-      <div className="flex items-center gap-3 px-4 py-3">
+    <div className="border-b border-white/[0.08] last:border-b-0">
+      <div
+        onClick={() => router.push(`/clipper/submission/${sub.id}`)}
+        className="flex items-center gap-3 px-4 py-3.5 cursor-pointer hover:bg-white/[0.02] transition-colors"
+      >
         {/* Platform icon */}
         <div className="w-8 h-8 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-sm">
           {platformIcon(sub.platform)}
@@ -231,7 +236,7 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
             <span className="text-xs font-semibold text-zinc-200 truncate">{sub.campaign_name}</span>
             <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">{sub.platform}</span>
           </div>
-          <a href={sub.post_url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-zinc-600 hover:text-green-400 transition-colors truncate block">{sub.post_url}</a>
+          <span className="text-[10px] text-zinc-600 truncate block">{sub.post_url}</span>
         </div>
 
         {/* Stats */}
@@ -241,7 +246,7 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
         </div>
 
         {/* Status + Actions */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
           {isPaid && (
             <span className="text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-400/10 px-2 py-0.5 rounded">Paid</span>
           )}
@@ -254,12 +259,12 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
             >{claiming ? "..." : "Claim"}</button>
           )}
           {(vs === "pending" || vs === "rejected") && !isPaid && (
-            <button onClick={() => setShowUpload(!showUpload)}
-              className="text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2.5 py-1 rounded-lg hover:bg-green-300 transition-all"
-            ><Upload className="w-3 h-3" /></button>
+            <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
+              className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2.5 py-1 rounded-lg hover:bg-green-300 transition-all"
+            ><Upload className="w-3 h-3" /> Upload Proof</button>
           )}
           {(vs === "uploaded" || vs === "verified") && !isPaid && !isClaimed && (
-            <button onClick={() => setShowUpload(!showUpload)} className="text-zinc-600 hover:text-zinc-300 transition-colors">
+            <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }} className="text-zinc-600 hover:text-zinc-300 transition-colors">
               <RotateCcw className="w-3 h-3" />
             </button>
           )}
@@ -288,26 +293,32 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
 /* ─────────────────────────────────────────────────────────
    SUBMIT NEW — inline campaign submission
    ───────────────────────────────────────────────────────── */
+type SubmitMode = "single" | "bulk"
+
 function SubmitNewTab({
   token, campaigns, onSubmitComplete,
 }: {
   token: string; campaigns: ClipperCampaignOption[]; onSubmitComplete: () => void
 }) {
   const { toast } = useToast()
+  const [mode, setMode] = useState<SubmitMode>("single")
   const [selectedCampaign, setSelectedCampaign] = useState<number | null>(null)
+  const [singleUrl, setSingleUrl] = useState("")
   const [urls, setUrls] = useState("")
   const [uploading, setUploading] = useState(false)
   const [result, setResult] = useState<ClipperBulkSubmitResult | null>(null)
 
   const handleSubmit = async () => {
-    if (!selectedCampaign || !urls.trim()) return
+    const urlList = mode === "single"
+      ? [singleUrl.trim()].filter(Boolean)
+      : urls.split("\n").map((u) => u.trim()).filter(Boolean)
+    if (!selectedCampaign || urlList.length === 0) return
     setUploading(true); setResult(null)
     try {
-      const urlList = urls.split("\n").map((u) => u.trim()).filter(Boolean)
       const res = await clipperApi.bulkSubmit(token, selectedCampaign, urlList)
       setResult(res)
-      toast({ description: `Added ${res.added} submissions`, variant: "success" })
-      if (res.added > 0) { onSubmitComplete(); setUrls("") }
+      toast({ description: `Added ${res.added} submission${res.added !== 1 ? "s" : ""}`, variant: "success" })
+      if (res.added > 0) { onSubmitComplete(); setSingleUrl(""); setUrls("") }
     } catch (err) {
       toast({ description: err instanceof Error ? err.message : "Submit failed", variant: "error" })
     } finally { setUploading(false) }
@@ -325,8 +336,26 @@ function SubmitNewTab({
     reader.readAsText(file); e.target.value = ""
   }
 
+  const canSubmit = selectedCampaign && (mode === "single" ? singleUrl.trim() : urls.trim())
+
   return (
     <div className="space-y-4">
+      {/* Mode toggle */}
+      <div className="flex items-center gap-1 p-0.5 rounded-lg bg-white/[0.04] w-fit">
+        <button
+          onClick={() => setMode("single")}
+          className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+            mode === "single" ? "bg-green-400 text-black" : "text-zinc-400 hover:text-zinc-200"
+          }`}
+        >Single URL</button>
+        <button
+          onClick={() => setMode("bulk")}
+          className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+            mode === "bulk" ? "bg-green-400 text-black" : "text-zinc-400 hover:text-zinc-200"
+          }`}
+        >Bulk URLs</button>
+      </div>
+
       <div>
         <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-1.5">Campaign</label>
         <select
@@ -339,29 +368,42 @@ function SubmitNewTab({
         </select>
       </div>
 
-      <div>
-        <div className="flex items-center justify-between mb-1.5">
-          <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Post URLs (one per line)</label>
-          <label className="cursor-pointer text-[10px] text-green-400 hover:text-green-300 transition-colors font-semibold">
-            Import CSV
-            <input type="file" accept=".csv" onChange={handleCsv} className="hidden" />
-          </label>
+      {mode === "single" ? (
+        <div>
+          <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-1.5">Post URL</label>
+          <input
+            type="url"
+            value={singleUrl}
+            onChange={(e) => setSingleUrl(e.target.value)}
+            placeholder="https://tiktok.com/@user/video/123"
+            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors"
+          />
         </div>
-        <textarea
-          value={urls}
-          onChange={(e) => setUrls(e.target.value)}
-          rows={6}
-          placeholder={"https://tiktok.com/@user/video/123\nhttps://tiktok.com/@user/video/456"}
-          className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors resize-none"
-        />
-      </div>
+      ) : (
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Post URLs (one per line)</label>
+            <label className="cursor-pointer text-[10px] text-green-400 hover:text-green-300 transition-colors font-semibold">
+              Import CSV
+              <input type="file" accept=".csv" onChange={handleCsv} className="hidden" />
+            </label>
+          </div>
+          <textarea
+            value={urls}
+            onChange={(e) => setUrls(e.target.value)}
+            rows={6}
+            placeholder={"https://tiktok.com/@user/video/123\nhttps://tiktok.com/@user/video/456"}
+            className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-green-400/30 placeholder:text-zinc-600 transition-colors resize-none"
+          />
+        </div>
+      )}
 
       <button
         onClick={handleSubmit}
-        disabled={uploading || !selectedCampaign || !urls.trim()}
+        disabled={uploading || !canSubmit}
         className="w-full bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-40"
       >
-        {uploading ? "Submitting..." : "Submit URLs"}
+        {uploading ? "Submitting..." : mode === "single" ? "Submit URL" : "Submit URLs"}
       </button>
 
       {result && (
@@ -545,7 +587,7 @@ export default function ClipperDashboardPage() {
         </div>
 
         {/* Tab content */}
-        <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] overflow-hidden">
+        <div className="rounded-xl border border-white/[0.06] bg-[#0d1f16] overflow-hidden">
 
           {/* ── Submissions tab ───────────────────────────── */}
           {activeTab === "submissions" && (

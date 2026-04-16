@@ -356,6 +356,7 @@ export type ClipperSubmission = {
   comments: number; est_earnings: number; status: string; campaign_name: string
   campaign_slug: string; thumbnail_url: string; created_at: string
   verification_status: string; verification_note: string; submission_token: string
+  verification_video_url: string
 }
 
 export type ClipperDashboard = {
