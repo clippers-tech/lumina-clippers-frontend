@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Upload, ChevronDown, MessageSquare, DollarSign, ShieldCheck, AlertCircle, RotateCcw, CheckCircle2, Wallet } from "lucide-react"
+import { Upload, ChevronDown, MessageSquare, DollarSign, ShieldCheck, AlertCircle, RotateCcw, CheckCircle2, Wallet, LayoutGrid, List } from "lucide-react"
 import { clipperApi, clipperAuth, verification, type ClipperDashboard, type ClipperSubmission, type ClipperCampaignOption, type ClipperBulkSubmitResult } from "@/lib/api"
 import { getClipperToken, clearClipperToken } from "@/lib/clipper-auth"
 import { formatNumber, formatCurrency, platformIcon, statusColor } from "@/lib/utils"
@@ -245,7 +245,7 @@ function SubmissionCard({
           {(vs === "pending" || vs === "rejected") && !isPaid && (
             <button
               onClick={() => setShowUpload(!showUpload)}
-              className="flex items-center gap-1.5 bg-amber-500 text-black font-bold text-[11px] px-3 py-1.5 rounded-lg uppercase tracking-wide hover:bg-amber-400 transition-all"
+              className="flex items-center gap-1.5 bg-green-400 text-black font-bold text-[11px] px-3 py-1.5 rounded-lg uppercase tracking-wide hover:bg-green-300 transition-all shadow-[0_0_15px_-3px_rgba(74,222,128,0.3)]"
             >
               <Upload className="w-3.5 h-3.5" />
               Upload Proof
@@ -309,6 +309,157 @@ function SubmissionCard({
         <p className="text-[10px] text-zinc-600 mt-2 italic">
           You will only be paid for the views shown in your analytics proof video.
         </p>
+      )}
+    </div>
+  )
+}
+
+/* ── Submission Card — Grid ───────────────────────────── */
+function SubmissionCardGrid({
+  submission,
+  token,
+  onRefresh,
+}: {
+  submission: ClipperSubmission
+  token: string
+  onRefresh: () => void
+}) {
+  const { toast } = useToast()
+  const [showUpload, setShowUpload] = useState(false)
+  const [claiming, setClaiming] = useState(false)
+
+  const vs = submission.verification_status || "pending"
+  const isPaid = submission.status === "paid"
+  const isClaimed = submission.status === "payment_claimed"
+  const isVerified = vs === "verified"
+  const hasProof = vs === "uploaded" || vs === "verified" || vs === "rejected"
+
+  const handleClaimPayment = async () => {
+    setClaiming(true)
+    try {
+      await clipperApi.claimPayment(token, submission.id)
+      toast({ description: "Payment claimed.", variant: "success" })
+      onRefresh()
+    } catch (err) {
+      toast({ description: err instanceof Error ? err.message : "Claim failed", variant: "error" })
+    } finally {
+      setClaiming(false)
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-white/[0.08] bg-[#0d3420]/80 p-4 flex flex-col justify-between">
+      {/* Top: campaign + platform */}
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <div className="w-8 h-8 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-sm">
+            {platformIcon(submission.platform)}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold text-zinc-200 truncate">{submission.campaign_name}</p>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">{submission.platform}</span>
+          </div>
+        </div>
+        <a
+          href={submission.post_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] text-zinc-500 hover:text-green-400 transition-colors truncate block mt-1 mb-3"
+        >
+          {submission.post_url}
+        </a>
+      </div>
+
+      {/* Middle: stats */}
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <p className="text-lg font-extrabold text-zinc-100">{formatNumber(submission.views)}</p>
+          <p className="text-[10px] text-zinc-500">views</p>
+        </div>
+        <p className="text-sm font-bold text-green-400">{formatCurrency(submission.est_earnings)}</p>
+      </div>
+
+      {/* Bottom: status + action */}
+      <div className="pt-3 border-t border-white/[0.06] space-y-2">
+        <div className="flex items-center justify-between">
+          {vs === "pending" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-400">
+              <AlertCircle className="w-3 h-3" /> No proof
+            </span>
+          )}
+          {vs === "uploaded" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-blue-400">
+              <ShieldCheck className="w-3 h-3" /> Under review
+            </span>
+          )}
+          {vs === "verified" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-green-400">
+              <CheckCircle2 className="w-3 h-3" /> Verified
+            </span>
+          )}
+          {vs === "rejected" && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-red-400">
+              <AlertCircle className="w-3 h-3" /> Rejected
+            </span>
+          )}
+
+          {/* Badges */}
+          {isClaimed && (
+            <span className="text-[10px] font-bold uppercase tracking-wider text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded">
+              Pending
+            </span>
+          )}
+          {isPaid && (
+            <span className="text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-400/10 px-2 py-0.5 rounded">
+              Paid
+            </span>
+          )}
+        </div>
+
+        {/* Actions */}
+        {(vs === "pending" || vs === "rejected") && !isPaid && (
+          <button
+            onClick={() => setShowUpload(!showUpload)}
+            className="w-full flex items-center justify-center gap-1.5 bg-green-400 text-black font-bold text-[11px] px-3 py-1.5 rounded-lg uppercase tracking-wide hover:bg-green-300 transition-all shadow-[0_0_15px_-3px_rgba(74,222,128,0.3)]"
+          >
+            <Upload className="w-3.5 h-3.5" />
+            Upload Proof
+          </button>
+        )}
+
+        {isVerified && !isPaid && !isClaimed && (
+          <button
+            onClick={handleClaimPayment}
+            disabled={claiming}
+            className="w-full flex items-center justify-center gap-1.5 bg-green-400 text-black font-bold text-[11px] px-3 py-1.5 rounded-lg uppercase tracking-wide shadow-[0_0_20px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-50"
+          >
+            <DollarSign className="w-3.5 h-3.5" />
+            {claiming ? "Claiming..." : "Claim Payment"}
+          </button>
+        )}
+
+        {(vs === "uploaded" || vs === "verified") && !isPaid && !isClaimed && (
+          <button
+            onClick={() => setShowUpload(!showUpload)}
+            className="w-full flex items-center justify-center gap-1 text-[10px] text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            <RotateCcw className="w-3 h-3" />
+            Re-upload
+          </button>
+        )}
+      </div>
+
+      {/* Upload area */}
+      {showUpload && (
+        <ProofUploadInline
+          submissionId={submission.id}
+          submissionToken={submission.submission_token}
+          isReupload={hasProof}
+          onComplete={() => {
+            setShowUpload(false)
+            onRefresh()
+          }}
+        />
       )}
     </div>
   )
@@ -439,6 +590,7 @@ export default function ClipperDashboardPage() {
   const [chatToken, setChatToken] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState("all")
   const [platformFilter, setPlatformFilter] = useState("all")
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list")
 
   const loadDashboard = useCallback(async () => {
     const token = getClipperToken()
@@ -644,6 +796,22 @@ export default function ClipperDashboardPage() {
                   <option value="all" className="bg-[#0d3420]">All Platforms</option>
                   {allPlatforms.map((p) => (<option key={p} value={p} className="bg-[#0d3420]">{p}</option>))}
                 </select>
+                <div className="flex items-center border border-white/[0.08] rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`p-1.5 transition-colors ${viewMode === "list" ? "bg-green-400/15 text-green-400" : "text-zinc-500 hover:text-zinc-300"}`}
+                    title="List view"
+                  >
+                    <List className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={`p-1.5 transition-colors ${viewMode === "grid" ? "bg-green-400/15 text-green-400" : "text-zinc-500 hover:text-zinc-300"}`}
+                    title="Grid view"
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -654,10 +822,21 @@ export default function ClipperDashboardPage() {
                   Browse campaigns &rarr;
                 </Link>
               </div>
-            ) : (
+            ) : viewMode === "list" ? (
               <div className="space-y-2">
                 {filteredSubmissions.map((sub) => (
                   <SubmissionCard
+                    key={sub.id}
+                    submission={sub}
+                    token={getClipperToken()!}
+                    onRefresh={loadDashboard}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                {filteredSubmissions.map((sub) => (
+                  <SubmissionCardGrid
                     key={sub.id}
                     submission={sub}
                     token={getClipperToken()!}
