@@ -188,10 +188,11 @@ export type PaymentLog = {
 }
 
 export const payments = {
-  list: (token: string, filter?: string, creatorEmail?: string, page?: number, perPage?: number) => {
+  list: (token: string, filter?: string, creatorEmail?: string, page?: number, perPage?: number, campaignId?: number) => {
     const params = new URLSearchParams()
     if (filter) params.set("filter", filter)
     if (creatorEmail) params.set("creator_email", creatorEmail)
+    if (campaignId) params.set("campaign_id", String(campaignId))
     if (page) params.set("page", String(page))
     if (perPage) params.set("per_page", String(perPage))
     const qs = params.toString()

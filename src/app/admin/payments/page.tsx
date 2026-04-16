@@ -1,26 +1,100 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { getToken } from "@/lib/auth"
-import { payments as paymentsApi, type PaymentLog } from "@/lib/api"
+import {
+  payments as paymentsApi,
+  campaigns as campaignsApi,
+  type PaymentLog,
+  type Campaign,
+} from "@/lib/api"
 import { AdminTabs } from "@/components/admin/AdminTabs"
 import { AdminGuard } from "@/components/admin/AdminGuard"
 import { Pagination } from "@/components/admin/Pagination"
 import { LoadingState } from "@/components/admin/LoadingState"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { formatCurrency } from "@/lib/utils"
-import { Plus, Trash2, Search, CheckCircle, Clock, DollarSign } from "lucide-react"
+import { Plus, Trash2, DollarSign, ChevronDown, Check, Clock, CheckCircle } from "lucide-react"
 
-type FilterMode = "all" | "payment_claimed" | "needs_payment"
+type FilterMode = "paid" | "to_be_paid" | "rejected"
 
+/* ── Campaign Dropdown ────────────────────────────────── */
+function CampaignDropdown({
+  campaigns,
+  value,
+  onChange,
+}: {
+  campaigns: Campaign[]
+  value: number | null
+  onChange: (id: number | null) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("mousedown", handleClick)
+    return () => document.removeEventListener("mousedown", handleClick)
+  }, [])
+
+  const selected = campaigns.find((c) => c.id === value)
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between gap-2 bg-white/[0.05] border border-white/[0.08] text-sm rounded-lg px-3 py-2 min-w-[180px] focus:outline-none focus:border-green-400/30 transition-colors hover:bg-white/[0.08]"
+      >
+        <span className={selected ? "text-zinc-100 truncate" : "text-zinc-500"}>
+          {selected ? selected.name : "All Campaigns"}
+        </span>
+        <ChevronDown className={`w-3.5 h-3.5 text-zinc-500 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && (
+        <div className="absolute z-50 mt-1 w-full min-w-[220px] max-h-72 overflow-y-auto rounded-lg border border-green-400/[0.12] bg-[#0a2015] shadow-2xl shadow-black/60 ring-1 ring-black/20">
+          <button
+            type="button"
+            onClick={() => { onChange(null); setOpen(false) }}
+            className={`w-full text-left px-3 py-2.5 text-sm transition-colors ${
+              !value ? "text-green-400 bg-green-400/[0.08]" : "text-zinc-400 hover:bg-white/[0.06] hover:text-zinc-200"
+            }`}
+          >
+            All Campaigns
+          </button>
+          {campaigns.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => { onChange(c.id); setOpen(false) }}
+              className={`w-full flex items-center justify-between text-left px-3 py-2.5 text-sm transition-colors ${
+                c.id === value
+                  ? "text-green-400 bg-green-400/[0.08]"
+                  : "text-zinc-200 hover:bg-white/[0.06] hover:text-white"
+              }`}
+            >
+              <span className="truncate">{c.name}</span>
+              {c.id === value && <Check className="w-3.5 h-3.5 text-green-400 shrink-0 ml-2" />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ── Main Page ────────────────────────────────────────── */
 export default function PaymentsPage() {
   const [payments, setPayments] = useState<PaymentLog[]>([])
+  const [allCampaigns, setAllCampaigns] = useState<Campaign[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [filterMode, setFilterMode] = useState<FilterMode>("payment_claimed")
-  const [searchEmail, setSearchEmail] = useState("")
-  const [debouncedEmail, setDebouncedEmail] = useState("")
+  const [filterMode, setFilterMode] = useState<FilterMode>("paid")
+  const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
   const [prefillSubmissionId, setPrefillSubmissionId] = useState("")
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,27 +109,25 @@ export default function PaymentsPage() {
   const [addLoading, setAddLoading] = useState(false)
   const [addError, setAddError] = useState("")
 
-  // Debounce email search
+  // Load campaigns for dropdown
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedEmail(searchEmail)
-      setPage(1)
-    }, 400)
-    return () => clearTimeout(timer)
-  }, [searchEmail])
+    const token = getToken()
+    if (!token) return
+    campaignsApi.list(token).then(setAllCampaigns).catch(console.error)
+  }, [])
 
   const fetchPayments = useCallback(async () => {
     const token = getToken()
     if (!token) return
     setLoading(true)
     try {
-      const filter = filterMode === "all" ? undefined : filterMode
       const res = await paymentsApi.list(
         token,
-        filter,
-        debouncedEmail || undefined,
+        filterMode,
+        undefined,
         page,
-        25
+        25,
+        selectedCampaignId ?? undefined
       )
       setPayments(res.items)
       setTotalPages(res.pages)
@@ -64,7 +136,7 @@ export default function PaymentsPage() {
     } finally {
       setLoading(false)
     }
-  }, [filterMode, debouncedEmail, page])
+  }, [filterMode, page, selectedCampaignId])
 
   useEffect(() => {
     fetchPayments()
@@ -111,16 +183,14 @@ export default function PaymentsPage() {
       setPayments((prev) => [newPayment, ...prev])
       setShowAddModal(false)
       setAddForm({ submission_id: "", amount: "", method: "", reference: "", notes: "" })
-      // If we were on payment_claimed tab, refresh to remove the processed item
-      if (filterMode === "payment_claimed") {
-        fetchPayments()
-      }
+      // Refresh to update counts
+      fetchPayments()
     } catch (err: unknown) {
       setAddError(err instanceof Error ? err.message : "Failed to create payment")
     } finally {
       setAddLoading(false)
     }
-  }, [addForm, filterMode, fetchPayments])
+  }, [addForm, fetchPayments])
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr)
@@ -133,13 +203,13 @@ export default function PaymentsPage() {
     })
   }
 
-  const filterTabs: { mode: FilterMode; label: string; icon: React.ReactNode }[] = [
-    { mode: "payment_claimed", label: "Payment Claims", icon: <Clock className="w-3.5 h-3.5" /> },
-    { mode: "needs_payment", label: "Needs Payment", icon: <DollarSign className="w-3.5 h-3.5" /> },
-    { mode: "all", label: "All Payments", icon: <CheckCircle className="w-3.5 h-3.5" /> },
-  ]
+  const isClaimView = filterMode === "to_be_paid" || filterMode === "rejected"
 
-  const isClaimView = filterMode === "payment_claimed" || filterMode === "needs_payment"
+  const filterTabs: { mode: FilterMode; label: string }[] = [
+    { mode: "paid", label: "Paid" },
+    { mode: "to_be_paid", label: "To be paid" },
+    { mode: "rejected", label: "Rejected" },
+  ]
 
   return (
     <AdminGuard>
@@ -150,48 +220,51 @@ export default function PaymentsPage() {
             Admin Panel
           </p>
           <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">Payments</h1>
-          <p className="text-xs sm:text-sm text-zinc-500 mt-1">Process payment claims and track transactions</p>
         </div>
 
         <div className="mt-6 mb-6">
           <AdminTabs />
         </div>
 
-        {/* Controls bar */}
-        <div className="flex flex-col gap-3 mb-4">
-          {/* Search */}
-          <div className="relative w-full sm:max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-            <input
-              value={searchEmail}
-              onChange={(e) => setSearchEmail(e.target.value)}
-              placeholder="Search by creator email..."
-              className="w-full pl-9 bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
+        {/* Filters bar — matches screenshot */}
+        <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            {/* Status pill tabs */}
+            <div className="flex items-center gap-2">
+              {filterTabs.map(({ mode, label }) => (
+                <button
+                  key={mode}
+                  onClick={() => { setFilterMode(mode); setPage(1) }}
+                  className={`px-4 py-1.5 text-xs font-bold rounded-full transition-all ${
+                    filterMode === mode
+                      ? "bg-green-400 text-black shadow-[0_0_12px_-3px_rgba(74,222,128,0.4)]"
+                      : "bg-white/[0.06] text-zinc-400 hover:bg-white/[0.1] hover:text-zinc-200 border border-white/[0.06]"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Campaign dropdown */}
+            <CampaignDropdown
+              campaigns={allCampaigns}
+              value={selectedCampaignId}
+              onChange={(id) => { setSelectedCampaignId(id); setPage(1) }}
             />
-          </div>
 
-          {/* Filter tabs */}
-          <div className="flex flex-wrap gap-1">
-            {filterTabs.map(({ mode, label, icon }) => (
-              <button
-                key={mode}
-                onClick={() => {
-                  setFilterMode(mode)
-                  setPage(1)
-                }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  filterMode === mode
-                    ? "bg-green-400/10 text-green-400"
-                    : "text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.04]"
-                }`}
-              >
-                {icon}
-                {label}
-              </button>
-            ))}
+            {/* ALL PAID SUBMISSIONS — right side */}
+            <button
+              onClick={() => { setFilterMode("paid"); setSelectedCampaignId(null); setPage(1) }}
+              className="sm:ml-auto text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-green-400 transition-colors whitespace-nowrap"
+            >
+              All Paid Submissions
+            </button>
           </div>
+        </div>
 
-          {/* Add button */}
+        {/* Add Payment button */}
+        <div className="flex justify-end mb-4">
           <button
             onClick={() => openPayModal()}
             className="flex items-center gap-1.5 bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
@@ -207,11 +280,11 @@ export default function PaymentsPage() {
             <LoadingState />
           ) : payments.length === 0 ? (
             <EmptyState message={
-              filterMode === "payment_claimed"
-                ? "No pending payment claims"
-                : filterMode === "needs_payment"
+              filterMode === "paid"
+                ? "No paid submissions yet"
+                : filterMode === "to_be_paid"
                   ? "No submissions awaiting payment"
-                  : "No payments found"
+                  : "No rejected submissions"
             } />
           ) : (
             <div className="overflow-x-auto">
@@ -230,7 +303,7 @@ export default function PaymentsPage() {
                     <th className="text-right text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
                       Views
                     </th>
-                    {!isClaimView && (
+                    {filterMode === "paid" && (
                       <>
                         <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
                           Method
@@ -283,7 +356,7 @@ export default function PaymentsPage() {
                           {p.paid_views?.toLocaleString() ?? "-"}
                         </span>
                       </td>
-                      {!isClaimView && (
+                      {filterMode === "paid" && (
                         <>
                           <td className="px-5 py-4">
                             <span className="text-sm text-zinc-400">{p.method || "-"}</span>
@@ -306,6 +379,10 @@ export default function PaymentsPage() {
                             <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-400 bg-amber-400/10 px-2 py-1 rounded-md">
                               <Clock className="w-3 h-3" />
                               Claimed
+                            </span>
+                          ) : (p as PaymentLog & { status?: string }).status === "rejected" ? (
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-red-400 bg-red-400/10 px-2 py-1 rounded-md">
+                              Rejected
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 bg-blue-400/10 px-2 py-1 rounded-md">
@@ -331,7 +408,7 @@ export default function PaymentsPage() {
                               Pay
                             </button>
                           )}
-                          {!isClaimView && (
+                          {filterMode === "paid" && (
                             <button
                               onClick={() => handleDelete(p.id)}
                               className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] text-red-400/60 hover:bg-red-500/10 hover:text-red-400 transition-all"
