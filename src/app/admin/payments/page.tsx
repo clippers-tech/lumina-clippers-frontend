@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback, useRef } from "react"
+import Link from "next/link"
 import { getToken } from "@/lib/auth"
 import {
   payments as paymentsApi,
@@ -14,7 +15,7 @@ import { Pagination } from "@/components/admin/Pagination"
 import { LoadingState } from "@/components/admin/LoadingState"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { formatCurrency } from "@/lib/utils"
-import { Plus, Trash2, DollarSign, ChevronDown, Check, CheckCircle } from "lucide-react"
+import { Plus, Trash2, DollarSign, ChevronDown, Check, CheckCircle, ExternalLink } from "lucide-react"
 
 type FilterMode = "paid" | "to_be_paid" | "rejected"
 
@@ -42,7 +43,7 @@ function CampaignDropdown({
   const selected = campaigns.find((c) => c.id === value)
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative z-40">
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -86,9 +87,18 @@ function CampaignDropdown({
   )
 }
 
+/* ── Extended PaymentLog type with clipper info ─────── */
+interface PaymentItem extends PaymentLog {
+  campaign_id?: number
+  clipper_payment_method?: string
+  clipper_payment_whop?: string
+  clipper_payment_paypal?: string
+  clipper_payment_solana?: string
+}
+
 /* ── Main Page ────────────────────────────────────────── */
 export default function PaymentsPage() {
-  const [payments, setPayments] = useState<PaymentLog[]>([])
+  const [payments, setPayments] = useState<PaymentItem[]>([])
   const [allCampaigns, setAllCampaigns] = useState<Campaign[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
@@ -97,8 +107,13 @@ export default function PaymentsPage() {
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
   const [prefillSubmissionId, setPrefillSubmissionId] = useState("")
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [prefillAmount, setPrefillAmount] = useState("")
+  const [prefillCreatorInfo, setPrefillCreatorInfo] = useState<{
+    email: string
+    method: string
+    whop: string
+    paypal: string
+    solana: string
+  } | null>(null)
   const [addForm, setAddForm] = useState({
     submission_id: "",
     amount: "",
@@ -154,16 +169,30 @@ export default function PaymentsPage() {
     }
   }, [])
 
-  const openPayModal = (submissionId?: number, amount?: number) => {
+  const openPayModal = (item?: PaymentItem) => {
+    const creatorInfo = item ? {
+      email: item.creator_email || "",
+      method: item.clipper_payment_method || "",
+      whop: item.clipper_payment_whop || "",
+      paypal: item.clipper_payment_paypal || "",
+      solana: item.clipper_payment_solana || "",
+    } : null
+
+    // Auto-select the payment method
+    const autoMethod = creatorInfo?.method === "whop" ? "Whop"
+      : creatorInfo?.method === "paypal" ? "PayPal"
+      : creatorInfo?.method === "solana" ? "Solana"
+      : ""
+
     setAddForm({
-      submission_id: submissionId?.toString() || "",
-      amount: amount?.toFixed(2) || "",
-      method: "",
+      submission_id: item?.submission_id?.toString() || "",
+      amount: item?.amount?.toFixed(2) || "",
+      method: autoMethod,
       reference: "",
       notes: "",
     })
-    setPrefillSubmissionId(submissionId?.toString() || "")
-    setPrefillAmount(amount?.toFixed(2) || "")
+    setPrefillSubmissionId(item?.submission_id?.toString() || "")
+    setPrefillCreatorInfo(creatorInfo)
     setShowAddModal(true)
   }
 
@@ -183,7 +212,6 @@ export default function PaymentsPage() {
       setPayments((prev) => [newPayment, ...prev])
       setShowAddModal(false)
       setAddForm({ submission_id: "", amount: "", method: "", reference: "", notes: "" })
-      // Refresh to update counts
       fetchPayments()
     } catch (err: unknown) {
       setAddError(err instanceof Error ? err.message : "Failed to create payment")
@@ -201,6 +229,26 @@ export default function PaymentsPage() {
       hour: "numeric",
       minute: "2-digit",
     })
+  }
+
+  // Helper: get display string for clipper's preferred payment method
+  const getPaymentMethodDisplay = (p: PaymentItem) => {
+    if (filterMode === "paid") return p.method || "-"
+    // For to_be_paid / rejected, show clipper's preferred method
+    const m = p.clipper_payment_method
+    if (m === "whop") return "Whop"
+    if (m === "paypal") return "PayPal"
+    if (m === "solana") return "Solana"
+    return "Not set"
+  }
+
+  // Helper: get the clipper's payment address/handle
+  const getPaymentAddress = (p: PaymentItem) => {
+    const m = p.clipper_payment_method
+    if (m === "whop") return p.clipper_payment_whop || "-"
+    if (m === "paypal") return p.clipper_payment_paypal || "-"
+    if (m === "solana") return p.clipper_payment_solana || "-"
+    return "-"
   }
 
   const isClaimView = filterMode === "to_be_paid" || filterMode === "rejected"
@@ -226,8 +274,8 @@ export default function PaymentsPage() {
           <AdminTabs />
         </div>
 
-        {/* Filters bar — matches screenshot */}
-        <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 mb-4">
+        {/* Filters bar */}
+        <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 mb-4 relative z-30">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             {/* Status pill tabs */}
             <div className="flex items-center gap-2">
@@ -275,7 +323,7 @@ export default function PaymentsPage() {
         </div>
 
         {/* Payments table */}
-        <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] overflow-hidden">
+        <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] overflow-hidden relative z-10">
           {loading ? (
             <LoadingState />
           ) : payments.length === 0 ? (
@@ -303,11 +351,21 @@ export default function PaymentsPage() {
                     <th className="text-right text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
                       Views
                     </th>
-                    {filterMode === "paid" && (
+                    <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
+                      Method
+                    </th>
+                    {isClaimView && (
                       <>
                         <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
-                          Method
+                          Pay To
                         </th>
+                        <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
+                          Status
+                        </th>
+                      </>
+                    )}
+                    {filterMode === "paid" && (
+                      <>
                         <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
                           Reference
                         </th>
@@ -315,11 +373,6 @@ export default function PaymentsPage() {
                           Paid By
                         </th>
                       </>
-                    )}
-                    {isClaimView && (
-                      <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
-                        Status
-                      </th>
                     )}
                     <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
                       Date
@@ -344,7 +397,17 @@ export default function PaymentsPage() {
                         </p>
                       </td>
                       <td className="px-5 py-4">
-                        <p className="text-sm text-zinc-300">{p.campaign_name}</p>
+                        {p.campaign_id ? (
+                          <Link
+                            href={`/admin/campaigns/${p.campaign_id}`}
+                            className="text-sm text-zinc-300 hover:text-green-400 transition-colors inline-flex items-center gap-1 group"
+                          >
+                            {p.campaign_name}
+                            <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </Link>
+                        ) : (
+                          <p className="text-sm text-zinc-300">{p.campaign_name}</p>
+                        )}
                       </td>
                       <td className="px-5 py-4 text-right">
                         <span className="text-sm font-mono text-green-400 font-semibold">
@@ -356,11 +419,34 @@ export default function PaymentsPage() {
                           {p.paid_views?.toLocaleString() ?? "-"}
                         </span>
                       </td>
-                      {filterMode === "paid" && (
+                      <td className="px-5 py-4">
+                        <span className="text-sm text-zinc-400">
+                          {getPaymentMethodDisplay(p)}
+                        </span>
+                      </td>
+                      {isClaimView && (
                         <>
                           <td className="px-5 py-4">
-                            <span className="text-sm text-zinc-400">{p.method || "-"}</span>
+                            <span className="text-[11px] text-zinc-400 font-mono break-all">
+                              {getPaymentAddress(p)}
+                            </span>
                           </td>
+                          <td className="px-5 py-4">
+                            {filterMode === "rejected" ? (
+                              <span className="inline-flex items-center gap-1 text-xs font-bold text-red-400 bg-red-400/10 px-2 py-1 rounded-md">
+                                Rejected
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-xs font-bold text-green-400 bg-green-400/10 px-2 py-1 rounded-md">
+                                <CheckCircle className="w-3 h-3" />
+                                Verified
+                              </span>
+                            )}
+                          </td>
+                        </>
+                      )}
+                      {filterMode === "paid" && (
+                        <>
                           <td className="px-5 py-4">
                             <span className="text-sm text-zinc-400 font-mono">
                               {p.reference || "-"}
@@ -373,20 +459,6 @@ export default function PaymentsPage() {
                           </td>
                         </>
                       )}
-                      {isClaimView && (
-                        <td className="px-5 py-4">
-                          {filterMode === "rejected" ? (
-                            <span className="inline-flex items-center gap-1 text-xs font-bold text-red-400 bg-red-400/10 px-2 py-1 rounded-md">
-                              Rejected
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 text-xs font-bold text-green-400 bg-green-400/10 px-2 py-1 rounded-md">
-                              <CheckCircle className="w-3 h-3" />
-                              Verified
-                            </span>
-                          )}
-                        </td>
-                      )}
                       <td className="px-5 py-4">
                         <span className="text-sm text-zinc-500">
                           {formatDate(p.paid_at)}
@@ -396,7 +468,7 @@ export default function PaymentsPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           {isClaimView && (
                             <button
-                              onClick={() => openPayModal(p.submission_id, p.amount)}
+                              onClick={() => openPayModal(p)}
                               className="flex items-center gap-1 bg-green-400/10 text-green-400 text-[11px] font-bold px-3 py-1.5 rounded-lg hover:bg-green-400/20 transition-all"
                             >
                               <DollarSign className="w-3 h-3" />
@@ -434,6 +506,39 @@ export default function PaymentsPage() {
                 <p className="text-xs text-zinc-500 mb-4">
                   Recording payment for Submission #{prefillSubmissionId}
                 </p>
+              )}
+
+              {/* Clipper payment info summary */}
+              {prefillCreatorInfo && prefillCreatorInfo.method && (
+                <div className="bg-white/[0.04] border border-white/[0.06] rounded-lg p-3 mb-4">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Clipper Payment Info</p>
+                  <div className="space-y-1">
+                    <p className="text-xs text-zinc-300">
+                      <span className="text-zinc-500">Email:</span> {prefillCreatorInfo.email}
+                    </p>
+                    <p className="text-xs text-zinc-300">
+                      <span className="text-zinc-500">Method:</span>{" "}
+                      <span className="text-green-400 font-semibold">
+                        {prefillCreatorInfo.method === "whop" ? "Whop" : prefillCreatorInfo.method === "paypal" ? "PayPal" : prefillCreatorInfo.method === "solana" ? "Solana" : prefillCreatorInfo.method}
+                      </span>
+                    </p>
+                    <p className="text-xs text-zinc-300">
+                      <span className="text-zinc-500">Address:</span>{" "}
+                      <span className="font-mono text-zinc-200">
+                        {prefillCreatorInfo.method === "whop" ? prefillCreatorInfo.whop
+                          : prefillCreatorInfo.method === "paypal" ? prefillCreatorInfo.paypal
+                          : prefillCreatorInfo.method === "solana" ? prefillCreatorInfo.solana
+                          : "-"}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {prefillCreatorInfo && !prefillCreatorInfo.method && (
+                <div className="bg-amber-500/[0.08] border border-amber-400/20 rounded-lg p-3 mb-4">
+                  <p className="text-xs text-amber-400 font-semibold">No payment method set by this clipper.</p>
+                </div>
               )}
 
               {addError && (
@@ -485,11 +590,9 @@ export default function PaymentsPage() {
                     className="w-full bg-white/[0.05] border border-white/[0.08] text-zinc-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-green-400/30 transition-colors"
                   >
                     <option value="" className="bg-[#0d2e1c] text-zinc-100">Select method...</option>
+                    <option value="Whop" className="bg-[#0d2e1c] text-zinc-100">Whop</option>
+                    <option value="Solana" className="bg-[#0d2e1c] text-zinc-100">Solana</option>
                     <option value="PayPal" className="bg-[#0d2e1c] text-zinc-100">PayPal</option>
-                    <option value="Wire Transfer" className="bg-[#0d2e1c] text-zinc-100">Wire Transfer</option>
-                    <option value="Crypto" className="bg-[#0d2e1c] text-zinc-100">Crypto</option>
-                    <option value="Wise" className="bg-[#0d2e1c] text-zinc-100">Wise</option>
-                    <option value="Other" className="bg-[#0d2e1c] text-zinc-100">Other</option>
                   </select>
                 </div>
                 <div>
@@ -527,7 +630,7 @@ export default function PaymentsPage() {
                     setShowAddModal(false)
                     setAddError("")
                     setPrefillSubmissionId("")
-                    setPrefillAmount("")
+                    setPrefillCreatorInfo(null)
                     setAddForm({
                       submission_id: "",
                       amount: "",

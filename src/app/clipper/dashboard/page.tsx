@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Upload, ChevronDown, MessageSquare, DollarSign, ShieldCheck, AlertCircle, RotateCcw, CheckCircle2, Wallet, LayoutGrid, List, Clock } from "lucide-react"
@@ -584,6 +584,137 @@ function BulkUploadSection({
   )
 }
 
+/* ── Claim Payouts Section — always visible, swipeable on mobile ─── */
+const PAYOUT_STEPS = [
+  { n: "1", title: "Upload proof video", desc: "Record your screen showing the analytics & geo breakdown for each clip.", icon: "\ud83c\udfa5" },
+  { n: "2", title: "Wait for verification", desc: "Our team reviews your proof and verifies the view count.", icon: "\ud83d\udd0d" },
+  { n: "3", title: "Claim payment", desc: 'Once verified, hit "Claim Payment". You\'re paid for verified views only.', icon: "\ud83d\udcb0" },
+]
+
+function ClaimPayoutsSection({
+  activeStep,
+  setActiveStep,
+  sliderRef,
+  autoPlayRef,
+}: {
+  activeStep: number
+  setActiveStep: (n: number) => void
+  sliderRef: React.RefObject<HTMLDivElement>
+  autoPlayRef: React.MutableRefObject<NodeJS.Timeout | null>
+}) {
+  const touchStartX = useRef(0)
+
+  // Auto-advance on mobile
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActiveStep((activeStep + 1) % 3)
+    }, 3500)
+    autoPlayRef.current = id
+    return () => clearInterval(id)
+  }, [activeStep, setActiveStep, autoPlayRef])
+
+  // Scroll to active step on mobile
+  useEffect(() => {
+    if (!sliderRef.current) return
+    const cards = sliderRef.current.children
+    if (cards[activeStep]) {
+      (cards[activeStep] as HTMLElement).scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      })
+    }
+  }, [activeStep, sliderRef])
+
+  const handleDotClick = (i: number) => {
+    setActiveStep(i)
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current)
+  }
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && activeStep < 2) setActiveStep(activeStep + 1)
+      if (diff < 0 && activeStep > 0) setActiveStep(activeStep - 1)
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-green-400/20 bg-gradient-to-r from-green-400/[0.08] via-[#0d3420]/90 to-[#0d3420]/80 overflow-hidden shadow-[0_0_30px_-10px_rgba(74,222,128,0.15)] p-5">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-8 h-8 rounded-lg bg-green-400/15 flex items-center justify-center">
+          <DollarSign className="w-4 h-4 text-green-400" />
+        </div>
+        <div>
+          <span className="text-sm font-extrabold text-green-400">Claim Payouts</span>
+          <p className="text-[10px] text-zinc-500">3 steps to get paid</p>
+        </div>
+      </div>
+
+      {/* Desktop: grid of 3 cards */}
+      <div className="hidden md:grid grid-cols-3 gap-3">
+        {PAYOUT_STEPS.map((step) => (
+          <div key={step.n} className="rounded-lg border border-white/[0.06] bg-white/[0.03] p-3.5">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-base">{step.icon}</span>
+              <span className="text-[10px] font-bold text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">Step {step.n}</span>
+            </div>
+            <p className="text-xs font-bold text-zinc-200 mb-1">{step.title}</p>
+            <p className="text-[11px] text-zinc-500 leading-relaxed">{step.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Mobile: swipeable slider */}
+      <div className="md:hidden">
+        <div
+          ref={sliderRef}
+          className="flex gap-3 overflow-x-hidden snap-x snap-mandatory scroll-smooth"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {PAYOUT_STEPS.map((step, i) => (
+            <div
+              key={step.n}
+              className={`min-w-full snap-center rounded-lg border p-4 transition-all duration-300 ${
+                i === activeStep
+                  ? "border-green-400/20 bg-green-400/[0.06]"
+                  : "border-white/[0.06] bg-white/[0.03]"
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xl">{step.icon}</span>
+                <span className="text-[10px] font-bold text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">Step {step.n}</span>
+              </div>
+              <p className="text-sm font-bold text-zinc-200 mb-1">{step.title}</p>
+              <p className="text-xs text-zinc-500 leading-relaxed">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center justify-center gap-2 mt-3">
+          {PAYOUT_STEPS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => handleDotClick(i)}
+              className={`rounded-full transition-all duration-300 ${
+                i === activeStep
+                  ? "w-6 h-2 bg-green-400"
+                  : "w-2 h-2 bg-white/[0.15] hover:bg-white/[0.25]"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      <p className="text-[10px] text-zinc-600 mt-3">You can re-upload a new proof video anytime to update your verified view count.</p>
+    </div>
+  )
+}
+
 /* ── Main Dashboard ───────────────────────────────────── */
 export default function ClipperDashboardPage() {
   const router = useRouter()
@@ -596,7 +727,9 @@ export default function ClipperDashboardPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [platformFilter, setPlatformFilter] = useState("all")
   const [viewMode, setViewMode] = useState<"list" | "grid">("list")
-  const [payoutGuideOpen, setPayoutGuideOpen] = useState(false)
+  const [activeStep, setActiveStep] = useState(0)
+  const sliderRef = useRef<HTMLDivElement>(null)
+  const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
 
   const loadDashboard = useCallback(async () => {
     const token = getClipperToken()
@@ -718,6 +851,9 @@ export default function ClipperDashboardPage() {
             </Link>
           )}
 
+          {/* Claim Payouts — always visible, swipeable on mobile */}
+          <ClaimPayoutsSection activeStep={activeStep} setActiveStep={setActiveStep} sliderRef={sliderRef} autoPlayRef={autoPlayRef} />
+
           {/* Needs Proof Alert */}
           {needsProofCount > 0 && (
             <div className="flex items-center gap-3 rounded-lg border border-amber-400/20 bg-amber-500/[0.08] px-4 py-3">
@@ -776,45 +912,7 @@ export default function ClipperDashboardPage() {
             )
           })()}
 
-          {/* Claim Payouts — standout collapsible */}
-          <div className="rounded-xl border border-green-400/20 bg-gradient-to-r from-green-400/[0.08] via-[#0d3420]/90 to-[#0d3420]/80 overflow-hidden shadow-[0_0_30px_-10px_rgba(74,222,128,0.15)]">
-            <button
-              onClick={() => setPayoutGuideOpen(!payoutGuideOpen)}
-              className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-green-400/15 flex items-center justify-center">
-                  <DollarSign className="w-4.5 h-4.5 text-green-400" />
-                </div>
-                <div className="text-left">
-                  <span className="text-sm font-extrabold text-green-400">Claim Payouts</span>
-                  <p className="text-[10px] text-zinc-500 mt-0.5">3 steps to get paid</p>
-                </div>
-              </div>
-              <ChevronDown className={`w-4 h-4 text-green-400/60 transition-transform duration-200 ${payoutGuideOpen ? "rotate-180" : ""}`} />
-            </button>
-            {payoutGuideOpen && (
-              <div className="px-5 pb-5 border-t border-green-400/10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4">
-                  {[
-                    { n: "1", title: "Upload proof video", desc: "Record your screen showing the analytics & geo breakdown for each clip.", icon: "🎥" },
-                    { n: "2", title: "Wait for verification", desc: "Our team reviews your proof and verifies the view count.", icon: "🔍" },
-                    { n: "3", title: "Claim payment", desc: "Once verified, hit \"Claim Payment\". You're paid for verified views only.", icon: "💰" },
-                  ].map((step) => (
-                    <div key={step.n} className="rounded-lg border border-white/[0.06] bg-white/[0.03] p-3.5">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-base">{step.icon}</span>
-                        <span className="text-[10px] font-bold text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">Step {step.n}</span>
-                      </div>
-                      <p className="text-xs font-bold text-zinc-200 mb-1">{step.title}</p>
-                      <p className="text-[11px] text-zinc-500 leading-relaxed">{step.desc}</p>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[10px] text-zinc-600 mt-3">You can re-upload a new proof video anytime to update your verified view count.</p>
-              </div>
-            )}
-          </div>
+
 
           {/* Campaigns — collapsed by default */}
           {dashboard.campaigns.length > 0 && (
