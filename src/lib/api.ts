@@ -358,8 +358,13 @@ export type ClipperSubmission = {
 }
 
 export type ClipperDashboard = {
-  email: string; name: string; stats: ClipperStats
+  email: string; name: string; has_payment_method: boolean; stats: ClipperStats
   campaigns: ClipperCampaign[]; submissions: ClipperSubmission[]
+}
+
+export type PaymentSettings = {
+  payment_method: string; whop_username: string
+  paypal_email: string; solana_address: string
 }
 
 export type ClipperCampaignOption = {
@@ -391,6 +396,17 @@ export const clipperApi = {
       token: jwtToken,
       method: "POST",
       body: JSON.stringify({ submission_id: submissionId }),
+    }),
+  getPaymentSettings: (jwtToken: string) =>
+    apiFetch<PaymentSettings>(`/api/clipper/settings/payment`, { token: jwtToken }),
+  updatePaymentSettings: (jwtToken: string, data: {
+    payment_method: string; whop_username?: string
+    paypal_email?: string; solana_address?: string
+  }) =>
+    apiFetch<PaymentSettings & { detail: string }>(`/api/clipper/settings/payment`, {
+      token: jwtToken,
+      method: "PUT",
+      body: JSON.stringify(data),
     }),
 }
 

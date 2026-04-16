@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Upload, ChevronDown, MessageSquare, DollarSign, ShieldCheck, AlertCircle, RotateCcw, CheckCircle2 } from "lucide-react"
+import { Upload, ChevronDown, MessageSquare, DollarSign, ShieldCheck, AlertCircle, RotateCcw, CheckCircle2, Wallet } from "lucide-react"
 import { clipperApi, clipperAuth, verification, type ClipperDashboard, type ClipperSubmission, type ClipperCampaignOption, type ClipperBulkSubmitResult } from "@/lib/api"
 import { getClipperToken, clearClipperToken } from "@/lib/clipper-auth"
 import { formatNumber, formatCurrency, platformIcon, statusColor } from "@/lib/utils"
@@ -544,6 +544,30 @@ export default function ClipperDashboardPage() {
 
           {/* Payout Guide Banner */}
           <PayoutGuideBanner />
+
+          {/* Payment Method Warning */}
+          {!dashboard.has_payment_method && (
+            <Link
+              href="/clipper/settings"
+              className="group flex items-center gap-4 rounded-xl border border-red-400/20 bg-red-400/[0.06] px-5 py-4 hover:border-red-400/30 hover:bg-red-400/[0.08] transition-all"
+            >
+              <div className="relative flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-red-400/15 flex items-center justify-center">
+                  <Wallet className="w-5 h-5 text-red-400" />
+                </div>
+                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-red-400">Set up your payment method</p>
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  You need to add a payment method before you can receive payouts. Tap here to configure.
+                </p>
+              </div>
+              <span className="text-xs font-bold text-red-400 group-hover:text-red-300 uppercase tracking-wide flex-shrink-0">
+                Set Up &rarr;
+              </span>
+            </Link>
+          )}
 
           {/* Needs Proof Alert */}
           {needsProofCount > 0 && (
