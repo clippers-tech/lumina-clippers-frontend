@@ -15,13 +15,11 @@ function Dropdown({
   value,
   onChange,
   placeholder,
-  minWidth = "200px",
 }: {
   options: DropdownOption[]
   value: string
   onChange: (val: string) => void
   placeholder: string
-  minWidth?: string
 }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -37,7 +35,7 @@ function Dropdown({
   const selected = options.find((o) => o.value === value)
 
   return (
-    <div ref={ref} className="relative" style={{ minWidth }}>
+    <div ref={ref} className="relative w-full sm:w-auto">
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -123,28 +121,29 @@ export function FilterBar({
 
   return (
     <div className="relative z-20 rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 mb-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-        {/* Campaign selector */}
-        <Dropdown
-          options={campaignOptions}
-          value={selectedCampaignId ? String(selectedCampaignId) : ""}
-          onChange={(val) => onCampaignChange(val ? Number(val) : null)}
-          placeholder="Select Campaign"
-          minWidth="220px"
-        />
+      <div className="flex flex-col gap-3">
+        {/* Filters row */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          {/* Campaign selector */}
+          <Dropdown
+            options={campaignOptions}
+            value={selectedCampaignId ? String(selectedCampaignId) : ""}
+            onChange={(val) => onCampaignChange(val ? Number(val) : null)}
+            placeholder="Select Campaign"
+          />
 
-        {/* Status filter */}
-        <Dropdown
-          options={statusOptions}
-          value={selectedStatus}
-          onChange={onStatusChange}
-          placeholder="All Statuses"
-          minWidth="160px"
-        />
+          {/* Status filter */}
+          <Dropdown
+            options={statusOptions}
+            value={selectedStatus}
+            onChange={onStatusChange}
+            placeholder="All Statuses"
+          />
+        </div>
 
         {/* Action buttons */}
         {!isViewer && (
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={onBulkAdd}
               className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-3 py-2 rounded-lg transition-all"

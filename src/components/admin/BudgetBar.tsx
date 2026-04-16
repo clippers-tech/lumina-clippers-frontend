@@ -13,7 +13,7 @@ export function BudgetBar({ budgetUsed, budgetTotal, estRevenue }: BudgetBarProp
 
   return (
     <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 mb-4">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
         <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
           Budget Usage
         </p>

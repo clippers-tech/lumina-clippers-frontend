@@ -10,10 +10,10 @@ export function DashboardHeader() {
       <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">
         Operations Terminal
       </p>
-      <h1 className="text-2xl font-bold text-zinc-100">
+      <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">
         Welcome back{user ? `, ${user.name}` : ""}
       </h1>
-      <p className="text-sm text-zinc-400 mt-1">
+      <p className="text-xs sm:text-sm text-zinc-400 mt-1">
         Monitor campaigns, track submissions, and manage your clippers network.
       </p>
     </div>

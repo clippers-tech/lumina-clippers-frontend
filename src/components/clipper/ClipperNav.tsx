@@ -14,7 +14,8 @@ export function ClipperNav() {
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/clipper/dashboard" className="flex items-center gap-2">
           <LuminaLogo size={24} />
-          <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
+          <span className="font-bold text-sm uppercase tracking-wider text-zinc-100 hidden sm:inline">Lumina Clippers</span>
+          <span className="font-bold text-xs uppercase tracking-wider text-zinc-100 sm:hidden">Clippers</span>
         </Link>
 
         <Link

@@ -149,8 +149,8 @@ export default function PaymentsPage() {
           <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">
             Admin Panel
           </p>
-          <h1 className="text-2xl font-bold text-zinc-100">Payments</h1>
-          <p className="text-sm text-zinc-500 mt-1">Process payment claims and track transactions</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">Payments</h1>
+          <p className="text-xs sm:text-sm text-zinc-500 mt-1">Process payment claims and track transactions</p>
         </div>
 
         <div className="mt-6 mb-6">
@@ -158,9 +158,9 @@ export default function PaymentsPage() {
         </div>
 
         {/* Controls bar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
+        <div className="flex flex-col gap-3 mb-4">
           {/* Search */}
-          <div className="relative flex-1 max-w-sm">
+          <div className="relative w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
             <input
               value={searchEmail}
@@ -171,7 +171,7 @@ export default function PaymentsPage() {
           </div>
 
           {/* Filter tabs */}
-          <div className="flex gap-1">
+          <div className="flex flex-wrap gap-1">
             {filterTabs.map(({ mode, label, icon }) => (
               <button
                 key={mode}

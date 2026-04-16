@@ -61,11 +61,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <div className="flex items-center justify-between h-14">
                 <Link href="/admin/dashboard" className="flex items-center gap-2">
                   <LuminaLogo size={28} />
-                  <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
+                  <span className="font-bold text-sm uppercase tracking-wider text-zinc-100 hidden sm:inline">Lumina Clippers</span>
+                  <span className="font-bold text-xs uppercase tracking-wider text-zinc-100 sm:hidden">Admin</span>
                 </Link>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 sm:gap-4">
                   {user && (
-                    <span className="text-sm text-zinc-500">
+                    <span className="text-sm text-zinc-500 hidden sm:inline">
                       {user.name}
                       {user.role === "viewer" && (
                         <span className="ml-2 text-[10px] uppercase tracking-wider text-green-400/60 bg-green-400/10 px-1.5 py-0.5 rounded">

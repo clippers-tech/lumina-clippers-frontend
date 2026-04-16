@@ -223,11 +223,11 @@ export default function HomePage() {
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
               <LuminaLogo size={32} />
-              <span className="font-bold text-sm uppercase tracking-wider text-zinc-100">Lumina Clippers</span>
+              <span className="font-bold text-sm uppercase tracking-wider text-zinc-100 hidden sm:inline">Lumina Clippers</span>
             </Link>
             <Link
               href="/viral"
-              className="bg-green-400 text-black font-extrabold text-xs px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
+              className="bg-green-400 text-black font-extrabold text-xs px-4 sm:px-6 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
             >
               Claim Payouts
             </Link>
@@ -313,7 +313,7 @@ export default function HomePage() {
 
         {/* Footer */}
         <footer className="border-t border-green-400/[0.06] py-8">
-          <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
+          <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <LuminaLogo size={20} />
               <span className="text-xs text-zinc-500">Lumina Clippers</span>

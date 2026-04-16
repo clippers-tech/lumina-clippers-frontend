@@ -132,7 +132,7 @@ export default function ClipperSettingsPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-zinc-100">Payment Settings</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">Payment Settings</h1>
           <p className="text-sm text-zinc-500 mt-1">
             Set up how you want to receive your earnings
           </p>

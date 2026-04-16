@@ -94,8 +94,8 @@ export default function CampaignsPage() {
         <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-2">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-1">Admin Panel</p>
-            <h1 className="text-2xl font-bold text-zinc-100">Campaign Management</h1>
-            <p className="text-sm text-zinc-500 mt-1">Create and manage campaigns</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">Campaign Management</h1>
+            <p className="text-xs sm:text-sm text-zinc-500 mt-1">Create and manage campaigns</p>
           </div>
           <Link
             href="/admin/campaigns/new"

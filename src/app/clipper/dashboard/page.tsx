@@ -176,21 +176,21 @@ function SubmissionCard({
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-[#0d3420]/80 p-4">
+    <div className="rounded-xl border border-white/[0.08] bg-[#0d3420]/80 p-3 sm:p-4">
       {/* Top row: platform + campaign + status */}
-      <div className="flex items-center gap-3 mb-3">
+      <div className="flex items-start sm:items-center gap-3 mb-3">
         {submission.thumbnail_url ? (
-          <img src={submission.thumbnail_url} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" />
+          <img src={submission.thumbnail_url} alt="" className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg object-cover shrink-0" />
         ) : (
-          <div className="w-10 h-10 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-lg">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-lg">
             {platformIcon(submission.platform)}
           </div>
         )}
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-0.5">
+          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
             <span className="text-xs font-semibold text-zinc-200 truncate">{submission.campaign_name}</span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/[0.05] text-zinc-300 border border-white/[0.06]">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/[0.05] text-zinc-300 border border-white/[0.06] shrink-0">
               {platformIcon(submission.platform.toLowerCase())} {submission.platform}
             </span>
           </div>
@@ -202,16 +202,21 @@ function SubmissionCard({
           >
             {submission.post_url}
           </a>
+          {/* Stats — visible on mobile below URL */}
+          <div className="flex items-center gap-3 mt-1.5 sm:hidden">
+            <p className="text-xs font-bold text-zinc-200">{formatNumber(submission.views)} views</p>
+            <p className="text-xs text-green-400 font-semibold">{formatCurrency(submission.est_earnings)}</p>
+          </div>
         </div>
 
-        <div className="text-right shrink-0 space-y-0.5">
+        <div className="text-right shrink-0 space-y-0.5 hidden sm:block">
           <p className="text-xs font-bold text-zinc-200">{formatNumber(submission.views)} views</p>
           <p className="text-xs text-green-400 font-semibold">{formatCurrency(submission.est_earnings)}</p>
         </div>
       </div>
 
       {/* Verification + Payment Status Bar */}
-      <div className="flex items-center justify-between gap-2 pt-3 border-t border-white/[0.06]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3 border-t border-white/[0.06]">
         {/* Left: verification status */}
         <div className="flex items-center gap-2">
           {vs === "pending" && (
@@ -666,25 +671,25 @@ export default function ClipperDashboardPage() {
 
         <div className="max-w-5xl mx-auto px-4 py-8 space-y-5">
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-extrabold text-zinc-100">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl font-extrabold text-zinc-100 truncate">
                 Welcome back, <span className="text-green-400">{dashboard.name || dashboard.email}</span>
               </h1>
-              <p className="text-xs text-zinc-500 mt-0.5">{dashboard.email}</p>
+              <p className="text-xs text-zinc-500 mt-0.5 truncate">{dashboard.email}</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               {chatToken && (
                 <Link
                   href={`/chat/${chatToken}`}
-                  className="inline-flex items-center gap-1.5 border border-white/[0.08] bg-[#0d3420]/60 text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-[#0d3420] transition-all"
+                  className="inline-flex items-center gap-1.5 border border-white/[0.08] bg-[#0d3420]/60 text-zinc-300 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs font-semibold hover:bg-[#0d3420] transition-all"
                 >
-                  <MessageSquare className="w-3.5 h-3.5" /> Messages
+                  <MessageSquare className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Messages</span>
                 </Link>
               )}
               <button
                 onClick={handleLogout}
-                className="border border-white/[0.08] bg-[#0d3420]/60 text-zinc-300 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-[#0d3420] transition-all"
+                className="border border-white/[0.08] bg-[#0d3420]/60 text-zinc-300 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs font-semibold hover:bg-[#0d3420] transition-all"
               >
                 Logout
               </button>
@@ -724,7 +729,7 @@ export default function ClipperDashboardPage() {
           )}
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <StatCard label="Submissions" value={formatNumber(dashboard.stats.total_submissions)} />
             <StatCard label="Total Views" value={formatNumber(dashboard.stats.total_views)} />
             <StatCard label="Est. Earnings" value={formatCurrency(dashboard.stats.total_est_earnings)} accent />
@@ -808,13 +813,13 @@ export default function ClipperDashboardPage() {
 
           {/* Submissions */}
           <div>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
               <h2 className="text-sm font-bold text-zinc-300">Submissions</h2>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="bg-[#0d3420]/80 border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
+                  className="bg-[#0d3420]/80 border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors flex-1 sm:flex-none min-w-0"
                 >
                   <option value="all" className="bg-[#0d3420]">All Status</option>
                   {allStatuses.map((s) => (<option key={s} value={s} className="bg-[#0d3420]">{s.replace(/_/g, " ")}</option>))}
@@ -822,7 +827,7 @@ export default function ClipperDashboardPage() {
                 <select
                   value={platformFilter}
                   onChange={(e) => setPlatformFilter(e.target.value)}
-                  className="bg-[#0d3420]/80 border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors"
+                  className="bg-[#0d3420]/80 border border-white/[0.08] text-zinc-300 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-green-400/30 transition-colors flex-1 sm:flex-none min-w-0"
                 >
                   <option value="all" className="bg-[#0d3420]">All Platforms</option>
                   {allPlatforms.map((p) => (<option key={p} value={p} className="bg-[#0d3420]">{p}</option>))}

@@ -26,7 +26,7 @@ export function StatCards({
   ]
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
       {stats.map((s) => (
         <div
           key={s.label}
