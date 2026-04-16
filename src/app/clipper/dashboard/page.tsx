@@ -591,6 +591,7 @@ export default function ClipperDashboardPage() {
   const [statusFilter, setStatusFilter] = useState("all")
   const [platformFilter, setPlatformFilter] = useState("all")
   const [viewMode, setViewMode] = useState<"list" | "grid">("list")
+  const [payoutGuideOpen, setPayoutGuideOpen] = useState(false)
 
   const loadDashboard = useCallback(async () => {
     const token = getClipperToken()
@@ -642,10 +643,22 @@ export default function ClipperDashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#0b2518] text-zinc-100 selection:bg-green-500/30">
-      {/* Gradient background */}
+      {/* Background: grid + gradient orbs */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-green-400/[0.06] via-green-400/[0.02] to-transparent rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-gradient-to-tl from-emerald-600/[0.04] to-transparent rounded-full blur-[120px]" />
+        {/* Grid squares */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
+          }}
+        />
+        {/* Radial gradient orbs */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-to-b from-green-400/[0.08] via-green-400/[0.03] to-transparent rounded-full blur-[100px]" />
+        <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] bg-gradient-to-br from-green-500/[0.06] to-transparent rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-0 w-[700px] h-[500px] bg-gradient-to-tl from-emerald-500/[0.06] via-green-600/[0.03] to-transparent rounded-full blur-[120px]" />
+        {/* Subtle diagonal accent */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-green-400/[0.02] via-transparent to-emerald-400/[0.02] rounded-full blur-[80px]" />
       </div>
 
       <div className="relative z-10">
@@ -719,27 +732,45 @@ export default function ClipperDashboardPage() {
             <StatCard label="Pending" value={formatCurrency(dashboard.stats.pending_earnings)} sub="Awaiting payment" />
           </div>
 
-          {/* Payout Guide — collapsed by default */}
-          <CollapsibleSection
-            title="How to Claim Your Payment"
-            icon={<DollarSign className="w-4 h-4 text-green-400" />}
-          >
-            <div className="space-y-2.5 pt-3">
-              {[
-                { n: "1", title: "Upload proof video", desc: "Record your screen showing the analytics/geo breakdown for each clip you submitted." },
-                { n: "2", title: "Wait for verification", desc: "Our team will review your proof and verify the view count." },
-                { n: "3", title: "Claim payment", desc: "Once verified, hit the \"Claim Payment\" button. You'll only be paid for the views shown in your proof video." },
-              ].map((step) => (
-                <div key={step.n} className="flex items-start gap-2.5">
-                  <span className="shrink-0 w-5 h-5 rounded-full bg-green-400/10 text-green-400 text-[10px] font-bold flex items-center justify-center">{step.n}</span>
-                  <p className="text-xs text-zinc-400">
-                    <span className="text-zinc-200 font-semibold">{step.title}</span> — {step.desc}
-                  </p>
+          {/* Claim Payouts — standout collapsible */}
+          <div className="rounded-xl border border-green-400/20 bg-gradient-to-r from-green-400/[0.08] via-[#0d3420]/90 to-[#0d3420]/80 overflow-hidden shadow-[0_0_30px_-10px_rgba(74,222,128,0.15)]">
+            <button
+              onClick={() => setPayoutGuideOpen(!payoutGuideOpen)}
+              className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-green-400/15 flex items-center justify-center">
+                  <DollarSign className="w-4.5 h-4.5 text-green-400" />
                 </div>
-              ))}
-              <p className="text-[10px] text-zinc-500 mt-2">You can re-upload a new proof video anytime to update your verified view count.</p>
-            </div>
-          </CollapsibleSection>
+                <div className="text-left">
+                  <span className="text-sm font-extrabold text-green-400">Claim Payouts</span>
+                  <p className="text-[10px] text-zinc-500 mt-0.5">3 steps to get paid</p>
+                </div>
+              </div>
+              <ChevronDown className={`w-4 h-4 text-green-400/60 transition-transform duration-200 ${payoutGuideOpen ? "rotate-180" : ""}`} />
+            </button>
+            {payoutGuideOpen && (
+              <div className="px-5 pb-5 border-t border-green-400/10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-4">
+                  {[
+                    { n: "1", title: "Upload proof video", desc: "Record your screen showing the analytics & geo breakdown for each clip.", icon: "🎥" },
+                    { n: "2", title: "Wait for verification", desc: "Our team reviews your proof and verifies the view count.", icon: "🔍" },
+                    { n: "3", title: "Claim payment", desc: "Once verified, hit \"Claim Payment\". You're paid for verified views only.", icon: "💰" },
+                  ].map((step) => (
+                    <div key={step.n} className="rounded-lg border border-white/[0.06] bg-white/[0.03] p-3.5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-base">{step.icon}</span>
+                        <span className="text-[10px] font-bold text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">Step {step.n}</span>
+                      </div>
+                      <p className="text-xs font-bold text-zinc-200 mb-1">{step.title}</p>
+                      <p className="text-[11px] text-zinc-500 leading-relaxed">{step.desc}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] text-zinc-600 mt-3">You can re-upload a new proof video anytime to update your verified view count.</p>
+              </div>
+            )}
+          </div>
 
           {/* Campaigns — collapsed by default */}
           {dashboard.campaigns.length > 0 && (
