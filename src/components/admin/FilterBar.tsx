@@ -122,7 +122,7 @@ export function FilterBar({
   }))
 
   return (
-    <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 mb-4">
+    <div className="relative z-20 rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-4 mb-4">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
         {/* Campaign selector */}
         <Dropdown
