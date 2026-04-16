@@ -22,6 +22,8 @@ interface SubmissionCardProps {
   isAdmin?: boolean
 }
 
+const MIN_VIEWS_FOR_GEO = 50
+
 const platformColors: Record<string, string> = {
   instagram: "bg-gradient-to-br from-purple-500 to-pink-500",
   youtube: "bg-red-600",
@@ -107,6 +109,7 @@ export function SubmissionCard({
   const thumbnail = getThumbnail(submission)
   const embedUrl = getEmbedUrl(submission)
   const hasStats = submission.views > 0 || submission.likes > 0 || submission.comments > 0
+  const hasEnoughViewsForGeo = submission.views >= MIN_VIEWS_FOR_GEO
 
   const effectiveUsPct = submission.us_viewers_pct ?? usViewersPct ?? 90
   const effectiveUkPct = includeUkViews ? (submission.uk_viewers_pct ?? ukViewersPct ?? null) : null
@@ -114,8 +117,8 @@ export function SubmissionCard({
   const hasUkOverride = submission.uk_viewers_pct != null
 
   const geoStats = useMemo(
-    () => (hasStats ? generateGeoStats(submission.id, submission.views, effectiveUsPct, effectiveUkPct) : []),
-    [submission.id, submission.views, hasStats, effectiveUsPct, effectiveUkPct]
+    () => (hasEnoughViewsForGeo ? generateGeoStats(submission.id, submission.views, effectiveUsPct, effectiveUkPct) : []),
+    [submission.id, submission.views, hasEnoughViewsForGeo, effectiveUsPct, effectiveUkPct]
   )
 
   const handleStartEdit = useCallback((which: "us" | "uk") => {
@@ -238,7 +241,12 @@ export function SubmissionCard({
         )}
 
         {/* Geo stats toggle */}
-        {hasStats && geoStats.length > 0 && (
+        {hasStats && !hasEnoughViewsForGeo && (
+          <div className="px-3 pb-2">
+            <p className="text-[10px] text-zinc-600 italic">Not enough views for geo breakdown (min {MIN_VIEWS_FOR_GEO})</p>
+          </div>
+        )}
+        {hasStats && hasEnoughViewsForGeo && geoStats.length > 0 && (
           <>
             <div className="px-3 pb-1">
               <button
