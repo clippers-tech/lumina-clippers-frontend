@@ -51,6 +51,11 @@ function getInstagramShortcode(url: string): string | null {
   return m ? m[1] : null
 }
 
+function getTwitterStatusId(url: string): string | null {
+  const m = url.match(/(?:twitter\.com|x\.com)\/[^/]+\/status\/(\d+)/)
+  return m ? m[1] : null
+}
+
 function getThumbnail(sub: Submission): string | null {
   if (sub.thumbnail_url && sub.platform !== "instagram") return sub.thumbnail_url
   if (sub.platform === "youtube") {
@@ -72,6 +77,10 @@ function getEmbedUrl(sub: Submission): string | null {
   if (sub.platform === "instagram") {
     const code = getInstagramShortcode(sub.post_url)
     if (code) return `https://www.instagram.com/reel/${code}/embed/`
+  }
+  if (sub.platform === "twitter") {
+    const id = getTwitterStatusId(sub.post_url)
+    if (id) return `https://platform.twitter.com/embed/Tweet.html?id=${id}&theme=dark`
   }
   return null
 }
@@ -154,14 +163,14 @@ export function SubmissionCard({
 
         {/* Thumbnail / Preview */}
         <div className="px-3 py-2">
-          {submission.platform === "instagram" && embedUrl ? (
-            <div className="relative w-full rounded-lg overflow-hidden bg-black" style={{ height: "320px" }}>
+          {(submission.platform === "instagram" || submission.platform === "twitter") && embedUrl ? (
+            <div className="relative w-full rounded-lg overflow-hidden bg-black" style={{ height: submission.platform === "twitter" ? "280px" : "320px" }}>
               <iframe
                 src={embedUrl}
                 className="w-full h-full border-0"
                 allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                title="Instagram reel"
+                title={`${submission.platform === "twitter" ? "Tweet" : "Instagram reel"}`}
                 loading="lazy"
               />
             </div>
