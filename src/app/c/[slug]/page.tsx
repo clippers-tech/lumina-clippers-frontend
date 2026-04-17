@@ -162,6 +162,17 @@ export default function CampaignSubmitPage() {
                 </div>
               </div>
 
+              {campaign.requirements_url && (
+                <a
+                  href={campaign.requirements_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full text-center bg-green-400/10 border border-green-400/20 text-green-400 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-green-400/20 transition-all"
+                >
+                  View Requirements &rarr;
+                </a>
+              )}
+
               {campaign.brief_url && (
                 <a
                   href={campaign.brief_url}
