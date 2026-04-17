@@ -207,7 +207,7 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
   const canClaim = (vs === "uploaded" || vs === "verified") && !isPaid && !isClaimed
   const needsProof = (vs === "pending" || vs === "rejected") && !isPaid
 
-  const isSyncing = (sub.scrape_status === "pending" || sub.status === "awaiting_stats") && sub.views === 0
+  const isSyncing = sub.scrape_status === "pending" || sub.scrape_status === "running"
 
   const handleClaim = async (e: React.MouseEvent) => {
     e.stopPropagation()

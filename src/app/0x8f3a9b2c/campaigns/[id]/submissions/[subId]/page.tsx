@@ -109,9 +109,15 @@ export default function SubmissionDetailPage() {
 
   async function confirmReject() {
     setShowDeleteConfirm(false)
-    const token = getToken()!
-    await subsApi.delete(token, submissionId)
-    router.push(`/0x8f3a9b2c/campaigns/${campaignId}`)
+    try {
+      const token = getToken()!
+      const updated = await subsApi.update(token, submissionId, { status: "rejected" })
+      setSub(updated)
+      setEditStatus("rejected")
+      toast({ description: "Submission rejected", variant: "success" })
+    } catch (err) {
+      toast({ description: err instanceof Error ? err.message : "Failed to reject", variant: "error" })
+    }
   }
 
   function getEmbedUrl(platform: string, postUrl: string): string | null {
@@ -285,9 +291,9 @@ export default function SubmissionDetailPage() {
       {!isViewer && (
         <ConfirmModal
           open={showDeleteConfirm}
-          title="Delete Submission"
-          message="Permanently delete this submission? This cannot be undone."
-          confirmLabel="Delete"
+          title="Reject Submission"
+          message="Reject this submission? It will be moved to the Rejected section in Payments."
+          confirmLabel="Reject"
           variant="danger"
           onConfirm={confirmReject}
           onCancel={() => setShowDeleteConfirm(false)}

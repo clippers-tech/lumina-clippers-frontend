@@ -486,7 +486,7 @@ export default function PaymentsPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           {isClaimView && (
                             <button
-                              onClick={() => openPayModal(p)}
+                              onClick={(e) => { e.stopPropagation(); openPayModal(p) }}
                               className="flex items-center gap-1 bg-green-400/10 text-green-400 text-[11px] font-bold px-3 py-1.5 rounded-lg hover:bg-green-400/20 transition-all"
                             >
                               <DollarSign className="w-3 h-3" />
@@ -495,7 +495,7 @@ export default function PaymentsPage() {
                           )}
                           {filterMode === "paid" && (
                             <button
-                              onClick={() => handleDelete(p.id)}
+                              onClick={(e) => { e.stopPropagation(); handleDelete(p.id) }}
                               className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] text-red-400/60 hover:bg-red-500/10 hover:text-red-400 transition-all"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
