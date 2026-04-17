@@ -105,7 +105,7 @@ export default function CampaignDetailPage() {
           <a href={campaignsApi.exportUrl(campaignId)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-4 py-2 rounded-lg transition-all">
             <Download className="w-3.5 h-3.5" /> Export CSV
           </a>
-          <Link href={`/admin/campaigns/${campaignId}/settings`} className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-4 py-2 rounded-lg transition-all">
+          <Link href={`/0x8f3a9b2c/campaigns/${campaignId}/settings`} className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-4 py-2 rounded-lg transition-all">
             <Settings className="w-3.5 h-3.5" /> Settings
           </Link>
         </div>

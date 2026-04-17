@@ -61,7 +61,7 @@ export default function CreatorDetailPage() {
 
   return (
     <div>
-      <Link href="/admin/creators" className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 mb-6 transition-colors">
+      <Link href="/0x8f3a9b2c/creators" className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 mb-6 transition-colors">
         <ArrowLeft className="w-4 h-4" /> Back to creators
       </Link>
 
@@ -89,7 +89,7 @@ export default function CreatorDetailPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span>{platformIcon(sub.platform)}</span>
-                      <Link href={`/admin/campaigns/${sub.campaign_id}/submissions/${sub.id}`} className="text-sm text-green-400 hover:underline">#{sub.id}</Link>
+                      <Link href={`/0x8f3a9b2c/campaigns/${sub.campaign_id}/submissions/${sub.id}`} className="text-sm text-green-400 hover:underline">#{sub.id}</Link>
                       <span className="text-xs text-zinc-500">{sub.campaign_name}</span>
                     </div>
                     <a href={sub.post_url} target="_blank" rel="noopener noreferrer" className="text-[11px] text-zinc-400 hover:text-zinc-300 flex items-center gap-1 mt-1">

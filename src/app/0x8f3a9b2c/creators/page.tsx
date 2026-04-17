@@ -70,7 +70,7 @@ export default function CreatorsPage() {
                 </thead>
                 <tbody>
                   {data.items.map((c) => (
-                    <tr key={c.email} onClick={() => router.push(`/admin/creators/${encodeURIComponent(c.email)}`)} className="border-b border-white/[0.03] hover:bg-white/[0.02] cursor-pointer transition-colors">
+                    <tr key={c.email} onClick={() => router.push(`/0x8f3a9b2c/creators/${encodeURIComponent(c.email)}`)} className="border-b border-white/[0.03] hover:bg-white/[0.02] cursor-pointer transition-colors">
                       <td className="px-5 py-4">
                         <p className="text-sm font-medium text-zinc-100">{c.name || c.email}</p>
                         <p className="text-[11px] text-zinc-500 font-mono">{c.email}</p>

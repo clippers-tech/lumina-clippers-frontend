@@ -16,7 +16,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [user, setUser] = useState<AppUser | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const isLoginPage = pathname === "/admin" || pathname === "/admin/login"
+  const isLoginPage = pathname === "/0x8f3a9b2c" || pathname === "/0x8f3a9b2c/login"
 
   useEffect(() => {
     if (isLoginPage) {
@@ -26,7 +26,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     const token = getToken()
     if (!token) {
-      router.push("/admin")
+      router.push("/0x8f3a9b2c")
       return
     }
 
@@ -34,7 +34,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       .then(setUser)
       .catch(() => {
         clearToken()
-        router.push("/admin")
+        router.push("/0x8f3a9b2c")
       })
       .finally(() => setLoading(false))
   }, [isLoginPage, router])
@@ -59,7 +59,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <nav className="border-b border-white/[0.06] bg-[#0b2518]/80 backdrop-blur-md sticky top-0 z-40">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between h-14">
-                <Link href="/admin/dashboard" className="flex items-center gap-2">
+                <Link href="/0x8f3a9b2c/dashboard" className="flex items-center gap-2">
                   <LuminaLogo size={28} />
                   <span className="font-bold text-sm uppercase tracking-wider text-zinc-100 hidden sm:inline">Lumina Clippers</span>
                   <span className="font-bold text-xs uppercase tracking-wider text-zinc-100 sm:hidden">Admin</span>
@@ -76,7 +76,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     </span>
                   )}
                   <button
-                    onClick={() => { clearToken(); router.push("/admin") }}
+                    onClick={() => { clearToken(); router.push("/0x8f3a9b2c") }}
                     className="text-zinc-600 hover:text-zinc-300 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />

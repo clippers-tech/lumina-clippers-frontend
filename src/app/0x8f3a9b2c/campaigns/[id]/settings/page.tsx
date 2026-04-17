@@ -18,7 +18,7 @@ export default function CampaignSettingsPage() {
 
   const [form, setForm] = useState({
     name: "", slug: "", client_name: "", client_email: "",
-    cpm_rate: "", max_payout: "", budget_total: "",
+    cpm_rate: "", client_cpm_rate: "", max_payout: "", budget_total: "",
     brief_url: "", thumbnail_url: "", accepted_platforms: "", us_viewers_pct: "",
     include_uk_views: false, uk_viewers_pct: "",
     target_views: "", requirements_url: "", description: "",
@@ -33,6 +33,7 @@ export default function CampaignSettingsPage() {
         setForm({
           name: c.name, slug: c.slug, client_name: c.client_name,
           client_email: c.client_email, cpm_rate: c.cpm_rate.toString(),
+          client_cpm_rate: (c.client_cpm_rate || 0).toString(),
           max_payout: c.max_payout.toString(), budget_total: c.budget_total.toString(),
           brief_url: c.brief_url, thumbnail_url: c.thumbnail_url,
           accepted_platforms: c.accepted_platforms,
@@ -63,6 +64,7 @@ export default function CampaignSettingsPage() {
         thumbnail_url: form.thumbnail_url, accepted_platforms: form.accepted_platforms,
         requirements_url: form.requirements_url, description: form.description,
         status: form.status, cpm_rate: parseFloat(form.cpm_rate) || 0,
+        client_cpm_rate: parseFloat(form.client_cpm_rate) || 0,
         max_payout: parseFloat(form.max_payout) || 0,
         budget_total: parseFloat(form.budget_total) || 0,
         us_viewers_pct: parseFloat(form.us_viewers_pct) || 90,
@@ -89,7 +91,7 @@ export default function CampaignSettingsPage() {
     if (!confirm("Archive this campaign? It will be hidden from the main list.")) return
     const token = getToken()!
     await campaignsApi.delete(token, campaignId)
-    router.push("/admin/campaigns")
+    router.push("/0x8f3a9b2c/campaigns")
   }
 
   if (loading) {
@@ -119,8 +121,9 @@ export default function CampaignSettingsPage() {
             <div><label className={labelClass}>Client Email</label><input type="email" value={form.client_email} onChange={(e) => setForm({ ...form, client_email: e.target.value })} className={inputClass} /></div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <div><label className={labelClass}>CPM Rate ($)</label><input type="number" step="0.01" value={form.cpm_rate} onChange={(e) => setForm({ ...form, cpm_rate: e.target.value })} className={inputClass} /></div>
+          <div className="grid grid-cols-4 gap-4">
+            <div><label className={labelClass}>Clipper CPM ($)</label><input type="number" step="0.01" value={form.cpm_rate} onChange={(e) => setForm({ ...form, cpm_rate: e.target.value })} className={inputClass} /></div>
+            <div><label className={labelClass}>Client CPM ($)</label><input type="number" step="0.01" value={form.client_cpm_rate} onChange={(e) => setForm({ ...form, client_cpm_rate: e.target.value })} className={inputClass} /></div>
             <div><label className={labelClass}>Max Payout ($)</label><input type="number" step="0.01" value={form.max_payout} onChange={(e) => setForm({ ...form, max_payout: e.target.value })} className={inputClass} /></div>
             <div><label className={labelClass}>Max Budget ($)</label><input type="number" step="0.01" value={form.budget_total} onChange={(e) => setForm({ ...form, budget_total: e.target.value })} className={inputClass} /><p className={helpClass}>Leave empty for unlimited</p></div>
           </div>

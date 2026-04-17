@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback, useRef } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { getToken } from "@/lib/auth"
 import {
@@ -98,6 +99,7 @@ interface PaymentItem extends PaymentLog {
 
 /* ── Main Page ────────────────────────────────────────── */
 export default function PaymentsPage() {
+  const router = useRouter()
   const [payments, setPayments] = useState<PaymentItem[]>([])
   const [allCampaigns, setAllCampaigns] = useState<Campaign[]>([])
   const [loading, setLoading] = useState(true)
@@ -387,7 +389,8 @@ export default function PaymentsPage() {
                   {payments.map((p) => (
                     <tr
                       key={`${p.id}-${p.submission_id}`}
-                      className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors"
+                      onClick={filterMode === "to_be_paid" && p.campaign_id ? () => router.push(`/0x8f3a9b2c/campaigns/${p.campaign_id}/submissions/${p.submission_id}`) : undefined}
+                      className={`border-b border-white/[0.03] transition-colors ${filterMode === "to_be_paid" && p.campaign_id ? "hover:bg-white/[0.04] cursor-pointer" : "hover:bg-white/[0.02]"}`}
                     >
                       <td className="px-5 py-4">
                         <p className="text-sm font-medium text-zinc-100">
@@ -400,7 +403,8 @@ export default function PaymentsPage() {
                       <td className="px-5 py-4">
                         {p.campaign_id ? (
                           <Link
-                            href={`/admin/campaigns/${p.campaign_id}`}
+                            href={`/0x8f3a9b2c/campaigns/${p.campaign_id}`}
+                            onClick={(e) => e.stopPropagation()}
                             className="text-sm text-zinc-300 hover:text-green-400 transition-colors inline-flex items-center gap-1 group"
                           >
                             {p.campaign_name}

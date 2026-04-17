@@ -12,7 +12,7 @@ import { AdminTabs } from "@/components/admin/AdminTabs"
 import { AdminGuard } from "@/components/admin/AdminGuard"
 import { LoadingState } from "@/components/admin/LoadingState"
 import { EmptyState } from "@/components/admin/EmptyState"
-import { Plus, Pencil, Trash2, X, Check } from "lucide-react"
+import { Plus, Pencil, Trash2, X, Check, Copy } from "lucide-react"
 
 type UserForm = {
   name: string
@@ -40,6 +40,15 @@ export default function UsersPage() {
   const [formError, setFormError] = useState("")
   const [formLoading, setFormLoading] = useState(false)
   const [selectedCampaignIds, setSelectedCampaignIds] = useState<number[]>([])
+  const [copiedUserId, setCopiedUserId] = useState<number | null>(null)
+
+  const inviteLink = "https://portal.luminaclippers.com/client"
+
+  const handleCopyInviteLink = (userId: number) => {
+    navigator.clipboard.writeText(inviteLink)
+    setCopiedUserId(userId)
+    setTimeout(() => setCopiedUserId(null), 2000)
+  }
 
   useEffect(() => {
     const token = getToken()
@@ -204,6 +213,9 @@ export default function UsersPage() {
                       Status
                     </th>
                     <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
+                      Invite Link
+                    </th>
+                    <th className="text-left text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
                       Created
                     </th>
                     <th className="text-right text-[10px] uppercase tracking-wider text-zinc-600 font-bold px-5 py-3">
@@ -258,6 +270,24 @@ export default function UsersPage() {
                             user.is_active ? "bg-green-400" : "bg-zinc-600"
                           }`}
                         />
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-zinc-500 font-mono truncate max-w-[160px]">
+                            {inviteLink}
+                          </span>
+                          <button
+                            onClick={() => handleCopyInviteLink(user.id)}
+                            className="w-6 h-6 flex items-center justify-center rounded text-zinc-500 hover:text-green-400 transition-colors shrink-0"
+                            title="Copy invite link"
+                          >
+                            {copiedUserId === user.id ? (
+                              <Check className="w-3.5 h-3.5 text-green-400" />
+                            ) : (
+                              <Copy className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
                       </td>
                       <td className="px-5 py-4">
                         <span className="text-sm text-zinc-500">

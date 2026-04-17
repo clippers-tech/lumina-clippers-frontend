@@ -100,10 +100,10 @@ export default function SubmissionDetailPage() {
   }
 
   async function handleReject() {
-    if (!confirm("Reject this submission?")) return
+    if (!confirm("Permanently delete this submission? This cannot be undone.")) return
     const token = getToken()!
     await subsApi.delete(token, submissionId)
-    router.push(`/admin/campaigns/${campaignId}`)
+    router.push(`/0x8f3a9b2c/campaigns/${campaignId}`)
   }
 
   function getEmbedUrl(platform: string, postUrl: string): string | null {
@@ -137,7 +137,7 @@ export default function SubmissionDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <Link href={`/admin/campaigns/${campaignId}`} className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 mb-6 transition-colors">
+      <Link href={`/0x8f3a9b2c/campaigns/${campaignId}`} className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 mb-6 transition-colors">
         <ArrowLeft className="w-4 h-4" /> Back to campaign
       </Link>
 

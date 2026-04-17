@@ -52,7 +52,7 @@ export const auth = {
 // ── Campaigns ─────────────────────────────────────────
 export type Campaign = {
   id: number; slug: string; name: string; client_name: string; client_email: string
-  brief_url: string; thumbnail_url: string; cpm_rate: number; max_payout: number
+  brief_url: string; thumbnail_url: string; cpm_rate: number; client_cpm_rate: number; max_payout: number
   budget_total: number; budget_used: number; status: string; accepted_platforms: string
   us_viewers_pct: number; include_uk_views: boolean; uk_viewers_pct: number | null; target_views: number | null; requirements_url: string
   description: string; min_publish_date: string | null; min_views_payout: number | null
@@ -349,6 +349,7 @@ export type ClipperStats = {
 export type ClipperCampaign = {
   id: number; name: string; slug: string; status: string
   submission_count: number; views: number; earnings: number
+  requirements_url: string
 }
 
 export type ClipperSubmission = {
@@ -356,7 +357,7 @@ export type ClipperSubmission = {
   comments: number; est_earnings: number; status: string; campaign_name: string
   campaign_slug: string; thumbnail_url: string; created_at: string
   verification_status: string; verification_note: string; submission_token: string
-  verification_video_url: string
+  verification_video_url: string; scrape_status: string
 }
 
 export type ClipperDashboard = {
@@ -371,6 +372,7 @@ export type PaymentSettings = {
 
 export type ClipperCampaignOption = {
   id: number; name: string; slug: string; accepted_platforms: string
+  requirements_url: string; cpm_rate: number
 }
 
 export type ClipperBulkSubmitResult = {
@@ -399,6 +401,8 @@ export const clipperApi = {
       method: "POST",
       body: JSON.stringify({ submission_id: submissionId }),
     }),
+  submissionStatus: (jwtToken: string, submissionId: number) =>
+    apiFetch<{ id: number; scrape_status: string; views: number; est_earnings: number; status: string }>(`/api/clipper/submission-status/${submissionId}`, { token: jwtToken }),
   getPaymentSettings: (jwtToken: string) =>
     apiFetch<PaymentSettings>(`/api/clipper/settings/payment`, { token: jwtToken }),
   updatePaymentSettings: (jwtToken: string, data: {

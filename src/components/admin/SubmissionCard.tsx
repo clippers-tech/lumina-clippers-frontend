@@ -373,7 +373,7 @@ export function SubmissionCard({
         {/* Footer */}
         <div className="flex items-center justify-end px-3 pb-3">
           <Link
-            href={`/admin/campaigns/${submission.campaign_id}/submissions/${submission.id}`}
+            href={`/0x8f3a9b2c/campaigns/${submission.campaign_id}/submissions/${submission.id}`}
             className="text-[11px] font-medium text-green-400 hover:text-green-300 transition-colors"
           >
             View details

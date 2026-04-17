@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 export default function AdminLoginRedirect() {
   const router = useRouter()
   useEffect(() => {
-    router.replace("/admin")
+    router.replace("/0x8f3a9b2c")
   }, [router])
 
   return (

@@ -98,7 +98,7 @@ export default function CampaignsPage() {
             <p className="text-xs sm:text-sm text-zinc-500 mt-1">Create and manage campaigns</p>
           </div>
           <Link
-            href="/admin/campaigns/new"
+            href="/0x8f3a9b2c/campaigns/new"
             className="flex items-center gap-1.5 bg-green-400 text-black text-xs font-extrabold px-5 py-2.5 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all"
           >
             <Plus className="w-4 h-4" />
@@ -143,7 +143,7 @@ export default function CampaignsPage() {
                         <div className="flex items-start gap-2.5">
                           <span className={`w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0 ${statusDot(c.status)}`} />
                           <div className="min-w-0">
-                            <Link href={`/admin/campaigns/${c.id}`} className="text-sm font-semibold text-zinc-100 hover:text-green-400 transition-colors">
+                            <Link href={`/0x8f3a9b2c/campaigns/${c.id}`} className="text-sm font-semibold text-zinc-100 hover:text-green-400 transition-colors">
                               {c.name}
                             </Link>
                             {c.client_email && <p className="text-[11px] text-zinc-600 mt-0.5">by {c.client_email}</p>}
@@ -170,10 +170,10 @@ export default function CampaignsPage() {
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex items-center justify-end gap-1.5">
-                          <Link href={`/admin/campaigns/${c.id}`} title="View" className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] text-zinc-500 hover:bg-white/[0.06] hover:text-zinc-300 transition-all">
+                          <Link href={`/0x8f3a9b2c/campaigns/${c.id}`} title="View" className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] text-zinc-500 hover:bg-white/[0.06] hover:text-zinc-300 transition-all">
                             <FolderOpen className="w-3.5 h-3.5" />
                           </Link>
-                          <Link href={`/admin/campaigns/${c.id}/settings`} title="Edit" className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] text-zinc-500 hover:bg-white/[0.06] hover:text-zinc-300 transition-all">
+                          <Link href={`/0x8f3a9b2c/campaigns/${c.id}/settings`} title="Edit" className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] text-zinc-500 hover:bg-white/[0.06] hover:text-zinc-300 transition-all">
                             <Pencil className="w-3.5 h-3.5" />
                           </Link>
                           <button onClick={() => handleDuplicate(c.id)} title="Duplicate" className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/[0.03] text-zinc-500 hover:bg-white/[0.06] hover:text-zinc-300 transition-all">

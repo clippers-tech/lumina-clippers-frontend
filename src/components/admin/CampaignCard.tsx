@@ -7,7 +7,7 @@ import { StatusBadge } from "./StatusBadge"
 
 export function CampaignCard({ campaign }: { campaign: Campaign }) {
   return (
-    <Link href={`/admin/campaigns/${campaign.id}`}>
+    <Link href={`/0x8f3a9b2c/campaigns/${campaign.id}`}>
       <div className="rounded-xl border border-white/[0.04] bg-white/[0.015] backdrop-blur-[2px] p-5 transition-all hover:bg-white/[0.03] hover:border-white/[0.08] cursor-pointer">
         <div className="flex items-start justify-between mb-3">
           <div>

@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import {
   Upload, DollarSign, AlertCircle,
-  RotateCcw, Wallet, Clock,
-  ChevronLeft, ChevronRight,
+  Wallet, Clock,
+  ChevronLeft, ChevronRight, ExternalLink, Loader2,
 } from "lucide-react"
 import {
   clipperApi, clipperAuth, verification,
@@ -204,8 +204,10 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
   const vs = sub.verification_status || "pending"
   const isPaid = sub.status === "paid"
   const isClaimed = sub.status === "payment_claimed"
-  const isVerified = vs === "verified"
-  const hasProof = vs === "uploaded" || vs === "verified" || vs === "rejected"
+  const canClaim = (vs === "uploaded" || vs === "verified") && !isPaid && !isClaimed
+  const needsProof = (vs === "pending" || vs === "rejected") && !isPaid
+
+  const isSyncing = (sub.scrape_status === "pending" || sub.status === "awaiting_stats") && sub.views === 0
 
   const handleClaim = async (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -221,16 +223,14 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
 
   return (
     <div className="border-b border-white/[0.08] last:border-b-0">
+      {/* Desktop row */}
       <div
         onClick={() => router.push(`/clipper/submission/${sub.id}`)}
-        className="flex items-center gap-3 px-4 py-3.5 cursor-pointer hover:bg-white/[0.02] transition-colors"
+        className="hidden sm:flex items-center gap-3 px-4 py-3.5 cursor-pointer hover:bg-white/[0.02] transition-colors"
       >
-        {/* Platform icon */}
         <div className="w-8 h-8 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-sm">
           {platformIcon(sub.platform)}
         </div>
-
-        {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             <span className="text-xs font-semibold text-zinc-200 truncate">{sub.campaign_name}</span>
@@ -238,14 +238,19 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
           </div>
           <span className="text-[10px] text-zinc-600 truncate block">{sub.post_url}</span>
         </div>
-
-        {/* Stats */}
-        <div className="text-right shrink-0 hidden sm:block">
-          <p className="text-xs font-bold text-zinc-200">{formatNumber(sub.views)}</p>
-          <p className="text-[10px] text-green-400 font-semibold">{formatCurrency(sub.est_earnings)}</p>
+        <div className="text-right shrink-0">
+          {isSyncing ? (
+            <div className="flex items-center gap-1 animate-pulse">
+              <Loader2 className="w-3 h-3 text-zinc-500 animate-spin" />
+              <span className="text-[10px] text-zinc-500">Syncing clip data...</span>
+            </div>
+          ) : (
+            <>
+              <p className="text-xs font-bold text-zinc-200">{formatNumber(sub.views)}</p>
+              <p className="text-[10px] text-green-400 font-semibold">{formatCurrency(sub.est_earnings)}</p>
+            </>
+          )}
         </div>
-
-        {/* Status + Actions */}
         <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
           {isPaid && (
             <span className="text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-400/10 px-2 py-0.5 rounded">Paid</span>
@@ -253,37 +258,76 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
           {isClaimed && (
             <span className="text-[10px] font-bold uppercase tracking-wider text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded">Pending</span>
           )}
-          {isVerified && !isPaid && !isClaimed && (
+          {canClaim && (
             <button onClick={handleClaim} disabled={claiming}
               className="text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2.5 py-1 rounded-lg hover:bg-green-300 transition-all disabled:opacity-50"
-            >{claiming ? "..." : "Claim"}</button>
+            >{claiming ? "..." : "Claim Payment"}</button>
           )}
-          {(vs === "pending" || vs === "rejected") && !isPaid && (
+          {needsProof && (
             <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
               className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2.5 py-1 rounded-lg hover:bg-green-300 transition-all"
-            ><Upload className="w-3 h-3" /> Upload Proof</button>
-          )}
-          {(vs === "uploaded" || vs === "verified") && !isPaid && !isClaimed && (
-            <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }} className="text-zinc-600 hover:text-zinc-300 transition-colors">
-              <RotateCcw className="w-3 h-3" />
-            </button>
+            ><Upload className="w-3 h-3" /> Upload Proof to Claim</button>
           )}
         </div>
       </div>
 
-      {/* Mobile stats row */}
-      <div className="flex items-center gap-3 px-4 pb-2 sm:hidden">
-        <p className="text-[10px] font-bold text-zinc-300">{formatNumber(sub.views)} views</p>
-        <p className="text-[10px] text-green-400 font-semibold">{formatCurrency(sub.est_earnings)}</p>
-        {vs === "pending" && <span className="text-[10px] text-amber-400">No proof</span>}
-        {vs === "uploaded" && <span className="text-[10px] text-blue-400">Under review</span>}
-        {vs === "verified" && <span className="text-[10px] text-green-400">Verified</span>}
-        {vs === "rejected" && <span className="text-[10px] text-red-400">Rejected</span>}
+      {/* Mobile card */}
+      <div
+        onClick={() => router.push(`/clipper/submission/${sub.id}`)}
+        className="sm:hidden p-4 cursor-pointer hover:bg-white/[0.02] transition-colors space-y-2.5"
+      >
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-sm">
+            {platformIcon(sub.platform)}
+          </div>
+          <span className="text-xs font-semibold text-zinc-200 truncate flex-1">{sub.campaign_name}</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">{sub.platform}</span>
+        </div>
+        <span className="text-[10px] text-zinc-600 truncate block">{sub.post_url}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {isSyncing ? (
+              <div className="flex items-center gap-1 animate-pulse">
+                <Loader2 className="w-3 h-3 text-zinc-500 animate-spin" />
+                <span className="text-[10px] text-zinc-500">Syncing clip data...</span>
+              </div>
+            ) : (
+              <>
+                <div>
+                  <p className="text-[10px] text-zinc-500">Views</p>
+                  <p className="text-xs font-bold text-zinc-200">{formatNumber(sub.views)}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-zinc-500">Earnings</p>
+                  <p className="text-xs font-bold text-green-400">{formatCurrency(sub.est_earnings)}</p>
+                </div>
+              </>
+            )}
+          </div>
+          <div onClick={(e) => e.stopPropagation()}>
+            {isPaid && (
+              <span className="text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-400/10 px-2 py-0.5 rounded">Paid</span>
+            )}
+            {isClaimed && (
+              <span className="text-[10px] font-bold uppercase tracking-wider text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded">Pending</span>
+            )}
+            {canClaim && (
+              <button onClick={handleClaim} disabled={claiming}
+                className="text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2 py-1 rounded-lg hover:bg-green-300 transition-all disabled:opacity-50"
+              >{claiming ? "..." : "Claim Payment"}</button>
+            )}
+            {needsProof && (
+              <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
+                className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2 py-1 rounded-lg hover:bg-green-300 transition-all"
+              ><Upload className="w-3 h-3" /> Upload Proof to Claim</button>
+            )}
+          </div>
+        </div>
       </div>
 
       {showUpload && (
         <div className="px-4 pb-3">
-          <ProofUploadInline submissionId={sub.id} submissionToken={sub.submission_token} isReupload={hasProof} onComplete={() => { setShowUpload(false); onRefresh() }} />
+          <ProofUploadInline submissionId={sub.id} submissionToken={sub.submission_token} isReupload={vs === "uploaded" || vs === "verified" || vs === "rejected"} onComplete={() => { setShowUpload(false); onRefresh() }} />
         </div>
       )}
     </div>
@@ -322,18 +366,6 @@ function SubmitNewTab({
     } catch (err) {
       toast({ description: err instanceof Error ? err.message : "Submit failed", variant: "error" })
     } finally { setUploading(false) }
-  }
-
-  const handleCsv = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; if (!file) return
-    const reader = new FileReader()
-    reader.onload = (ev) => {
-      const text = ev.target?.result as string; if (!text) return
-      const lines = text.split("\n").slice(1)
-      const parsed = lines.map((l) => l.split(",")[0]?.trim()).filter(Boolean)
-      setUrls(parsed.join("\n"))
-    }
-    reader.readAsText(file); e.target.value = ""
   }
 
   const canSubmit = selectedCampaign && (mode === "single" ? singleUrl.trim() : urls.trim())
@@ -383,10 +415,6 @@ function SubmitNewTab({
         <div>
           <div className="flex items-center justify-between mb-1.5">
             <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Post URLs (one per line)</label>
-            <label className="cursor-pointer text-[10px] text-green-400 hover:text-green-300 transition-colors font-semibold">
-              Import CSV
-              <input type="file" accept=".csv" onChange={handleCsv} className="hidden" />
-            </label>
           </div>
           <textarea
             value={urls}
@@ -684,6 +712,14 @@ export default function ClipperDashboardPage() {
                       <div className="flex items-center gap-4 text-[10px] text-zinc-500">
                         <span>{c.submission_count} clips</span>
                         <span>{formatNumber(c.views)} views</span>
+                        {c.requirements_url && (
+                          <a href={c.requirements_url} target="_blank" rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-[10px] font-semibold text-green-400 hover:text-green-300 transition-colors flex items-center gap-1"
+                          >
+                            <ExternalLink className="w-3 h-3" /> Requirements
+                          </a>
+                        )}
                       </div>
                     </div>
                     <span className="text-sm font-bold text-green-400 shrink-0">{formatCurrency(c.earnings)}</span>

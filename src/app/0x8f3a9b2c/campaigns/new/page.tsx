@@ -15,7 +15,7 @@ export default function NewCampaignPage() {
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     name: "", slug: "", client_name: "", client_email: "",
-    cpm_rate: "", max_payout: "", budget_total: "",
+    cpm_rate: "", client_cpm_rate: "", max_payout: "", budget_total: "",
     brief_url: "", thumbnail_url: "",
     accepted_platforms: "instagram,tiktok,youtube,twitter",
     us_viewers_pct: "90", include_uk_views: false, uk_viewers_pct: "45",
@@ -43,6 +43,7 @@ export default function NewCampaignPage() {
         thumbnail_url: form.thumbnail_url, accepted_platforms: form.accepted_platforms,
         requirements_url: form.requirements_url, description: form.description,
         status: form.status, cpm_rate: parseFloat(form.cpm_rate) || 0,
+        client_cpm_rate: parseFloat(form.client_cpm_rate) || 0,
         max_payout: parseFloat(form.max_payout) || 0,
         budget_total: parseFloat(form.budget_total) || 0,
         us_viewers_pct: parseFloat(form.us_viewers_pct) || 90,
@@ -53,7 +54,7 @@ export default function NewCampaignPage() {
         min_publish_date: form.min_publish_date || null,
       }
       const created = await campaigns.create(token, data as Partial<Campaign>)
-      router.push(`/admin/campaigns/${created.id}`)
+      router.push(`/0x8f3a9b2c/campaigns/${created.id}`)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to create")
     } finally {
@@ -95,10 +96,14 @@ export default function NewCampaignPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <div>
-              <label className={labelClass}>CPM Rate ($)</label>
+              <label className={labelClass}>Clipper CPM ($)</label>
               <input type="number" step="0.01" value={form.cpm_rate} onChange={(e) => updateField("cpm_rate", e.target.value)} placeholder="5.00" className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>Client CPM ($)</label>
+              <input type="number" step="0.01" value={form.client_cpm_rate} onChange={(e) => updateField("client_cpm_rate", e.target.value)} placeholder="7.00" className={inputClass} />
             </div>
             <div>
               <label className={labelClass}>Max Payout ($)</label>

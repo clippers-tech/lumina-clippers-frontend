@@ -2,11 +2,12 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Settings, LogOut, MessageSquare } from "lucide-react"
+import { Settings, LogOut, MessageCircle } from "lucide-react"
 import { LuminaLogo } from "@/components/LuminaLogo"
 import { clearClipperToken } from "@/lib/clipper-auth"
 
-export function ClipperNav({ chatToken }: { chatToken?: string | null }) {
+export function ClipperNav({ chatToken: _ct }: { chatToken?: string | null }) {
+  void _ct // prop kept for backward compat
   const pathname = usePathname()
   const router = useRouter()
   const isSettings = pathname === "/clipper/settings"
@@ -22,15 +23,15 @@ export function ClipperNav({ chatToken }: { chatToken?: string | null }) {
           </Link>
 
           <div className="flex items-center gap-1 sm:gap-2">
-            {chatToken && (
-              <Link
-                href={`/chat/${chatToken}`}
-                className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.04] transition-all"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Messages</span>
-              </Link>
-            )}
+            <a
+              href="https://discord.gg/clips"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.04] transition-all"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Discord</span>
+            </a>
             <Link
               href="/clipper/settings"
               className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-all ${

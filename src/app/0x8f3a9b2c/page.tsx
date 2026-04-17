@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
     try {
       const res = await auth.login(email, password)
       setToken(res.access_token)
-      router.push("/admin/dashboard")
+      router.push("/0x8f3a9b2c/dashboard")
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed")
     } finally {

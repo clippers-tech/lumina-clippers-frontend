@@ -94,7 +94,7 @@ export function SubmissionGrid({
                 <td className="px-3 py-3">
                   <div className="flex items-center gap-2">
                     <Link
-                      href={`/admin/campaigns/${campaignId}/submissions/${sub.id}`}
+                      href={`/0x8f3a9b2c/campaigns/${campaignId}/submissions/${sub.id}`}
                       className="text-sm text-green-400 hover:underline truncate max-w-[200px]"
                     >
                       #{sub.id}

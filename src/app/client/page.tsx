@@ -23,7 +23,13 @@ export default function ClientLoginPage() {
       const result = await auth.login(email, password)
       setToken(result.access_token)
       toast({ description: "Login successful!", variant: "success" })
-      router.push("/admin")
+      // Check role and route accordingly
+      const me = await auth.me(result.access_token)
+      if (me.role === "viewer") {
+        router.push("/client/dashboard")
+      } else {
+        router.push("/0x8f3a9b2c/dashboard")
+      }
     } catch (err) {
       toast({
         description: err instanceof Error ? err.message : "Login failed",
@@ -49,7 +55,7 @@ export default function ClientLoginPage() {
             <LuminaLogo size={48} />
           </div>
           <h1 className="text-xl font-extrabold text-zinc-100">Client Login</h1>
-          <p className="text-xs text-zinc-500 mt-1">Sign in to the admin dashboard</p>
+          <p className="text-xs text-zinc-500 mt-1">Sign in to your campaign dashboard</p>
         </div>
 
         {/* Login Form */}

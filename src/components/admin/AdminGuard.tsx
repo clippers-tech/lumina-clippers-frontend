@@ -10,7 +10,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isViewer) {
-      router.replace("/admin")
+      router.replace("/0x8f3a9b2c")
     }
   }, [isViewer, router])
 
