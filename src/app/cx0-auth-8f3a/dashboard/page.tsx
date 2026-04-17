@@ -65,7 +65,15 @@ export default function ClientDashboardPage() {
 
     submissionsApi
       .list(token, selectedCampaignId, { ...params, per_page: 200 })
-      .then((res) => setSubmissions(res.items))
+      .then((res) => {
+        const campaign = allCampaigns.find((c) => c.id === selectedCampaignId)
+        const clientRate = campaign?.client_cpm_rate || campaign?.cpm_rate || 0
+        const adjusted = res.items.map((sub: Submission) => ({
+          ...sub,
+          est_earnings: Math.round((sub.views || 0) / 1000 * clientRate * 100) / 100,
+        }))
+        setSubmissions(adjusted)
+      })
       .catch(console.error)
   }, [selectedCampaignId, statusFilter, platformFilter, allCampaigns])
 

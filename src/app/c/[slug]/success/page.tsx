@@ -157,7 +157,7 @@ function SuccessContent() {
                   className="flex items-center justify-center gap-2 w-full bg-green-400 text-black font-extrabold text-sm px-6 py-3 rounded-lg uppercase tracking-wide shadow-[0_0_25px_-5px_rgba(74,222,128,0.4)] hover:bg-green-300 transition-all disabled:opacity-40"
                 >
                   <Lock className="w-4 h-4" />
-                  {settingPw ? "Setting up..." : "Create Account & View Dashboard"}
+                  {settingPw ? "Setting up..." : "Create Account to Claim Payout"}
                 </button>
               </form>
 

@@ -42,11 +42,14 @@ export default function UsersPage() {
   const [selectedCampaignIds, setSelectedCampaignIds] = useState<number[]>([])
   const [copiedUserId, setCopiedUserId] = useState<number | null>(null)
 
-  const inviteLink = "https://portal.luminaclippers.com/cx0-auth-8f3a"
+  const getInviteLink = (user: UserDetail) => {
+    const encoded = btoa(user.email).replace(/=/g, "")
+    return `https://portal.luminaclippers.com/cx0-auth-8f3a?u=${encoded}`
+  }
 
-  const handleCopyInviteLink = (userId: number) => {
-    navigator.clipboard.writeText(inviteLink)
-    setCopiedUserId(userId)
+  const handleCopyInviteLink = (user: UserDetail) => {
+    navigator.clipboard.writeText(getInviteLink(user))
+    setCopiedUserId(user.id)
     setTimeout(() => setCopiedUserId(null), 2000)
   }
 
@@ -274,10 +277,10 @@ export default function UsersPage() {
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-1.5">
                           <span className="text-[11px] text-zinc-500 font-mono truncate max-w-[160px]">
-                            {inviteLink}
+                            {getInviteLink(user)}
                           </span>
                           <button
-                            onClick={() => handleCopyInviteLink(user.id)}
+                            onClick={() => handleCopyInviteLink(user)}
                             className="w-6 h-6 flex items-center justify-center rounded text-zinc-500 hover:text-green-400 transition-colors shrink-0"
                             title="Copy invite link"
                           >

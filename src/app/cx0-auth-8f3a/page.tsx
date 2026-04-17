@@ -1,20 +1,28 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { auth } from "@/lib/api"
 import { LuminaLogo } from "@/components/LuminaLogo"
 import { setToken } from "@/lib/auth"
 import { useToast } from "@/components/ui/toast"
 
-export default function ClientLoginPage() {
+function ClientLoginForm() {
   const router = useRouter()
   const { toast } = useToast()
 
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const u = searchParams.get("u")
+    if (u) {
+      try { setEmail(atob(u)) } catch {}
+    }
+  }, [searchParams])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,7 +31,6 @@ export default function ClientLoginPage() {
       const result = await auth.login(email, password)
       setToken(result.access_token)
       toast({ description: "Login successful!", variant: "success" })
-      // Check role and route accordingly
       const me = await auth.me(result.access_token)
       if (me.role === "viewer") {
         router.push("/cx0-auth-8f3a/dashboard")
@@ -107,5 +114,17 @@ export default function ClientLoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ClientLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0b2518] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <ClientLoginForm />
+    </Suspense>
   )
 }
