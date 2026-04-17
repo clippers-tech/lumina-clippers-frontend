@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import Link from "next/link"
 import { getToken } from "@/lib/auth"
 import { submissions as subsApi, type Submission } from "@/lib/api"
@@ -16,7 +16,6 @@ import { useUser } from "@/lib/user-context"
 
 export default function SubmissionDetailPage() {
   const { id, subId } = useParams<{ id: string; subId: string }>()
-  const router = useRouter()
   const { isViewer } = useUser()
   const campaignId = parseInt(id)
   const submissionId = parseInt(subId)
