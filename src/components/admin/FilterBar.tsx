@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { type Campaign } from "@/lib/api"
-import { Download, RefreshCw, Send, Plus, ChevronDown, Check } from "lucide-react"
+import { RefreshCw, ChevronDown, Check } from "lucide-react"
 
 /* ── Custom Dropdown ───────────────────────────────────── */
 interface DropdownOption {
@@ -88,10 +88,7 @@ interface FilterBarProps {
   onCampaignChange: (id: number | null) => void
   selectedStatus: string
   onStatusChange: (status: string) => void
-  onSendUploadLinks: () => void
   onUpdateMetrics: () => void
-  onDownloadCsv: () => void
-  onBulkAdd: () => void
   isViewer: boolean
 }
 
@@ -101,10 +98,7 @@ export function FilterBar({
   onCampaignChange,
   selectedStatus,
   onStatusChange,
-  onSendUploadLinks,
   onUpdateMetrics,
-  onDownloadCsv,
-  onBulkAdd,
   isViewer,
 }: FilterBarProps) {
   const statuses = ["awaiting_stats", "stats_verified", "paid", "rejected"]
@@ -145,32 +139,11 @@ export function FilterBar({
         {!isViewer && (
           <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={onBulkAdd}
-              className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-3 py-2 rounded-lg transition-all"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              Bulk Add
-            </button>
-            <button
-              onClick={onSendUploadLinks}
-              className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-3 py-2 rounded-lg transition-all"
-            >
-              <Send className="w-3.5 h-3.5" />
-              Send Links
-            </button>
-            <button
               onClick={onUpdateMetrics}
               className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-3 py-2 rounded-lg transition-all"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               Update
-            </button>
-            <button
-              onClick={onDownloadCsv}
-              className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-3 py-2 rounded-lg transition-all"
-            >
-              <Download className="w-3.5 h-3.5" />
-              CSV
             </button>
           </div>
         )}

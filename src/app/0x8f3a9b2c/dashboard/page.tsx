@@ -16,8 +16,7 @@ import { BudgetBar } from "@/components/admin/BudgetBar"
 import { StatCards } from "@/components/admin/StatCards"
 import { SubmissionsSection } from "@/components/admin/SubmissionsSection"
 import { UpdateStatusModal } from "@/components/admin/UpdateStatusModal"
-import { SendUploadLinksModal } from "@/components/admin/SendUploadLinksModal"
-import { BulkAddModal } from "@/components/admin/BulkAddModal"
+
 import { useUser } from "@/lib/user-context"
 import { AdminTabs } from "@/components/admin/AdminTabs"
 import { ConfirmModal } from "@/components/ui/ConfirmModal"
@@ -37,9 +36,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [statusModalIds, setStatusModalIds] = useState<number[]>([])
   const [showStatusModal, setShowStatusModal] = useState(false)
-  const [showUploadLinksModal, setShowUploadLinksModal] = useState(false)
-  const [showBulkAddModal, setShowBulkAddModal] = useState(false)
-  const [sendingLinks, setSendingLinks] = useState(false)
+
 
   useEffect(() => {
     const token = getToken()
@@ -85,26 +82,6 @@ export default function DashboardPage() {
       .catch(console.error)
   }, [selectedCampaignId, statusFilter, platformFilter])
 
-  const handleSendUploadLinks = useCallback(() => {
-    setShowUploadLinksModal(true)
-  }, [])
-
-  const handleConfirmSendLinks = useCallback(async (submissionIds: number[]) => {
-    const token = getToken()
-    if (!token) return
-    setSendingLinks(true)
-    try {
-      const result = await submissionsApi.sendUploadLinks(token, submissionIds)
-      alert(result.detail)
-      setShowUploadLinksModal(false)
-    } catch (err) {
-      console.error(err)
-      alert("Failed to send upload links")
-    } finally {
-      setSendingLinks(false)
-    }
-  }, [])
-
   const handleUpdateMetrics = useCallback(() => {
     if (!selectedCampaignId) return
     const token = getToken()
@@ -114,11 +91,6 @@ export default function DashboardPage() {
     })
     alert("Metrics update triggered for all visible submissions")
   }, [selectedCampaignId, submissions])
-
-  const handleDownloadCsv = useCallback(() => {
-    if (!selectedCampaignId) return
-    window.open(campaignsApi.exportUrl(selectedCampaignId), "_blank")
-  }, [selectedCampaignId])
 
   const handleRefreshMetrics = useCallback((ids: number[]) => {
     const token = getToken()
@@ -200,10 +172,7 @@ export default function DashboardPage() {
         }}
         selectedStatus={statusFilter}
         onStatusChange={setStatusFilter}
-        onSendUploadLinks={handleSendUploadLinks}
         onUpdateMetrics={handleUpdateMetrics}
-        onDownloadCsv={handleDownloadCsv}
-        onBulkAdd={() => setShowBulkAddModal(true)}
         isViewer={isViewer}
       />
 
@@ -260,33 +229,6 @@ export default function DashboardPage() {
           selectedCount={statusModalIds.length}
           onConfirm={handleConfirmStatusUpdate}
           onClose={() => { setShowStatusModal(false); setStatusModalIds([]) }}
-        />
-      )}
-
-      {showUploadLinksModal && !isViewer && (
-        <SendUploadLinksModal
-          submissions={submissions}
-          onSend={handleConfirmSendLinks}
-          onClose={() => setShowUploadLinksModal(false)}
-          sending={sendingLinks}
-        />
-      )}
-
-      {showBulkAddModal && !isViewer && (
-        <BulkAddModal
-          campaigns={allCampaigns}
-          selectedCampaignId={selectedCampaignId}
-          onSubmit={async (campaignId, items) => {
-            const token = getToken()
-            if (!token) throw new Error("Not authenticated")
-            const res = await submissionsApi.bulkAdd(token, campaignId, items)
-            if (campaignId === selectedCampaignId) {
-              submissionsApi.list(token, campaignId, { per_page: 200 }).then((r) => setSubmissions(r.items)).catch(console.error)
-              campaignsApi.stats(token, campaignId).then(setStats).catch(console.error)
-            }
-            return res
-          }}
-          onClose={() => setShowBulkAddModal(false)}
         />
       )}
 

@@ -102,10 +102,7 @@ export default function ClientDashboardPage() {
         onCampaignChange={setSelectedCampaignId}
         selectedStatus={statusFilter}
         onStatusChange={setStatusFilter}
-        onSendUploadLinks={noop}
         onUpdateMetrics={noop}
-        onDownloadCsv={noop}
-        onBulkAdd={noop}
         isViewer={true}
       />
 
