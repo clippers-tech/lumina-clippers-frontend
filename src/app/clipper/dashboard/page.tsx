@@ -204,7 +204,8 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
   const vs = sub.verification_status || "pending"
   const isPaid = sub.status === "paid"
   const isClaimed = sub.status === "payment_claimed"
-  const canClaim = (vs === "uploaded" || vs === "verified") && !isPaid && !isClaimed
+  const isRejected = sub.status === "rejected" || vs === "rejected"
+  const canClaim = (vs === "uploaded" || vs === "verified") && !isPaid && !isClaimed && !isRejected
   const needsProof = (vs === "pending" || vs === "rejected") && !isPaid
 
   const isSyncing = sub.scrape_status === "pending" || sub.scrape_status === "running"
@@ -255,7 +256,10 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
           {isPaid && (
             <span className="text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-400/10 px-2 py-0.5 rounded">Paid</span>
           )}
-          {isClaimed && (
+          {isRejected && (
+            <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-400/10 px-2 py-0.5 rounded">Rejected</span>
+          )}
+          {!isRejected && isClaimed && (
             <span className="text-[10px] font-bold uppercase tracking-wider text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded">Pending</span>
           )}
           {canClaim && (
@@ -266,7 +270,7 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
           {needsProof && (
             <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
               className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2.5 py-1 rounded-lg hover:bg-green-300 transition-all"
-            ><Upload className="w-3 h-3" /> Upload Proof to Claim Payments</button>
+            ><Upload className="w-3 h-3" /> {isRejected ? "Reupload Proof" : "Upload Proof to Claim Payments"}</button>
           )}
         </div>
       </div>
@@ -308,7 +312,10 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
             {isPaid && (
               <span className="text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-400/10 px-2 py-0.5 rounded">Paid</span>
             )}
-            {isClaimed && (
+            {isRejected && (
+              <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-400/10 px-2 py-0.5 rounded">Rejected</span>
+            )}
+            {!isRejected && isClaimed && (
               <span className="text-[10px] font-bold uppercase tracking-wider text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded">Pending</span>
             )}
             {canClaim && (
@@ -319,7 +326,7 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
             {needsProof && (
               <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
                 className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2 py-1 rounded-lg hover:bg-green-300 transition-all"
-              ><Upload className="w-3 h-3" /> Upload Proof to Claim Payments</button>
+              ><Upload className="w-3 h-3" /> {isRejected ? "Reupload Proof" : "Upload Proof to Claim Payments"}</button>
             )}
           </div>
         </div>
