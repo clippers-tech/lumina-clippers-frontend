@@ -17,6 +17,7 @@ import { LoadingState } from "@/components/admin/LoadingState"
 import { EmptyState } from "@/components/admin/EmptyState"
 import { formatCurrency } from "@/lib/utils"
 import { Plus, Trash2, DollarSign, ChevronDown, Check, CheckCircle, ExternalLink, Copy } from "lucide-react"
+import { ConfirmModal } from "@/components/ui/ConfirmModal"
 
 type FilterMode = "paid" | "to_be_paid" | "rejected"
 
@@ -95,6 +96,7 @@ interface PaymentItem extends PaymentLog {
   clipper_payment_whop?: string
   clipper_payment_paypal?: string
   clipper_payment_solana?: string
+  verification_status?: string
 }
 
 /* ── Main Page ────────────────────────────────────────── */
@@ -126,6 +128,7 @@ export default function PaymentsPage() {
   const [addLoading, setAddLoading] = useState(false)
   const [addError, setAddError] = useState("")
   const [copiedAddr, setCopiedAddr] = useState("")
+  const [deletePaymentConfirm, setDeletePaymentConfirm] = useState<number | null>(null)
 
   // Load campaigns for dropdown
   useEffect(() => {
@@ -160,8 +163,14 @@ export default function PaymentsPage() {
     fetchPayments()
   }, [fetchPayments])
 
-  const handleDelete = useCallback(async (id: number) => {
-    if (!confirm("Delete this payment record?")) return
+  const handleDelete = useCallback((id: number) => {
+    setDeletePaymentConfirm(id)
+  }, [])
+
+  const confirmDeletePayment = useCallback(async () => {
+    if (deletePaymentConfirm === null) return
+    const id = deletePaymentConfirm
+    setDeletePaymentConfirm(null)
     const token = getToken()
     if (!token) return
     try {
@@ -170,7 +179,7 @@ export default function PaymentsPage() {
     } catch (err) {
       console.error(err)
     }
-  }, [])
+  }, [deletePaymentConfirm])
 
   const openPayModal = (item?: PaymentItem) => {
     const creatorInfo = item ? {
@@ -441,10 +450,14 @@ export default function PaymentsPage() {
                               <span className="inline-flex items-center gap-1 text-xs font-bold text-red-400 bg-red-400/10 px-2 py-1 rounded-md">
                                 Rejected
                               </span>
-                            ) : (
+                            ) : p.verification_status === "verified" ? (
                               <span className="inline-flex items-center gap-1 text-xs font-bold text-green-400 bg-green-400/10 px-2 py-1 rounded-md">
                                 <CheckCircle className="w-3 h-3" />
                                 Verified
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-400 bg-amber-400/10 px-2 py-1 rounded-md">
+                                Unverified
                               </span>
                             )}
                           </td>
@@ -677,6 +690,15 @@ export default function PaymentsPage() {
           </div>
         )}
       </div>
+      <ConfirmModal
+        open={deletePaymentConfirm !== null}
+        title="Delete Payment"
+        message="Delete this payment record? This cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={confirmDeletePayment}
+        onCancel={() => setDeletePaymentConfirm(null)}
+      />
     </AdminGuard>
   )
 }

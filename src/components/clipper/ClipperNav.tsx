@@ -41,7 +41,7 @@ export function ClipperNav({ chatToken: _ct }: { chatToken?: string | null }) {
               }`}
             >
               <Settings className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Settings</span>
+              <span className="hidden sm:inline">Payment Settings</span>
             </Link>
             <button
               onClick={() => { clearClipperToken(); router.push("/viral") }}

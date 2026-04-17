@@ -42,7 +42,7 @@ export default function UsersPage() {
   const [selectedCampaignIds, setSelectedCampaignIds] = useState<number[]>([])
   const [copiedUserId, setCopiedUserId] = useState<number | null>(null)
 
-  const inviteLink = "https://portal.luminaclippers.com/client"
+  const inviteLink = "https://portal.luminaclippers.com/cx0-auth-8f3a"
 
   const handleCopyInviteLink = (userId: number) => {
     navigator.clipboard.writeText(inviteLink)

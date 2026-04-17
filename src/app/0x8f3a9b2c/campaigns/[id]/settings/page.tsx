@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import { getToken } from "@/lib/auth"
 import { campaigns as campaignsApi, type Campaign } from "@/lib/api"
 import { useToast } from "@/components/ui/toast"
+import { ConfirmModal } from "@/components/ui/ConfirmModal"
 
 export default function CampaignSettingsPage() {
   const { id } = useParams<{ id: string }>()
@@ -14,6 +15,7 @@ export default function CampaignSettingsPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [showArchiveConfirm, setShowArchiveConfirm] = useState(false)
   const { toast } = useToast()
 
   const [form, setForm] = useState({
@@ -88,7 +90,11 @@ export default function CampaignSettingsPage() {
   }
 
   async function handleArchive() {
-    if (!confirm("Archive this campaign? It will be hidden from the main list.")) return
+    setShowArchiveConfirm(true)
+  }
+
+  async function confirmArchive() {
+    setShowArchiveConfirm(false)
     const token = getToken()!
     await campaignsApi.delete(token, campaignId)
     router.push("/0x8f3a9b2c/campaigns")
@@ -184,6 +190,15 @@ export default function CampaignSettingsPage() {
           Archive Campaign
         </button>
       </div>
+      <ConfirmModal
+        open={showArchiveConfirm}
+        title="Archive Campaign"
+        message="Archive this campaign? It will be hidden from the main list."
+        confirmLabel="Archive"
+        variant="danger"
+        onConfirm={confirmArchive}
+        onCancel={() => setShowArchiveConfirm(false)}
+      />
     </div>
   )
 }

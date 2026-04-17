@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { getToken } from "@/lib/auth"
 import {
   campaigns as campaignsApi,
@@ -19,11 +20,16 @@ import { SendUploadLinksModal } from "@/components/admin/SendUploadLinksModal"
 import { BulkAddModal } from "@/components/admin/BulkAddModal"
 import { useUser } from "@/lib/user-context"
 import { AdminTabs } from "@/components/admin/AdminTabs"
+import { ConfirmModal } from "@/components/ui/ConfirmModal"
 
 export default function DashboardPage() {
   const { isViewer } = useUser()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
   const [allCampaigns, setAllCampaigns] = useState<Campaign[]>([])
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null)
+  const [deleteConfirm, setDeleteConfirm] = useState<{ ids: number[] } | null>(null)
   const [statusFilter, setStatusFilter] = useState("")
   const [platformFilter, setPlatformFilter] = useState("")
   const [stats, setStats] = useState<CampaignStats | null>(null)
@@ -38,15 +44,25 @@ export default function DashboardPage() {
   useEffect(() => {
     const token = getToken()
     if (!token) return
+    const initialCampaignParam = searchParams.get("campaign")
     campaignsApi
       .list(token)
       .then((data) => {
         setAllCampaigns(data)
-        if (data.length > 0) setSelectedCampaignId(data[0].id)
+        if (initialCampaignParam) {
+          const found = data.find((c) => c.id === parseInt(initialCampaignParam))
+          if (found) {
+            setSelectedCampaignId(found.id)
+          } else if (data.length > 0) {
+            setSelectedCampaignId(data[0].id)
+          }
+        } else if (data.length > 0) {
+          setSelectedCampaignId(data[0].id)
+        }
       })
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     if (!selectedCampaignId) {
@@ -115,7 +131,13 @@ export default function DashboardPage() {
 
   const handleDeleteSelected = useCallback((ids: number[]) => {
     if (ids.length === 0) return
-    if (!confirm(`Delete ${ids.length} submission(s)?`)) return
+    setDeleteConfirm({ ids })
+  }, [])
+
+  const confirmDeleteSelected = useCallback(async () => {
+    if (!deleteConfirm) return
+    const { ids } = deleteConfirm
+    setDeleteConfirm(null)
     const token = getToken()
     if (!token) return
     Promise.all(ids.map((id) => submissionsApi.delete(token, id)))
@@ -123,7 +145,7 @@ export default function DashboardPage() {
         setSubmissions((prev) => prev.filter((s) => !ids.includes(s.id)))
       })
       .catch(console.error)
-  }, [])
+  }, [deleteConfirm])
 
   const handleUpdateStatus = useCallback((ids: number[]) => {
     if (ids.length === 0) return
@@ -168,7 +190,14 @@ export default function DashboardPage() {
       <FilterBar
         campaigns={allCampaigns}
         selectedCampaignId={selectedCampaignId}
-        onCampaignChange={setSelectedCampaignId}
+        onCampaignChange={(id) => {
+          setSelectedCampaignId(id)
+          if (id) {
+            router.replace(pathname + "?" + new URLSearchParams({ campaign: String(id) }).toString(), { scroll: false })
+          } else {
+            router.replace(pathname, { scroll: false })
+          }
+        }}
         selectedStatus={statusFilter}
         onStatusChange={setStatusFilter}
         onSendUploadLinks={handleSendUploadLinks}
@@ -260,6 +289,16 @@ export default function DashboardPage() {
           onClose={() => setShowBulkAddModal(false)}
         />
       )}
+
+      <ConfirmModal
+        open={!!deleteConfirm}
+        title="Delete Submissions"
+        message={`Are you sure you want to delete ${deleteConfirm?.ids.length || 0} submission(s)? This cannot be undone.`}
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={confirmDeleteSelected}
+        onCancel={() => setDeleteConfirm(null)}
+      />
     </div>
   )
 }

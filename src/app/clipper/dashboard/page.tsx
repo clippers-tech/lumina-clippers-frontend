@@ -266,7 +266,7 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
           {needsProof && (
             <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
               className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2.5 py-1 rounded-lg hover:bg-green-300 transition-all"
-            ><Upload className="w-3 h-3" /> Upload Proof to Claim</button>
+            ><Upload className="w-3 h-3" /> Upload Proof to Claim Payments</button>
           )}
         </div>
       </div>
@@ -319,7 +319,7 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
             {needsProof && (
               <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
                 className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2 py-1 rounded-lg hover:bg-green-300 transition-all"
-              ><Upload className="w-3 h-3" /> Upload Proof to Claim</button>
+              ><Upload className="w-3 h-3" /> Upload Proof to Claim Payments</button>
             )}
           </div>
         </div>

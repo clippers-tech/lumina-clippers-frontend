@@ -12,6 +12,7 @@ import { AdminTabs } from "@/components/admin/AdminTabs"
 import { AdminGuard } from "@/components/admin/AdminGuard"
 import { formatCurrency } from "@/lib/utils"
 import { Plus, FolderOpen, Pencil, Trash2, Copy } from "lucide-react"
+import { ConfirmModal } from "@/components/ui/ConfirmModal"
 
 interface CampaignRow extends Campaign {
   submissionCount?: number
@@ -20,6 +21,7 @@ interface CampaignRow extends Campaign {
 export default function CampaignsPage() {
   const [campaigns, setCampaigns] = useState<CampaignRow[]>([])
   const [loading, setLoading] = useState(true)
+  const [deleteConfirm, setDeleteConfirm] = useState<{ id: number; name: string } | null>(null)
 
   useEffect(() => {
     const token = getToken()
@@ -63,15 +65,21 @@ export default function CampaignsPage() {
     } catch (err) { console.error(err) }
   }, [])
 
-  const handleDelete = useCallback(async (id: number, name: string) => {
-    if (!confirm(`Delete campaign "${name}"? This cannot be undone.`)) return
+  const handleDelete = useCallback((id: number, name: string) => {
+    setDeleteConfirm({ id, name })
+  }, [])
+
+  const confirmDelete = useCallback(async () => {
+    if (!deleteConfirm) return
+    const { id } = deleteConfirm
+    setDeleteConfirm(null)
     const token = getToken()
     if (!token) return
     try {
       await campaignsApi.delete(token, id)
       setCampaigns((prev) => prev.filter((c) => c.id !== id))
     } catch (err) { console.error(err) }
-  }, [])
+  }, [deleteConfirm])
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr)
@@ -195,6 +203,15 @@ export default function CampaignsPage() {
           )}
         </div>
       </div>
+      <ConfirmModal
+        open={!!deleteConfirm}
+        title="Delete Campaign"
+        message={`Delete campaign "${deleteConfirm?.name}"? This cannot be undone.`}
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirm(null)}
+      />
     </AdminGuard>
   )
 }

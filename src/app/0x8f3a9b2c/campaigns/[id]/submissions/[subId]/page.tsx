@@ -11,6 +11,7 @@ import { formatNumber, formatCurrency, platformIcon } from "@/lib/utils"
 import { VerificationReview } from "@/components/admin/VerificationReview"
 import { ArrowLeft, RefreshCw, ExternalLink, AlertTriangle } from "lucide-react"
 import { useToast } from "@/components/ui/toast"
+import { ConfirmModal } from "@/components/ui/ConfirmModal"
 
 export default function SubmissionDetailPage() {
   const { id, subId } = useParams<{ id: string; subId: string }>()
@@ -23,6 +24,7 @@ export default function SubmissionDetailPage() {
   const [saving, setSaving] = useState(false)
   const [scraping, setScraping] = useState(false)
   const [payoutOpen, setPayoutOpen] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const [editViews, setEditViews] = useState("")
   const [editInteractions, setEditInteractions] = useState("")
@@ -100,7 +102,11 @@ export default function SubmissionDetailPage() {
   }
 
   async function handleReject() {
-    if (!confirm("Permanently delete this submission? This cannot be undone.")) return
+    setShowDeleteConfirm(true)
+  }
+
+  async function confirmReject() {
+    setShowDeleteConfirm(false)
     const token = getToken()!
     await subsApi.delete(token, submissionId)
     router.push(`/0x8f3a9b2c/campaigns/${campaignId}`)
@@ -267,6 +273,16 @@ export default function SubmissionDetailPage() {
           onClose={() => setPayoutOpen(false)}
         />
       )}
+
+      <ConfirmModal
+        open={showDeleteConfirm}
+        title="Delete Submission"
+        message="Permanently delete this submission? This cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={confirmReject}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </div>
   )
 }
