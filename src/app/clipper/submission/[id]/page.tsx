@@ -288,12 +288,29 @@ export default function SubmissionDetailPage() {
               <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Proof Video</p>
             </div>
             {submission.verification_video_url ? (
-              <div className="p-4">
+              <div className="p-4 space-y-3">
                 <video
                   src={submission.verification_video_url}
                   controls
                   className="w-full rounded-lg max-h-[400px] bg-black"
                 />
+                {!isPaid && (
+                  <button onClick={() => {
+                    const input = document.createElement("input"); input.type = "file"; input.accept = "video/*"
+                    input.onchange = async (e) => {
+                      const f = (e.target as HTMLInputElement).files?.[0]; if (!f) return
+                      if (f.size > 100 * 1024 * 1024) { toast({ description: "File must be under 100MB", variant: "error" }); return }
+                      try {
+                        await verification.upload(submission.submission_token, submission.id, f, () => {})
+                        toast({ description: "New proof uploaded", variant: "success" }); loadData()
+                      } catch { toast({ description: "Upload failed", variant: "error" }) }
+                    }; input.click()
+                  }}
+                    className="w-full flex items-center justify-center gap-1.5 text-xs text-zinc-400 hover:text-green-400 border border-white/[0.06] hover:border-green-400/20 rounded-lg py-2 transition-colors"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" /> Reupload Proof
+                  </button>
+                )}
               </div>
             ) : (vs === "pending" || vs === "rejected") && !isPaid ? (
               <div className="p-4">
