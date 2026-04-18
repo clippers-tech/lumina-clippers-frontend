@@ -80,7 +80,7 @@ export function ScrapeProgressProvider({ children }: { children: React.ReactNode
         try {
           const p = await scrapeApi.progress(t, jobIdRef.current)
           setProgress(p)
-          if (p.status !== "running") {
+          if (p.status !== "running" && p.status !== "pending") {
             stopPolling()
             jobIdRef.current = null
           }
@@ -103,7 +103,7 @@ export function ScrapeProgressProvider({ children }: { children: React.ReactNode
     stopPolling()
   }, [stopPolling])
 
-  const isRunning = progress?.status === "running"
+  const isRunning = progress?.status === "running" || progress?.status === "pending"
 
   return (
     <ScrapeContext.Provider

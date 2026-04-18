@@ -11,7 +11,8 @@ export function ScrapeProgressBar() {
   const { total, completed, failed, skipped, status, current_platform, errors } = progress
   const processed = completed + failed + skipped
   const pct = total > 0 ? Math.round((processed / total) * 100) : 0
-  const isRunning = status === "running"
+  const isPending = status === "pending"
+  const isRunning = status === "running" || isPending
   const isComplete = status === "complete"
   const isFailed = status === "failed"
 
@@ -32,7 +33,7 @@ export function ScrapeProgressBar() {
             )}
             <div>
               <p className="text-[13px] font-semibold text-zinc-100">
-                {isRunning ? "Updating Stats" : isComplete ? "Stats Updated" : "Update Failed"}
+                {isPending ? "Queued" : isRunning ? "Updating Stats" : isComplete ? "Stats Updated" : "Update Failed"}
               </p>
               <p className="text-[11px] text-zinc-500 mt-0.5">{campaignName}</p>
             </div>

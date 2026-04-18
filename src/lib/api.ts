@@ -503,7 +503,7 @@ export type ScrapeProgress = {
   completed: number
   failed: number
   skipped: number
-  status: "running" | "complete" | "failed"
+  status: "pending" | "running" | "complete" | "failed"
   current_platform: string
   started_at: string
   errors: string[]
