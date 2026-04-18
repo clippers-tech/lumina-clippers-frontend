@@ -90,6 +90,7 @@ interface FilterBarProps {
   onStatusChange: (status: string) => void
   onUpdateMetrics: () => void
   isViewer: boolean
+  isScraping?: boolean
 }
 
 export function FilterBar({
@@ -100,6 +101,7 @@ export function FilterBar({
   onStatusChange,
   onUpdateMetrics,
   isViewer,
+  isScraping = false,
 }: FilterBarProps) {
   const statuses = ["awaiting_stats", "stats_verified", "paid", "rejected"]
 
@@ -140,10 +142,11 @@ export function FilterBar({
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={onUpdateMetrics}
-              className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-3 py-2 rounded-lg transition-all"
+              disabled={isScraping || !selectedCampaignId}
+              className="flex items-center gap-1.5 border border-white/[0.06] bg-transparent text-zinc-300 hover:bg-white/[0.05] text-xs font-medium px-3 py-2 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Update
+              <RefreshCw className={`w-3.5 h-3.5 ${isScraping ? "animate-spin" : ""}`} />
+              {isScraping ? "Updating..." : "Update"}
             </button>
           </div>
         )}

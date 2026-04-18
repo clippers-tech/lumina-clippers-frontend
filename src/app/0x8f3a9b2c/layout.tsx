@@ -7,6 +7,8 @@ import { getToken, clearToken } from "@/lib/auth"
 import { auth } from "@/lib/api"
 import { LogOut } from "lucide-react"
 import { UserProvider, type AppUser } from "@/lib/user-context"
+import { ScrapeProgressProvider } from "@/lib/scrape-context"
+import { ScrapeProgressBar } from "@/components/admin/ScrapeProgressBar"
 import { AtmosphericBackground } from "@/components/layout/AtmosphericBackground"
 import { LuminaLogo } from "@/components/LuminaLogo"
 
@@ -53,6 +55,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <UserProvider user={user}>
+      <ScrapeProgressProvider>
       <AtmosphericBackground>
         <div className="min-h-screen">
           {/* Top navbar — logo + user only */}
@@ -91,7 +94,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {children}
           </main>
         </div>
+        <ScrapeProgressBar />
       </AtmosphericBackground>
+      </ScrapeProgressProvider>
     </UserProvider>
   )
 }

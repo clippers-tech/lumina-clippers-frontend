@@ -496,6 +496,28 @@ export const verification = {
     apiFetch<Submission>(`/api/submissions/${submissionId}/verify`, { token, method: "POST", body: JSON.stringify(data) }),
 }
 
+// Campaign scrape progress
+export type ScrapeProgress = {
+  campaign_id: number
+  total: number
+  completed: number
+  failed: number
+  skipped: number
+  status: "running" | "complete" | "failed"
+  current_platform: string
+  started_at: string
+  errors: string[]
+}
+
+export const scrapeApi = {
+  startCampaign: (token: string, campaignId: number) =>
+    apiFetch<{ job_id: string | null; total: number; status: string }>(
+      `/api/scrape/campaign/${campaignId}`, { token, method: "POST" }
+    ),
+  progress: (token: string, jobId: string) =>
+    apiFetch<ScrapeProgress>(`/api/scrape/campaign-progress/${jobId}`, { token }),
+}
+
 export const settingsApi = {
   list: (token: string) =>
     apiFetch<Setting[]>("/api/settings", { token }),

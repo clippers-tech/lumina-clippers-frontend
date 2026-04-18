@@ -10,6 +10,7 @@ import {
   type CampaignStats,
   type Submission,
 } from "@/lib/api"
+import { useScrapeProgress } from "@/lib/scrape-context"
 import { DashboardHeader } from "@/components/admin/DashboardHeader"
 import { FilterBar } from "@/components/admin/FilterBar"
 import { BudgetBar } from "@/components/admin/BudgetBar"
@@ -82,15 +83,29 @@ export default function DashboardPage() {
       .catch(console.error)
   }, [selectedCampaignId, statusFilter, platformFilter])
 
-  const handleUpdateMetrics = useCallback(() => {
-    if (!selectedCampaignId) return
-    const token = getToken()
-    if (!token) return
-    submissions.forEach((sub) => {
-      submissionsApi.scrape(token, sub.id).catch(console.error)
-    })
-    alert("Metrics update triggered for all visible submissions")
-  }, [selectedCampaignId, submissions])
+  const { startScrape, isRunning: isScraping, progress } = useScrapeProgress()
+
+  // Auto-refresh data when scrape completes
+  useEffect(() => {
+    if (progress?.status === "complete" && selectedCampaignId) {
+      const token = getToken()
+      if (!token) return
+      campaignsApi.stats(token, selectedCampaignId).then(setStats).catch(console.error)
+      const params: { status?: string; platform?: string } = {}
+      if (statusFilter) params.status = statusFilter
+      if (platformFilter) params.platform = platformFilter
+      submissionsApi
+        .list(token, selectedCampaignId, { ...params, per_page: 200 })
+        .then((res) => setSubmissions(res.items))
+        .catch(console.error)
+    }
+  }, [progress?.status]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleUpdateMetrics = useCallback(async () => {
+    if (!selectedCampaignId || isScraping) return
+    const campaign = allCampaigns.find((c) => c.id === selectedCampaignId)
+    await startScrape(selectedCampaignId, campaign?.name || "Campaign")
+  }, [selectedCampaignId, allCampaigns, startScrape, isScraping])
 
   const handleRefreshMetrics = useCallback((ids: number[]) => {
     const token = getToken()
@@ -98,7 +113,6 @@ export default function DashboardPage() {
     ids.forEach((id) => {
       submissionsApi.scrape(token, id).catch(console.error)
     })
-    alert(`Refresh triggered for ${ids.length} submission(s)`)
   }, [])
 
   const handleDeleteSelected = useCallback((ids: number[]) => {
@@ -174,6 +188,7 @@ export default function DashboardPage() {
         onStatusChange={setStatusFilter}
         onUpdateMetrics={handleUpdateMetrics}
         isViewer={isViewer}
+        isScraping={isScraping}
       />
 
       {stats && (
