@@ -107,20 +107,13 @@ export default function ClientDashboardPage() {
       />
 
       {stats && (
-        <BudgetBar
-          budgetUsed={stats.budget_used}
-          budgetTotal={stats.budget_total}
-          estRevenue={stats.est_revenue}
-        />
-      )}
-
-      {stats && (
         <StatCards
           totalSubmissions={stats.total_submissions}
           verifiedSubmissions={stats.submissions_with_stats}
           totalViews={stats.total_views}
           totalInteractions={stats.total_interactions}
-          estRevenue={stats.est_revenue}
+          estRevenue={0}
+          hideRevenue
         />
       )}
 
