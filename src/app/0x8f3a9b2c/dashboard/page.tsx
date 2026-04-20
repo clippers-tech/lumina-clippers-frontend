@@ -39,6 +39,7 @@ export default function DashboardPage() {
   const [showStatusModal, setShowStatusModal] = useState(false)
 
 
+
   useEffect(() => {
     const token = getToken()
     if (!token) return
@@ -78,7 +79,7 @@ export default function DashboardPage() {
     if (platformFilter) params.platform = platformFilter
 
     submissionsApi
-      .list(token, selectedCampaignId, { ...params, per_page: 1000 })
+      .list(token, selectedCampaignId, { ...params, per_page: 200 })
       .then((res) => setSubmissions(res.items))
       .catch(console.error)
   }, [selectedCampaignId, statusFilter, platformFilter])
@@ -95,7 +96,7 @@ export default function DashboardPage() {
       if (statusFilter) params.status = statusFilter
       if (platformFilter) params.platform = platformFilter
       submissionsApi
-        .list(token, selectedCampaignId, { ...params, per_page: 1000 })
+        .list(token, selectedCampaignId, { ...params, per_page: 200 })
         .then((res) => setSubmissions(res.items))
         .catch(console.error)
     }
@@ -237,6 +238,7 @@ export default function DashboardPage() {
             setSubmissions((prev) => prev.map((s) => s.id === id ? { ...s, uk_viewers_pct: pct } : s))
           } catch (err) { console.error(err) }
         }}
+        totalCount={stats?.total_submissions}
       />
 
       {showStatusModal && !isViewer && (

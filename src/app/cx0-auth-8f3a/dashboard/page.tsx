@@ -24,6 +24,7 @@ export default function ClientDashboardPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [loading, setLoading] = useState(true)
 
+
   useEffect(() => {
     const token = getToken()
     if (!token) return
@@ -63,7 +64,7 @@ export default function ClientDashboardPage() {
     if (platformFilter) params.platform = platformFilter
 
     submissionsApi
-      .list(token, selectedCampaignId, { ...params, per_page: 1000 })
+      .list(token, selectedCampaignId, { ...params, per_page: 200 })
       .then((res) => {
         const campaign = allCampaigns.find((c) => c.id === selectedCampaignId)
         const clientRate = campaign?.client_cpm_rate || campaign?.cpm_rate || 0
@@ -129,6 +130,7 @@ export default function ClientDashboardPage() {
         usViewersPct={allCampaigns.find((c) => c.id === selectedCampaignId)?.us_viewers_pct}
         ukViewersPct={allCampaigns.find((c) => c.id === selectedCampaignId)?.uk_viewers_pct}
         includeUkViews={allCampaigns.find((c) => c.id === selectedCampaignId)?.include_uk_views || false}
+        totalCount={stats?.total_submissions}
       />
     </div>
   )

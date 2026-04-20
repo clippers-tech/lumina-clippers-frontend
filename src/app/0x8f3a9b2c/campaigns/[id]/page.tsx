@@ -20,6 +20,7 @@ export default function CampaignDetailPage() {
   const [loading, setLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState("")
   const [platformFilter, setPlatformFilter] = useState("")
+
   const [copied, setCopied] = useState("")
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [importOpen, setImportOpen] = useState(false)
@@ -35,7 +36,7 @@ export default function CampaignDetailPage() {
     Promise.all([
       campaignsApi.get(token, campaignId),
       campaignsApi.stats(token, campaignId),
-      subsApi.list(token, campaignId, { status: statusFilter || undefined, platform: platformFilter || undefined, per_page: 1000 }),
+      subsApi.list(token, campaignId, { status: statusFilter || undefined, platform: platformFilter || undefined, per_page: 200 }),
     ])
       .then(([c, s, sub]) => { setCampaign(c); setStats(s); setSubs(sub.items) })
       .catch(console.error)

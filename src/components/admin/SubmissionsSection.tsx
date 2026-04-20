@@ -22,6 +22,7 @@ interface SubmissionsSectionProps {
   includeUkViews?: boolean
   onUpdateUsViewersPct?: (id: number, pct: number) => void
   onUpdateUkViewersPct?: (id: number, pct: number) => void
+  totalCount?: number
 }
 
 const platforms = ["", "tiktok", "instagram", "youtube", "twitter"]
@@ -40,6 +41,7 @@ export function SubmissionsSection({
   includeUkViews,
   onUpdateUsViewersPct,
   onUpdateUkViewersPct,
+  totalCount,
 }: SubmissionsSectionProps) {
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
@@ -84,7 +86,7 @@ export function SubmissionsSection({
         {/* Title + view toggle */}
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">
-            Submissions ({filtered.length})
+            Submissions ({totalCount != null ? totalCount : filtered.length})
           </h2>
           <div className="flex border border-white/[0.06] rounded-lg overflow-hidden shrink-0">
             <button
@@ -277,6 +279,7 @@ export function SubmissionsSection({
           </button>
         </div>
       )}
+
     </div>
   )
 }
