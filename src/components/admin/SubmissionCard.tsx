@@ -144,8 +144,8 @@ export function SubmissionCard({
             {platformIcon}
           </div>
           <div className="flex items-center gap-2">
-            <StatusBadge status={submission.status} />
-            <VerificationBadge status={submission.verification_status} />
+            {isAdmin && <StatusBadge status={submission.status} />}
+            {isAdmin && <VerificationBadge status={submission.verification_status} />}
             {!hideCheckbox && (
               <button
                 onClick={() => onToggleSelect(submission.id)}
