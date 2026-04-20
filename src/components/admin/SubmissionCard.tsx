@@ -159,10 +159,12 @@ export function SubmissionCard({
           </div>
         </div>
 
-        {/* Creator info */}
-        <div className="px-3 pt-2 pb-1">
-          <p className="text-xs text-zinc-400 truncate">{submission.clipper_email}</p>
-        </div>
+        {/* Creator info — hidden for client viewers */}
+        {isAdmin && (
+          <div className="px-3 pt-2 pb-1">
+            <p className="text-xs text-zinc-400 truncate">{submission.clipper_email}</p>
+          </div>
+        )}
 
         {/* Thumbnail / Preview */}
         <div className="px-3 py-2">

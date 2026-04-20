@@ -9,6 +9,7 @@ interface StatCardsProps {
   totalInteractions: number
   estRevenue: number
   hideRevenue?: boolean
+  hideVerified?: boolean
 }
 
 export function StatCards({
@@ -18,17 +19,18 @@ export function StatCards({
   totalInteractions,
   estRevenue,
   hideRevenue = false,
+  hideVerified = false,
 }: StatCardsProps) {
   const stats = [
     { label: "Total Submissions", value: formatNumber(totalSubmissions) },
-    { label: "Verified", value: formatNumber(verifiedSubmissions) },
+    ...(!hideVerified ? [{ label: "Verified", value: formatNumber(verifiedSubmissions) }] : []),
     { label: "Total Views", value: formatNumber(totalViews) },
     { label: "Interactions", value: formatNumber(totalInteractions) },
     ...(!hideRevenue ? [{ label: "Est. Revenue", value: formatCurrency(estRevenue), accent: true }] : []),
   ]
 
   return (
-    <div className={`grid grid-cols-2 sm:grid-cols-3 ${hideRevenue ? "lg:grid-cols-4" : "lg:grid-cols-5"} gap-3 mb-6`}>
+    <div className={`grid grid-cols-2 sm:grid-cols-3 ${stats.length <= 3 ? "lg:grid-cols-3" : stats.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-5"} gap-3 mb-6`}>
       {stats.map((s) => (
         <div
           key={s.label}

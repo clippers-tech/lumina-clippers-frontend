@@ -113,6 +113,7 @@ export default function ClientDashboardPage() {
           totalInteractions={stats.total_interactions}
           estRevenue={0}
           hideRevenue
+          hideVerified
         />
       )}
 
