@@ -323,13 +323,15 @@ function SubmissionRow({ sub, token, onRefresh }: { sub: ClipperSubmission; toke
                 className="text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2 py-1 rounded-lg hover:bg-green-300 transition-all disabled:opacity-50"
               >{claiming ? "..." : "Claim Payment"}</button>
             )}
-            {needsProof && (
-              <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
-                className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-2 py-1 rounded-lg hover:bg-green-300 transition-all"
-              ><Upload className="w-3 h-3" /> {isRejected ? "Reupload Proof" : "Upload Proof to Claim Payments"}</button>
-            )}
           </div>
         </div>
+        {needsProof && (
+          <div onClick={(e) => e.stopPropagation()}>
+            <button onClick={(e) => { e.stopPropagation(); setShowUpload(!showUpload) }}
+              className="flex items-center justify-center gap-1.5 w-full text-[10px] font-bold uppercase tracking-wider bg-green-400 text-black px-3 py-2 rounded-lg hover:bg-green-300 transition-all"
+            ><Upload className="w-3 h-3" /> {isRejected ? "Reupload Proof" : "Upload Proof to Claim Payments"}</button>
+          </div>
+        )}
       </div>
 
       {showUpload && (
