@@ -35,7 +35,7 @@ export default function CampaignDetailPage() {
     Promise.all([
       campaignsApi.get(token, campaignId),
       campaignsApi.stats(token, campaignId),
-      subsApi.list(token, campaignId, { status: statusFilter || undefined, platform: platformFilter || undefined, per_page: 200 }),
+      subsApi.list(token, campaignId, { status: statusFilter || undefined, platform: platformFilter || undefined, per_page: 1000 }),
     ])
       .then(([c, s, sub]) => { setCampaign(c); setStats(s); setSubs(sub.items) })
       .catch(console.error)

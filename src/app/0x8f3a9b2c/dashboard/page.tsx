@@ -78,7 +78,7 @@ export default function DashboardPage() {
     if (platformFilter) params.platform = platformFilter
 
     submissionsApi
-      .list(token, selectedCampaignId, { ...params, per_page: 200 })
+      .list(token, selectedCampaignId, { ...params, per_page: 1000 })
       .then((res) => setSubmissions(res.items))
       .catch(console.error)
   }, [selectedCampaignId, statusFilter, platformFilter])
@@ -95,7 +95,7 @@ export default function DashboardPage() {
       if (statusFilter) params.status = statusFilter
       if (platformFilter) params.platform = platformFilter
       submissionsApi
-        .list(token, selectedCampaignId, { ...params, per_page: 200 })
+        .list(token, selectedCampaignId, { ...params, per_page: 1000 })
         .then((res) => setSubmissions(res.items))
         .catch(console.error)
     }

@@ -63,7 +63,7 @@ export default function ClientDashboardPage() {
     if (platformFilter) params.platform = platformFilter
 
     submissionsApi
-      .list(token, selectedCampaignId, { ...params, per_page: 200 })
+      .list(token, selectedCampaignId, { ...params, per_page: 1000 })
       .then((res) => {
         const campaign = allCampaigns.find((c) => c.id === selectedCampaignId)
         const clientRate = campaign?.client_cpm_rate || campaign?.cpm_rate || 0
