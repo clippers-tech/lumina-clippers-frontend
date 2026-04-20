@@ -11,7 +11,6 @@ import {
 } from "@/lib/api"
 import { DashboardHeader } from "@/components/admin/DashboardHeader"
 import { FilterBar } from "@/components/admin/FilterBar"
-import { BudgetBar } from "@/components/admin/BudgetBar"
 import { StatCards } from "@/components/admin/StatCards"
 import { SubmissionsSection } from "@/components/admin/SubmissionsSection"
 import { ClientTabs } from "@/components/client/ClientTabs"
