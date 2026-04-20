@@ -29,8 +29,8 @@ function AuroraBackground() {
 /* ── Money Counter ────────────────────────────────────── */
 function MoneyCounter() {
   const START = 105323
-  const RATE = 0.002 // 0.2%
-  const INTERVAL = 10000 // 10 seconds
+  const RATE = 0.000001 // ~$0.11 per tick
+  const INTERVAL = 20000 // 20 seconds
   const [amount, setAmount] = useState(START)
   const amountRef = useRef(START)
 
