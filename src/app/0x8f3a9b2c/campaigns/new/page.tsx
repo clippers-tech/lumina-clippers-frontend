@@ -15,7 +15,7 @@ export default function NewCampaignPage() {
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     name: "", slug: "", client_name: "", client_email: "",
-    cpm_rate: "", client_cpm_rate: "", max_payout: "", budget_total: "",
+    cpm_rate: "", client_cpm_rate: "", max_payout: "", budget_total: "", client_budget_total: "",
     brief_url: "", thumbnail_url: "",
     accepted_platforms: "instagram,tiktok,youtube,twitter",
     us_viewers_pct: "90", include_uk_views: false, uk_viewers_pct: "45",
@@ -46,6 +46,7 @@ export default function NewCampaignPage() {
         client_cpm_rate: parseFloat(form.client_cpm_rate) || 0,
         max_payout: parseFloat(form.max_payout) || 0,
         budget_total: parseFloat(form.budget_total) || 0,
+        client_budget_total: parseFloat(form.client_budget_total) || 0,
         us_viewers_pct: parseFloat(form.us_viewers_pct) || 90,
         include_uk_views: form.include_uk_views,
         uk_viewers_pct: form.include_uk_views ? (parseFloat(form.uk_viewers_pct) || 45) : null,
@@ -113,6 +114,11 @@ export default function NewCampaignPage() {
               <label className={labelClass}>Max Budget ($)</label>
               <input type="number" step="0.01" value={form.budget_total} onChange={(e) => updateField("budget_total", e.target.value)} placeholder="Unlimited" className={inputClass} />
               <p className={helpClass}>Leave empty for unlimited</p>
+            </div>
+            <div>
+              <label className={labelClass}>Client Budget ($)</label>
+              <input type="number" step="0.01" value={form.client_budget_total} onChange={(e) => updateField("client_budget_total", e.target.value)} placeholder="Same as max budget" className={inputClass} />
+              <p className={helpClass}>Budget shown to client (leave 0 to use real budget)</p>
             </div>
           </div>
 

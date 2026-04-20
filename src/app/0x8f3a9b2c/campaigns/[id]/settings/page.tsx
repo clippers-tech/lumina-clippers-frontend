@@ -20,7 +20,7 @@ export default function CampaignSettingsPage() {
 
   const [form, setForm] = useState({
     name: "", slug: "", client_name: "", client_email: "",
-    cpm_rate: "", client_cpm_rate: "", max_payout: "", budget_total: "",
+    cpm_rate: "", client_cpm_rate: "", max_payout: "", budget_total: "", client_budget_total: "",
     brief_url: "", thumbnail_url: "", accepted_platforms: "", us_viewers_pct: "",
     include_uk_views: false, uk_viewers_pct: "",
     target_views: "", requirements_url: "", description: "",
@@ -37,6 +37,7 @@ export default function CampaignSettingsPage() {
           client_email: c.client_email, cpm_rate: c.cpm_rate.toString(),
           client_cpm_rate: (c.client_cpm_rate || 0).toString(),
           max_payout: c.max_payout.toString(), budget_total: c.budget_total.toString(),
+          client_budget_total: (c.client_budget_total || 0).toString(),
           brief_url: c.brief_url, thumbnail_url: c.thumbnail_url,
           accepted_platforms: c.accepted_platforms,
           us_viewers_pct: c.us_viewers_pct?.toString() || "90",
@@ -69,6 +70,7 @@ export default function CampaignSettingsPage() {
         client_cpm_rate: parseFloat(form.client_cpm_rate) || 0,
         max_payout: parseFloat(form.max_payout) || 0,
         budget_total: parseFloat(form.budget_total) || 0,
+        client_budget_total: parseFloat(form.client_budget_total) || 0,
         us_viewers_pct: parseFloat(form.us_viewers_pct) || 90,
         include_uk_views: form.include_uk_views,
         uk_viewers_pct: form.include_uk_views ? (parseFloat(form.uk_viewers_pct) || 45) : null,
@@ -132,6 +134,7 @@ export default function CampaignSettingsPage() {
             <div><label className={labelClass}>Client CPM ($)</label><input type="number" step="0.01" value={form.client_cpm_rate} onChange={(e) => setForm({ ...form, client_cpm_rate: e.target.value })} className={inputClass} /></div>
             <div><label className={labelClass}>Max Payout ($)</label><input type="number" step="0.01" value={form.max_payout} onChange={(e) => setForm({ ...form, max_payout: e.target.value })} className={inputClass} /></div>
             <div><label className={labelClass}>Max Budget ($)</label><input type="number" step="0.01" value={form.budget_total} onChange={(e) => setForm({ ...form, budget_total: e.target.value })} className={inputClass} /><p className={helpClass}>Leave empty for unlimited</p></div>
+            <div><label className={labelClass}>Client Budget ($)</label><input type="number" step="0.01" value={form.client_budget_total} onChange={(e) => setForm({ ...form, client_budget_total: e.target.value })} className={inputClass} /><p className={helpClass}>Budget shown to client (leave 0 to use real budget)</p></div>
           </div>
 
           <div><label className={labelClass}>Target Views</label><input type="number" value={form.target_views} onChange={(e) => setForm({ ...form, target_views: e.target.value })} placeholder="No view cap" className={inputClass} /></div>

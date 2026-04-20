@@ -53,7 +53,7 @@ export const auth = {
 export type Campaign = {
   id: number; slug: string; name: string; client_name: string; client_email: string
   brief_url: string; thumbnail_url: string; cpm_rate: number; client_cpm_rate: number; max_payout: number
-  budget_total: number; budget_used: number; status: string; accepted_platforms: string
+  budget_total: number; client_budget_total: number; budget_used: number; status: string; accepted_platforms: string
   us_viewers_pct: number; include_uk_views: boolean; uk_viewers_pct: number | null; target_views: number | null; requirements_url: string
   description: string; min_publish_date: string | null; min_views_payout: number | null
   viewer_token: string; created_at: string; updated_at: string
